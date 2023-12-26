@@ -62,12 +62,13 @@ export declare interface PurchaseData{
     purchase_date?:Date,
 }
 export declare interface Model{
+    id:string,
     name:ModelName,
+    status:ModelStatus,
     article_number?:string,
     brand?:ModelBrand,
     scale?:ModelScale,
     type?:ModelType,
-    status?:ModelStatus,
     size?:ModelSize,
     imgs?:string[],
     PD?:Date, //生產日期
