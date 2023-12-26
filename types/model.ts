@@ -17,10 +17,10 @@ export enum ModelBrand{
     萬代
 }
 export enum ModelScale{
-    S144,
-    S72,
-    S48,
-    S35,
+    S144="1:144",
+    S72="1:72",
+    S48="1:48",
+    S35="1:35",
 }
 export enum ModelType{
     戰車,
@@ -33,7 +33,6 @@ export enum ModelType{
 }
 export enum ModelStatus{
     未入庫,
-    已入庫,
     未組裝,
     已組裝,
 }

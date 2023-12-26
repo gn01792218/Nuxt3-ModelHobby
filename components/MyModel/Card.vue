@@ -17,5 +17,4 @@ import { type Model } from "~/types/model"
 const props = defineProps<{
     modelData:Model
 }>()
-console.log(props.modelData)
 </script>
