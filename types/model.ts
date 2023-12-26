@@ -32,10 +32,14 @@ export enum ModelType{
     顏料
 }
 export enum ModelStatus{
-    已入庫,
     未入庫,
-    未拆封,
-    已完成,
+    已入庫,
+    未組裝,
+    已組裝,
+}
+export enum Ecommerce{
+    淘寶,
+    蝦皮
 }
 export declare interface ModelSize{
     unit:SizeUnit,
@@ -51,17 +55,22 @@ export declare interface ModelPrice{
     currency:Currency,
     amount:number,
 }
+export declare interface PurchaseData{
+    e_commerce_name:Ecommerce,
+    price:ModelPrice,
+    shop_name?:string,
+    purchase_date?:Date,
+}
 export declare interface Model{
     name:ModelName,
-    articleNumber?:string,
+    article_number?:string,
     brand?:ModelBrand,
     scale?:ModelScale,
     type?:ModelType,
-    price?:ModelPrice,
     status?:ModelStatus,
     size?:ModelSize,
     imgs?:string[],
-    purchaseDate?:Date, //購買日期
-    PD?:Date //生產日期
+    PD?:Date, //生產日期
+    purchaseData?:PurchaseData
 }
 

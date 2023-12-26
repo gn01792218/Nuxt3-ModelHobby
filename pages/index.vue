@@ -1,8 +1,9 @@
 <template>
     <div>
-        <p>Index頁面</p>
+        <p>總花費 : ????</p>
+        
+
     </div>
-    <NuxtWelcome />
 </template>
 <script setup lang="ts">
 
