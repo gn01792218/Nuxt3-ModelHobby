@@ -1,7 +1,7 @@
 <template>
-  <div class="flex justify-center items-center">
+  <div class="flex justify-center items-center cursor-pointer" @click="navigateTo(`MyModel/ModelDetail-${modelData.id}`)">
     <div>
-        <img v-if="modelData.img" :src="modelData.img[0]" :alt="modelData.name.zh">
+        <img v-if="modelData.imgs" :src="modelData.imgs[0]" :alt="modelData.name.zh">
         <img v-else src="" alt="">
     </div>
     <div>
