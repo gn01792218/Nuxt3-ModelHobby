@@ -13,11 +13,13 @@
     "@nuxt/devtools": "latest",
     "@nuxtjs/tailwindcss": "^6.10.1",
     "nuxt": "^3.8.2",
+    "prisma": "^5.7.1",
     "vue": "^3.3.12",
     "vue-router": "^4.2.5"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
+    "@supabase/supabase-js": "^2.39.1",
     "pinia": "^2.1.7"
   }
 }
