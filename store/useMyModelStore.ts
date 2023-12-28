@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 import { type Model, ModelStatus } from "../types/model";
-import myModels from "../data/model";
+
 // 使用composition API模式定义store
 export const useMyModelStore = defineStore("myModelStore", () => {
   // 初始状态
   const initState = {
-    myModelList: myModels,
+    myModelList: [],
   };
 
   //state
@@ -16,6 +16,9 @@ export const useMyModelStore = defineStore("myModelStore", () => {
   const unFinishedModels = computed(()=>  myModelList.value.filter(model => model.status <= ModelStatus.未組裝))
   const finishedModels = computed(() => myModelList.value.filter(model => model.status === ModelStatus.已組裝))
   //actions
+  function setmyModelList(payload:Model[]){
+    myModelList.value = payload
+  }
   function addModel(payload: Model) {
     myModelList.value.push(payload);
   }
@@ -27,6 +30,7 @@ export const useMyModelStore = defineStore("myModelStore", () => {
     unFinishedModels,
     finishedModels,
     //methods
+    setmyModelList,
     addModel,
   };
 });

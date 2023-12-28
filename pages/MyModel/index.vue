@@ -6,12 +6,21 @@
 </template>
 
 <script setup lang="ts">
-import { ModelStatus } from "../../types/model"
-import { useMyModelStore } from '../store/useMyModelStore'
+import useFetchMyModels from "~/composables/api/useFetchMyModels"
+import { useMyModelStore } from '../../store/useMyModelStore'
+const { getMyModels } = useFetchMyModels()
 const {
    unStockInModels,
    unFinishedModels,
    finishedModels,
 } = storeToRefs(useMyModelStore())
+const { setmyModelList } = useMyModelStore()
+
+fetchMyModels()
+
+async function fetchMyModels() {
+   const data = await getMyModels()
+   setmyModelList(data)
+}
 
 </script>
