@@ -1,20 +1,20 @@
 export enum Currency{
-    RMB,
-    TW
+    RMB = 'rmb',
+    TW = 'tw'
 }
 export enum SizeUnit{
-    MM,
-    CM
+    MM = "mm",
+    CM = "cm"
 }
 export enum ModelBrand{
-    小號手,
-    小號手_HOBBYBOSS,
-    愛德美,
-    田宮,
-    長谷川,
-    六分儀,
-    翔鷹,
-    萬代
+    TRUMPETER = '小號手',
+    TRUMPETER_HOBBYBOSS = '小號手_HOBBYBOSS',
+    ACADEMY = '愛德美',
+    TAMIYA = '田宮',
+    HASEGAWA = '長谷川',
+    S_MODEL = '六分儀',
+    FLVHAWK = '鷹翔',
+    BANDAI = '萬代'
 }
 export enum ModelScale{
     S144="1:144",
@@ -50,18 +50,18 @@ export declare interface ModelName{
     en?:string,
     zh?:string
 }
-export declare interface ModelPrice{
+export declare interface Price{
     currency:Currency,
     amount:number,
 }
-export declare interface PurchaseData{
+export declare interface PurchaseInfo{
     e_commerce_name:Ecommerce,
-    price:ModelPrice,
+    price:Price,
     shop_name?:string,
     purchase_date?:Date,
 }
 export declare interface Model{
-    id:string,
+    id:string | number,
     name:ModelName,
     status:ModelStatus,
     article_number?:string,
@@ -71,6 +71,6 @@ export declare interface Model{
     size?:ModelSize,
     imgs?:string[],
     PD?:Date, //生產日期
-    purchaseData?:PurchaseData
+    purchaseInfo?:PurchaseInfo
 }
 

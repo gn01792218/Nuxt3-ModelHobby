@@ -9,3 +9,48 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model MyModel{
+  id             Int @unique @id @default(autoincrement())
+  name           String
+  status         MyModelStatus
+  article_number String?
+  brand          String?
+  scale          String?
+  type           String?
+  size           ModelSize?
+  imgs           String[] @default([])
+  PD             DateTime?
+  purchaseInfo   PurchaseInfo?
+}
+model ModelSize {
+  id          Int @unique @id @default(autoincrement())
+  unit        String
+  width       Float
+  length      Float
+  height      Float?
+  modelId     Int @unique
+  model       MyModel @relation(fields: [modelId], references: [id]) 
+}
+model PurchaseInfo{
+  id              Int @unique @id @default(autoincrement())
+  e_commerce_name String
+  price           PurchasePrice?
+  shop_name       String?
+  purchase_date   DateTime?
+  modelId         Int @unique
+  model           MyModel @relation(fields: [modelId], references: [id])
+}
+model PurchasePrice{
+  id             Int @unique @id @default(autoincrement())
+  currency       String
+  amount         Float
+  purchaseInfoId Int @unique
+  purchaseInfo   PurchaseInfo @relation(fields: [purchaseInfoId], references: [id])
+}
+
+enum MyModelStatus {
+    UN_STOCK_IN
+    UN_FINISHED
+    FINISHED
+}

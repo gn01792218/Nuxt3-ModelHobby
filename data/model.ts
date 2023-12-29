@@ -17,7 +17,7 @@ export const model: Model[] = [
       en: "German 280mm K5(E) Railway Gun Leopold",
     },
     article_number: "82903",
-    brand: ModelBrand.小號手_HOBBYBOSS,
+    brand: ModelBrand.TRUMPETER_HOBBYBOSS,
     scale: ModelScale.S72,
     type: ModelType.戰車,
     size: {
@@ -27,7 +27,7 @@ export const model: Model[] = [
     },
     status: ModelStatus.未組裝,
     PD: new Date("2018"),
-    purchaseData: {
+    purchaseInfo: {
       e_commerce_name: Ecommerce.淘寶,
       price: {
         currency: Currency.RMB,
@@ -43,7 +43,7 @@ export const model: Model[] = [
       en: "Morser KARL-Gerat 040/041 Initial Version",
     },
     article_number: "82904",
-    brand: ModelBrand.小號手_HOBBYBOSS,
+    brand: ModelBrand.TRUMPETER_HOBBYBOSS,
     scale: ModelScale.S72,
     type: ModelType.戰車,
     size: {
@@ -53,7 +53,7 @@ export const model: Model[] = [
     },
     status: ModelStatus.未組裝,
     PD: new Date("2020"),
-    purchaseData: {
+    purchaseInfo: {
       e_commerce_name: Ecommerce.淘寶,
       price: {
         currency: Currency.RMB,
@@ -69,7 +69,7 @@ export const model: Model[] = [
       en: "P-40B/C WARHAWK",
     },
     article_number: "01632",
-    brand: ModelBrand.小號手,
+    brand: ModelBrand.TRUMPETER,
     scale: ModelScale.S72,
     type: ModelType.飛機,
     size: {
@@ -79,7 +79,7 @@ export const model: Model[] = [
     },
     status: ModelStatus.已組裝,
     PD: new Date("2011"),
-    purchaseData: {
+    purchaseInfo: {
       e_commerce_name: Ecommerce.淘寶,
       price: {
         currency: Currency.RMB,
