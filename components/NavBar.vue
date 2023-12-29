@@ -1,5 +1,5 @@
 <template>
-    <nav class="p-5">
+    <nav>
         <ul class="flex">
             <li class="mr-5"><NuxtLink to="/"> 首頁 </NuxtLink></li>
             <li class="mr-5"><NuxtLink to="/WishList"> 願望清單 </NuxtLink></li>
