@@ -12,8 +12,9 @@ datasource db {
 
 model MyModel{
   id             Int @unique @id @default(autoincrement())
-  name           String
-  status         MyModelStatus
+  status         Int
+  name_zh        String
+  name_en        String?
   article_number String?
   brand          String?
   scale          String?
@@ -47,10 +48,4 @@ model PurchasePrice{
   amount         Float
   purchaseInfoId Int @unique
   purchaseInfo   PurchaseInfo @relation(fields: [purchaseInfoId], references: [id])
-}
-
-enum MyModelStatus {
-    UN_STOCK_IN
-    UN_FINISHED
-    FINISHED
 }

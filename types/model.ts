@@ -61,8 +61,9 @@ export declare interface PurchaseInfo{
     purchase_date?:Date,
 }
 export declare interface Model{
-    id:string | number,
-    name:ModelName,
+    id?:number,
+    name_zh:string,
+    name_en:string,
     status:ModelStatus,
     article_number?:string,
     brand?:ModelBrand,
