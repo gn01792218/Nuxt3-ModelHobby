@@ -15,5 +15,4 @@ const {
     unFinishedModels,
     finishedModels,
  } = storeToRefs(useMyModelStore())
-
 </script>

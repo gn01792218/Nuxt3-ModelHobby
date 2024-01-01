@@ -36,16 +36,10 @@ model ModelSize {
 model PurchaseInfo{
   id              Int @unique @id @default(autoincrement())
   e_commerce_name String
-  price           PurchasePrice?
+  currency        String
+  price           Float
   shop_name       String?
   purchase_date   DateTime?
   modelId         Int @unique
   model           MyModel @relation(fields: [modelId], references: [id])
-}
-model PurchasePrice{
-  id             Int @unique @id @default(autoincrement())
-  currency       String
-  amount         Float
-  purchaseInfoId Int @unique
-  purchaseInfo   PurchaseInfo @relation(fields: [purchaseInfoId], references: [id])
 }

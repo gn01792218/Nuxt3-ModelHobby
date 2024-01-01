@@ -22,6 +22,7 @@
                   </select>
                </div>
                <div>
+                  --------------模型尺寸資訊------------
                   <div>
                      <label for="model_size_unit">選擇尺吋單位</label>
                      <select name="" id="" :v-model="modelSize.unit">
@@ -42,6 +43,35 @@
                      <input id="model_size_height" type="number" step="0.0001" v-model="(modelSize.height)">
                   </div>
                </div>
+               <div>
+                  --------------購買訊息------------
+                  <div>
+                     <label for="model_purchase_info_ecommerce">購買平台</label>
+                     <select name="" id="" :v-model="modelPurchaseInfo.e_commerce_name">
+                        <option :value="Ecommerce.淘寶">{{ Ecommerce.淘寶 }}</option>
+                        <option :value="Ecommerce.蝦皮">{{ Ecommerce.蝦皮 }}</option>
+                     </select>
+                  </div>
+                  <div>
+                     <label for="model_purchase_info_currency">幣種</label>
+                     <select name="" id="" :v-model="modelPurchaseInfo.currency">
+                        <option :value="Currency.RMB">{{ Currency.RMB }}</option>
+                        <option :value="Currency.TW">{{ Currency.TW }}</option>
+                     </select>
+                  </div>
+                  <div>
+                     <label for="model_purchase_info_price">價格</label>
+                     <input id="model_purchase_info_price" type="number" step="0.0001" v-model="(modelPurchaseInfo.price)">
+                  </div>
+                  <div>
+                     <label for="model_purchase_info_shop_name">店家名稱</label>
+                     <input id="model_purchase_info_shop_name" type="text" v-model="modelPurchaseInfo.shop_name">
+                  </div>
+                  <div>
+                     <label for="model_purchase_info_shop_name">購買日期</label>
+                     <input id="model_purchase_info_shop_name" type="date" v-model="modelPurchaseInfo.purchase_date">
+                  </div>
+               </div>
             </div>
             <button class="ml-auto block border-2" @click="fetchAddMyModel">確認</button>
          </div>
@@ -54,9 +84,17 @@
 
 <script setup lang="ts">
 import useFetchMyModels from "~/composables/api/useFetchMyModels"
-import { type ModelSize, ModelStatus, SizeUnit, type Model } from "~/types/model"
+import {
+   type ModelSize,
+   type PurchaseInfo,
+   type Model,
+   ModelStatus,
+   SizeUnit,
+   Ecommerce,
+   Currency,
+} from "~/types/model"
 import { useMyModelStore } from '../../store/useMyModelStore'
-const { getMyModels, addMyModels, addMyModelsSize } = useFetchMyModels()
+const { getMyModels, addMyModels, addMyModelsSize, addMyModelPurchaseInfo  } = useFetchMyModels()
 const {
    unStockInModels,
    unFinishedModels,
@@ -72,6 +110,11 @@ const modelSize = ref<ModelSize>({
    length: 0,
    height: 0
 })
+const modelPurchaseInfo = ref<PurchaseInfo>({
+   e_commerce_name: Ecommerce.淘寶,
+   currency: Currency.RMB,
+   price: 0,
+})
 const model: Model = {
    status: ModelStatus.未入庫,
    name_zh: '',
@@ -84,9 +127,13 @@ async function fetchMyModels() {
 }
 
 async function fetchAddMyModel() {
-   const myModel =await addMyModels(model) 
+   const myModel = await addMyModels(model)
+   if (!myModel.id) return alert('出問題了')
    //添加尺寸
-   if(myModel.id) await addMyModelsSize(myModel.id, modelSize.value)
+   const size = addMyModelsSize(myModel.id, modelSize.value)
+   //添加購買明細
+   const purchaseInfo = addMyModelPurchaseInfo(myModel.id, modelPurchaseInfo.value)
+   await Promise.allSettled([size,purchaseInfo])
    model.name_zh = ''
    model.name_en = ''
    showAddModelPanel.value = false

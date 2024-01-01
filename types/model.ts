@@ -37,7 +37,7 @@ export enum ModelStatus{
     已組裝,
 }
 export enum Ecommerce{
-    淘寶 = "掏寶",
+    淘寶 = "淘寶",
     蝦皮 = "蝦皮"
 }
 export declare interface ModelSize{
@@ -50,13 +50,10 @@ export declare interface ModelName{
     en?:string,
     zh?:string
 }
-export declare interface Price{
-    currency:Currency,
-    amount:number,
-}
 export declare interface PurchaseInfo{
     e_commerce_name:Ecommerce,
-    price:Price,
+    currency:Currency,
+    price:number,
     shop_name?:string,
     purchase_date?:Date,
 }

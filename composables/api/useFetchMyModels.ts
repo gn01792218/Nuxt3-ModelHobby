@@ -1,4 +1,5 @@
-import { type Model, type ModelSize } from "~/types/model"
+
+import { type Model, type ModelSize, type PurchaseInfo } from "~/types/model"
 
 export default ()=>{
     async function getMyModels():Promise<Model[]>{
@@ -21,6 +22,13 @@ export default ()=>{
         })
         return r as unknown as ModelSize
     }
+    async function addMyModelPurchaseInfo(modelId:number,payload:PurchaseInfo):Promise<PurchaseInfo>{
+        const r =await fetch(`/api/myModels/PurchaseInfo/${modelId}`,{
+            method:'post',
+            body:JSON.stringify(payload)
+        })
+        return r as unknown as PurchaseInfo
+    }
     async function deleteMyModels(modelId:number):Promise<boolean>{
         const r = await fetch(`/api/myModels/${modelId}}`,{
             method:'delete'
@@ -34,6 +42,7 @@ export default ()=>{
         getMyModels,
         addMyModels,
         addMyModelsSize,
+        addMyModelPurchaseInfo,
         deleteMyModels
     }
 }
