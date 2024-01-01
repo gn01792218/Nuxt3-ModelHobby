@@ -9,15 +9,15 @@
 definePageMeta({
     layout:"login"
 })
-const { baseURL } = useRuntimeConfig()
+
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 async function login(){
     const { error } = await  supabase.auth.signInWithOAuth({
         provider:'google',
-        options:{
-            redirectTo:`${baseURL}`
-        }
+        // options:{
+        //     redirectTo:`/MyModel`
+        // }
     })
     if(error) console.log(error)
 }
