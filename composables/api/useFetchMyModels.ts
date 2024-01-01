@@ -1,4 +1,5 @@
-import { type Model } from "~/types/model"
+import { type Model, type ModelSize } from "~/types/model"
+
 export default ()=>{
     async function getMyModels():Promise<Model[]>{
         const { data, error } =await useFetch('/api/myModels')
@@ -13,6 +14,13 @@ export default ()=>{
         if(error.value) throw createError({...error.value, message:"資料異常"})
         return data.value as unknown as Model
     }
+     async function addMyModelsSize(modelId:number,payload:ModelSize):Promise<ModelSize>{
+        const r =await fetch(`/api/myModels/ModelSize/${modelId}`,{
+            method:'post',
+            body:JSON.stringify(payload)
+        })
+        return r as unknown as ModelSize
+    }
     async function deleteMyModels(modelId:number):Promise<boolean>{
         const r = await fetch(`/api/myModels/${modelId}}`,{
             method:'delete'
@@ -25,6 +33,7 @@ export default ()=>{
         //methods
         getMyModels,
         addMyModels,
+        addMyModelsSize,
         deleteMyModels
     }
 }

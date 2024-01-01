@@ -23,13 +23,13 @@ export enum ModelScale{
     S35="1:35",
 }
 export enum ModelType{
-    戰車,
-    飛機,
-    火炮,
-    兵人,
-    科幻,
-    工具,
-    顏料
+    戰車 = "戰車",
+    飛機 = "飛機",
+    火炮 = "火炮",
+    兵人 = "兵人",
+    科幻 = "科幻",
+    工具 = "工具",
+    顏料 = "顏料"
 }
 export enum ModelStatus{
     未入庫,
@@ -37,8 +37,8 @@ export enum ModelStatus{
     已組裝,
 }
 export enum Ecommerce{
-    淘寶,
-    蝦皮
+    淘寶 = "掏寶",
+    蝦皮 = "蝦皮"
 }
 export declare interface ModelSize{
     unit:SizeUnit,
