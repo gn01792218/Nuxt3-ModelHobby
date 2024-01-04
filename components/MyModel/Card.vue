@@ -10,7 +10,7 @@
         <p v-if="modelData.scale">{{ modelData.scale }}</p>
     </div>
     <div>
-      <button class="border-2 p-5" @click="fetchDeleteMyModel"> - 刪除</button>
+      <button v-if="user?.id ==='ba5171d3-299b-4f64-983b-7faf1621944d' || user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1'" class="border-2 p-5" @click="fetchDeleteMyModel"> - 刪除</button>
     </div>
   </div>
 </template>
@@ -24,6 +24,7 @@ const props = defineProps<{
 }>()
 
 const { deleteMyModels } = useFetchMyModels()
+const user = useSupabaseUser()
 
 async function fetchDeleteMyModel(){
   deleteMyModels(props.modelData.id!)

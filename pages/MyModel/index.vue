@@ -2,7 +2,7 @@
    <p>我的模型</p>
    <section class="p-5 w-full h-[100px] bg-red-500 flex justify-start">
       <div class="">
-         <button class="border-2 p-5" @click="showAddModelPanel = !showAddModelPanel">+添加模型</button>
+         <button v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d'" class="border-2 p-5" @click="showAddModelPanel = !showAddModelPanel">+添加模型</button>
          <div class="bg-yellow-600 absolute p-5" v-show="showAddModelPanel">
             <div>
                <div>
@@ -101,6 +101,7 @@ const {
    finishedModels,
 } = storeToRefs(useMyModelStore())
 const { setmyModelList } = useMyModelStore()
+const user = useSupabaseUser()
 
 fetchMyModels()
 const showAddModelPanel = ref(false)
