@@ -18,15 +18,19 @@
 <script setup lang="ts">
 import { type Model } from "~/types/model"
 import useFetchMyModels from "~/composables/api/useFetchMyModels"
+import { useMyModelStore } from "~/store/useMyModelStore"
 
 const props = defineProps<{
     modelData:Model
 }>()
 
 const { deleteMyModels } = useFetchMyModels()
+const { setmyModelList } = useMyModelStore()
+const { myModelList } = storeToRefs(useMyModelStore())
 const user = useSupabaseUser()
 
 async function fetchDeleteMyModel(){
-  deleteMyModels(props.modelData.id!)
+  await deleteMyModels(props.modelData.id!)
+  setmyModelList(myModelList.value.filter(model=>model.id ! == props.modelData.id))
 }
 </script>
