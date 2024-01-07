@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { type Model } from "~/types/model"
-import useFetchMyModels from "~/composables/api/useFetchMyModels"
+import useFetchMyModels from "~/composables/api/useMyModelsAPI"
 import { useMyModelStore } from "~/store/useMyModelStore"
 
 const props = defineProps<{

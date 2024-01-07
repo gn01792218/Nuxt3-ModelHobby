@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import useFetchMyModels from "~/composables/api/useFetchMyModels"
+import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import {
    type ModelSize,
    type PurchaseInfo,
@@ -94,16 +94,18 @@ import {
    Currency,
 } from "~/types/model"
 import { useMyModelStore } from '../../store/useMyModelStore'
-const { getMyModels, addMyModels, addMyModelsSize, addMyModelPurchaseInfo  } = useFetchMyModels()
+const { getMyModels, addMyModels, addMyModelsSize, addMyModelPurchaseInfo  } = useMyModelsAPI()
 const {
+   myModelList,
    unStockInModels,
    unFinishedModels,
    finishedModels,
 } = storeToRefs(useMyModelStore())
-const { setmyModelList } = useMyModelStore()
+const { fetchMyModels } = useFetchMyModels()
 const user = useSupabaseUser()
 
-fetchMyModels()
+if(!myModelList.value.length) fetchMyModels()
+
 const showAddModelPanel = ref(false)
 const modelSize = ref<ModelSize>({
    unit: SizeUnit.MM,
@@ -122,11 +124,6 @@ const model: Model = {
    name_en: '',
 }
 
-async function fetchMyModels() {
-   const data = await getMyModels()
-   setmyModelList(data)
-}
-
 async function fetchAddMyModel() {
    const myModel = await addMyModels(model)
    if (!myModel.id) return alert('出問題了')
@@ -135,6 +132,9 @@ async function fetchAddMyModel() {
    //添加購買明細
    const purchaseInfo = addMyModelPurchaseInfo(myModel.id, modelPurchaseInfo.value)
    await Promise.allSettled([size,purchaseInfo])
+   //重新拉取資料
+   await fetchMyModels()
+   //reset
    model.name_zh = ''
    model.name_en = ''
    showAddModelPanel.value = false
