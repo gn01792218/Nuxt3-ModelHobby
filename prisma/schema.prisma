@@ -31,7 +31,7 @@ model ModelSize {
   length      Float
   height      Float?
   modelId     Int @unique
-  model       MyModel @relation(fields: [modelId], references: [id]) 
+  model       MyModel @relation(fields: [modelId], references: [id], onDelete: Cascade) 
 }
 model PurchaseInfo{
   id              Int @unique @id @default(autoincrement())
@@ -41,5 +41,5 @@ model PurchaseInfo{
   shop_name       String?
   purchase_date   DateTime?
   modelId         Int @unique
-  model           MyModel @relation(fields: [modelId], references: [id])
+  model           MyModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
 }
