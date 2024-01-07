@@ -20,7 +20,7 @@ export default defineEventHandler(async (event)=>{
             currency,
             price,
             shop_name,
-            purchase_date:new Date(purchase_date),
+            purchase_date:purchase_date? new Date(purchase_date) : null,
             modelId:parseInt(modelId),
         }
     })

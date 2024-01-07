@@ -16,13 +16,13 @@ export default ()=>{
         return data.value as unknown as Model
     }
      async function addMyModelsSize(modelId:number,payload:ModelSize):Promise<ModelSize>{
-        const r =await fetch(`/api/myModels/ModelSize/${modelId}`,{
-            method:'post',
-            body:JSON.stringify(payload)
-        })
-        return r as unknown as ModelSize
-    }
-    async function addMyModelPurchaseInfo(modelId:number,payload:PurchaseInfo):Promise<PurchaseInfo>{
+         const r =await fetch(`/api/myModels/ModelSize/${modelId}`,{
+             method:'post',
+             body:JSON.stringify(payload)
+            })
+            return r as unknown as ModelSize
+        }
+        async function addMyModelPurchaseInfo(modelId:number,payload:PurchaseInfo):Promise<PurchaseInfo>{
         const r =await fetch(`/api/myModels/PurchaseInfo/${modelId}`,{
             method:'post',
             body:JSON.stringify(payload)

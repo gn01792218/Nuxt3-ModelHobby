@@ -4,6 +4,7 @@ const prisma = new PrismaClient()
 export default defineEventHandler(async (event)=>{
 
     const { myModelId } = event.context.params as any
+    console.log(parseInt(myModelId))
 
     const myModel =await prisma.myModel.delete({
         where:{
