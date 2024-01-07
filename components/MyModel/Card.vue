@@ -32,6 +32,6 @@ const user = useSupabaseUser()
 
 async function fetchDeleteMyModel(){
   await deleteMyModels(props.modelData.id!)
-  setmyModelList(myModelList.value.filter(model=>model.id ! == props.modelData.id))
+  setmyModelList(myModelList.value.filter(model=>model.id !== props.modelData.id))
 }
 </script>
