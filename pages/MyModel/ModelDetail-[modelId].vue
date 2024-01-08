@@ -35,18 +35,21 @@
 <script setup lang="ts">
 import useMyModelsAPI from '~/composables/api/useMyModelsAPI';
 import { useMyModelStore } from '~/store/useMyModelStore';
-import { type ModelSize, type PurchaseInfo } from '~/types/model';
+import { type Model, type ModelSize, type PurchaseInfo } from '~/types/model';
 
 const { modelId } = useRoute().params
 const { myModelList } = storeToRefs(useMyModelStore())
 const { getModelSize, getModelPurchaseInfo } = useMyModelsAPI()
+const { fetchMyModels } = useFetchMyModels()
+const model = computed<Model>(()=>{
+    return myModelList.value.find(model => model.id === Number(modelId)) as Model
+})
 const modelSize = ref<ModelSize>()
 const purchaseInfo = ref<PurchaseInfo>()
-const model = computed(()=>{
-    return myModelList.value.find(model=>model.id?.toString() === modelId)
-})
+
 initModelDetial()
 async function initModelDetial(){
+    if(!myModelList.value.length) fetchMyModels()
     modelSize.value = await getModelSize(Number(modelId))
     purchaseInfo.value = await getModelPurchaseInfo(Number(modelId))
 }

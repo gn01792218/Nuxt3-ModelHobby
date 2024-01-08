@@ -7,6 +7,11 @@ export default () => {
     if (error.value) throw createError({ ...error.value, message: "資料異常" });
     return data.value as unknown as Model[];
   }
+  async function getMyModel(id:number): Promise<Model> {
+    const { data, error } = await useFetch(`/api/myModels/${id}`);
+    if (error.value) throw createError({ ...error.value, message: "資料異常" });
+    return data.value as unknown as Model;
+  }
   async function addMyModels(payload: Model): Promise<Model> {
     const { data, error } = await useFetch("/api/myModels", {
       method: "post",
@@ -53,6 +58,7 @@ export default () => {
     //data
     //methods
     getMyModels,
+    getMyModel,
     addMyModels,
     deleteMyModels,
     getModelSize,
