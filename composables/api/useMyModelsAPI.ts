@@ -12,7 +12,7 @@ export default () => {
     if (error.value) throw createError({ ...error.value, message: "資料異常" });
     return data.value as unknown as Model;
   }
-  async function addMyModels(payload: Model): Promise<Model> {
+  async function addMyModel(payload: Model): Promise<Model> {
     const { data, error } = await useFetch("/api/myModels", {
       method: "post",
       body: payload,
@@ -20,7 +20,14 @@ export default () => {
     if (error.value) throw createError({ ...error.value, message: "資料異常" });
     return data.value as unknown as Model;
   }
-  async function deleteMyModels(modelId: number): Promise<boolean> {
+  async function updateMyModel(payload: Model): Promise<Model> {
+    const r = await fetch("/api/myModels", {
+      method: "put",
+      body: JSON.stringify(payload),
+    });
+    return r as unknown as Model;
+  }
+  async function deleteMyModel(modelId: number): Promise<boolean> {
     const r = await fetch(`/api/myModels/${modelId}}`, {
       method: "delete",
     });
@@ -41,6 +48,13 @@ export default () => {
     });
     return r as unknown as ModelSize;
   }
+  async function updateMyModelsSize(modelId: number, payload: ModelSize): Promise<ModelSize> {
+    const r = await fetch(`/api/myModels/ModelSize/${modelId}`, {
+      method: "put",
+      body: JSON.stringify(payload),
+    });
+    return r as unknown as ModelSize;
+  }
   //PurchaseInfo API
   async function getModelPurchaseInfo(modelId: number): Promise<PurchaseInfo> {
     const { data, error } = await useFetch(`/api/myModels/PurchaseInfo/${modelId}`);
@@ -54,16 +68,26 @@ export default () => {
     });
     return r as unknown as PurchaseInfo;
   }
+  async function updateMyModelPurchaseInfo(modelId: number, payload: PurchaseInfo): Promise<PurchaseInfo> {
+    const r = await fetch(`/api/myModels/PurchaseInfo/${modelId}`, {
+      method: "put",
+      body: JSON.stringify(payload),
+    });
+    return r as unknown as PurchaseInfo;
+  }
   return {
     //data
     //methods
     getMyModels,
     getMyModel,
-    addMyModels,
-    deleteMyModels,
+    addMyModel,
+    updateMyModel,
+    deleteMyModel,
     getModelSize,
     addMyModelsSize,
+    updateMyModelsSize,
     getModelPurchaseInfo,
     addMyModelPurchaseInfo,
+    updateMyModelPurchaseInfo,
   };
 };

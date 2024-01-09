@@ -25,9 +25,9 @@
                   --------------模型尺寸資訊------------
                   <div>
                      <label for="model_size_unit">選擇尺吋單位</label>
-                     <select name="" id="" :v-model="modelSize.unit">
+                     <select name="" id="" v-model="modelSize.unit">
                         <option :value="SizeUnit.MM">{{ SizeUnit.MM }}</option>
-                        <option :value="SizeUnit.MM">{{ SizeUnit.CM }}</option>
+                        <option :value="SizeUnit.CM">{{ SizeUnit.CM }}</option>
                      </select>
                   </div>
                   <div>
@@ -94,7 +94,7 @@ import {
    Currency,
 } from "~/types/model"
 import { useMyModelStore } from '../../store/useMyModelStore'
-const { getMyModels, addMyModels, addMyModelsSize, addMyModelPurchaseInfo  } = useMyModelsAPI()
+const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo  } = useMyModelsAPI()
 const {
    myModelList,
    unStockInModels,
@@ -125,7 +125,7 @@ const model: Model = {
 }
 
 async function fetchAddMyModel() {
-   const myModel = await addMyModels(model)
+   const myModel = await addMyModel(model)
    if (!myModel.id) return alert('出問題了')
    //添加尺寸
    const size = addMyModelsSize(myModel.id, modelSize.value)

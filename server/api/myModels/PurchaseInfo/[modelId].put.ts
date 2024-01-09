@@ -14,7 +14,10 @@ export default defineEventHandler(async (event)=>{
        purchase_date 
      } = JSON.parse(body)
 
-    const myModelPurchaseInfo =await prisma.purchaseInfo.create({
+    const myModelPurchaseInfo =await prisma.purchaseInfo.update({
+        where:{
+            modelId:parseInt(modelId)
+        },
         data:{
             e_commerce_name,
             currency,

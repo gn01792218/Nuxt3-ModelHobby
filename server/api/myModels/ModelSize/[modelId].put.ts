@@ -7,22 +7,23 @@ export default defineEventHandler(async (event)=>{
 
     //選擇要傳送的欄位
     const { 
-       e_commerce_name,
-       currency,
-       price,
-       shop_name,
-       purchase_date 
+        unit,
+        width,
+        length,
+        height
      } = JSON.parse(body)
 
-    const myModelPurchaseInfo =await prisma.purchaseInfo.create({
+    const myModel =await prisma.modelSize.update({
+        where:{
+            modelId:parseInt(modelId)
+        },
         data:{
-            e_commerce_name,
-            currency,
-            price,
-            shop_name,
-            purchase_date:purchase_date? new Date(purchase_date) : null,
+            unit,
+            width,
+            length,
+            height,
             modelId:parseInt(modelId),
         }
     })
-    return myModelPurchaseInfo
+    return myModel
 })

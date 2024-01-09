@@ -25,13 +25,13 @@ const props = defineProps<{
     modelData:Model
 }>()
 
-const { deleteMyModels } = useFetchMyModels()
+const { deleteMyModel } = useFetchMyModels()
 const { setmyModelList } = useMyModelStore()
 const { myModelList } = storeToRefs(useMyModelStore())
 const user = useSupabaseUser()
 
 async function fetchDeleteMyModel(){
-  await deleteMyModels(props.modelData.id!)
+  await deleteMyModel(props.modelData.id!)
   setmyModelList(myModelList.value.filter(model=>model.id !== props.modelData.id))
 }
 </script>
