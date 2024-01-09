@@ -6,22 +6,10 @@
     </section>
     <ModelDetialModelSize
         :model-id="modelId"
-        :model-size="modelSize"
     />
-    <section class="border-2">
-        <p>
-            購買平台 : {{ purchaseInfo?.e_commerce_name }}
-        </p>
-        <p>
-            購買商家 : {{ purchaseInfo?.shop_name }}
-        </p>
-        <p>
-            購買價格 : {{ purchaseInfo?.price }} ( {{ purchaseInfo?.currency }} )
-        </p>
-        <p>
-            購買日期 : {{ purchaseInfo?.purchase_date }}
-        </p>
-    </section>
+   <ModelDetialPurchaseInfo
+    :model-id="modelId"
+   /> 
 </template>
 
 <script setup lang="ts">
@@ -41,6 +29,5 @@ const purchaseInfo = ref<PurchaseInfo>()
 initModelDetial()
 async function initModelDetial(){
     if(!myModelList.value.length) fetchMyModels()
-    purchaseInfo.value = await getModelPurchaseInfo(modelId)
 }
 </script>

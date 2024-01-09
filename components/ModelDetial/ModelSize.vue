@@ -50,7 +50,6 @@ const props = defineProps<{
 }>()
 
 const { updateMyModelsSize, getModelSize, addMyModelsSize } = useMyModelsAPI()
-
 const showEditPanel = ref(false)
 const modelSize = ref<ModelSize>()
 const editSize = ref<ModelSize>({
