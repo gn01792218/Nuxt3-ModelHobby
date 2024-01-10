@@ -20,6 +20,7 @@ model MyModel{
   scale          String?
   type           String?
   size           ModelSize?
+  main_img       String?
   imgs           String[] @default([])
   PD             DateTime?
   purchaseInfo   PurchaseInfo?

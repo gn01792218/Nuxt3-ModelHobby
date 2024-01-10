@@ -10,12 +10,14 @@ export default defineEventHandler(async (event)=>{
         name_zh,
         name_en,
         status,
+        main_img,
      } = body
     const myModel =await prisma.myModel.create({
         data:{
             name_zh,
             name_en,
-            status
+            status,
+            main_img
         }
     })
     return myModel

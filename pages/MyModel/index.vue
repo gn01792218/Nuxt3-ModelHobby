@@ -22,6 +22,11 @@
                   </select>
                </div>
                <div>
+                  <label for="model_main_img">封面圖片</label>
+                  <input type="file" id="model_main_img" @change="handleUploadImg">
+                  <img v-show="previewImg" :src="previewImg" alt="預覽圖">
+               </div>
+               <div>
                   --------------模型尺寸資訊------------
                   <div>
                      <label for="model_size_unit">選擇尺吋單位</label>
@@ -83,6 +88,7 @@
 </template>
 
 <script setup lang="ts">
+// import useUtils from "~/composables/useUtils"
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import {
    type ModelSize,
@@ -94,6 +100,7 @@ import {
    Currency,
 } from "~/types/model"
 import { useMyModelStore } from '../../store/useMyModelStore'
+// const { handleUploadImg } = useUtils()
 const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo  } = useMyModelsAPI()
 const {
    myModelList,
@@ -123,8 +130,26 @@ const model: Model = {
    name_zh: '',
    name_en: '',
 }
+const previewImg = ref("")
+const main_img_file = ref<File>()
+
+async function uploadSpabaseStorage():Promise<string>{
+   if(!main_img_file.value) return ''
+   const supabase = useSupabaseClient()
+
+   const fileName = `model_main_img_${crypto.randomUUID()}`
+   console.log(fileName)
+   const { data, error } = await supabase.storage.from("images").upload(`public/${fileName}`, main_img_file.value)
+   if(error) throw createError({
+      ...error,
+      message:'無法上傳圖片',
+   })
+   return data.path
+}
 
 async function fetchAddMyModel() {
+   //先處理圖片
+   model.main_img = await uploadSpabaseStorage()
    const myModel = await addMyModel(model)
    if (!myModel.id) return alert('出問題了')
    //添加尺寸
@@ -139,4 +164,17 @@ async function fetchAddMyModel() {
    model.name_en = ''
    showAddModelPanel.value = false
 }
+async function handleUploadImg(event:InputEvent){
+    const input = event.target as HTMLInputElement
+    if(input.files){
+        const img = input.files[0]
+        const reader = new FileReader()
+        reader.onload = (e)=>{
+            //預覽圖
+            previewImg.value = e.target?.result as string
+        }
+        reader.readAsDataURL(img)
+      main_img_file.value = img
+    }
+  }
 </script>

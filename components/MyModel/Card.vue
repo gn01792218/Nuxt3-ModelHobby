@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center items-center">
     <div class="cursor-pointer" @click="navigateTo(`MyModel/ModelDetail-${modelData.id}`)">
-        <img v-if="modelData.imgs" :src="modelData.imgs[0]" :alt="modelData.name_zh">
+        <img v-if="modelData.main_img" :src="`${supabaseBaseUrl}/storage/v1/object/public/images/${modelData.main_img}`" :alt="modelData.name_zh">
         <img v-else src="" alt="">
     </div>
     <div>
@@ -20,15 +20,17 @@
 import { type Model } from "~/types/model"
 import useFetchMyModels from "~/composables/api/useMyModelsAPI"
 import { useMyModelStore } from "~/store/useMyModelStore"
+import useSupabase from "~/composables/useSupabase"
 
 const props = defineProps<{
     modelData:Model
 }>()
-
+const { supabaseBaseUrl } = useSupabase()
 const { deleteMyModel } = useFetchMyModels()
 const { setmyModelList } = useMyModelStore()
 const { myModelList } = storeToRefs(useMyModelStore())
 const user = useSupabaseUser()
+const supabase = useSupabaseClient()
 
 async function fetchDeleteMyModel(){
   await deleteMyModel(props.modelData.id!)

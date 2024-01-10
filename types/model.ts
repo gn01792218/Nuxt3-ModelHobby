@@ -67,6 +67,7 @@ export declare interface Model{
     scale?:ModelScale,
     type?:ModelType,
     size?:ModelSize,
+    main_img?:string,
     imgs?:string[],
     PD?:Date, //生產日期
     purchaseInfo?:PurchaseInfo
