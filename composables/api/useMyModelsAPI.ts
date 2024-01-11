@@ -20,8 +20,8 @@ export default () => {
     if (error.value) throw createError({ ...error.value, message: "資料異常" });
     return data.value as unknown as Model;
   }
-  async function updateMyModel(payload: Model): Promise<Model> {
-    const r = await fetch("/api/myModels", {
+  async function updateMyModel(modelId:number ,payload: Model): Promise<Model> {
+    const r = await fetch(`/api/myModels/${modelId}`, {
       method: "put",
       body: JSON.stringify(payload),
     });

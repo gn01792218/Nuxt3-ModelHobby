@@ -22,6 +22,10 @@ export const useMyModelStore = defineStore("myModelStore", () => {
   function addModel(payload: Model) {
     myModelList.value.push(payload);
   }
+  function updateMyModelData(payload:Model){
+    const modelIndex = myModelList.value.findIndex(model=>model.id === payload.id)
+    myModelList.value[modelIndex] = payload
+  }
 
   return {
     //data
@@ -32,5 +36,6 @@ export const useMyModelStore = defineStore("myModelStore", () => {
     //methods
     setmyModelList,
     addModel,
+    updateMyModelData
   };
 });
