@@ -52,14 +52,14 @@
                   --------------購買訊息------------
                   <div>
                      <label for="model_purchase_info_ecommerce">購買平台</label>
-                     <select name="" id="" :v-model="modelPurchaseInfo.e_commerce_name">
+                     <select name="" id="" v-model="modelPurchaseInfo.e_commerce_name">
                         <option :value="Ecommerce.淘寶">{{ Ecommerce.淘寶 }}</option>
                         <option :value="Ecommerce.蝦皮">{{ Ecommerce.蝦皮 }}</option>
                      </select>
                   </div>
                   <div>
                      <label for="model_purchase_info_currency">幣種</label>
-                     <select name="" id="" :v-model="modelPurchaseInfo.currency">
+                     <select name="" id="" v-model="modelPurchaseInfo.currency">
                         <option :value="Currency.RMB">{{ Currency.RMB }}</option>
                         <option :value="Currency.TW">{{ Currency.TW }}</option>
                      </select>
@@ -138,7 +138,6 @@ async function uploadSpabaseStorage():Promise<string>{
    const supabase = useSupabaseClient()
 
    const fileName = `model_main_img_${crypto.randomUUID()}`
-   console.log(fileName)
    const { data, error } = await supabase.storage.from("images").upload(`public/${fileName}`, main_img_file.value)
    if(error) throw createError({
       ...error,

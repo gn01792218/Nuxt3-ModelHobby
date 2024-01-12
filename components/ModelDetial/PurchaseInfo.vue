@@ -25,6 +25,12 @@
                     </select>
                 </div>
                 <div>
+                    <select name="" id="" v-model="editPurchaseInfo.currency">
+                        <option :value="Currency.RMB">RMB</option>
+                        <option :value="Currency.TW">TW</option>
+                    </select>
+                </div>
+                <div>
                     <label for="purchase_price">購買價格</label>
                     <input id="purchase_price" type="number" v-model="editPurchaseInfo.price">
                 </div>
