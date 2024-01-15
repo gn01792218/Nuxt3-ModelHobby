@@ -2,7 +2,9 @@
    <p>我的模型</p>
    <section class="p-5 w-full h-[100px] bg-red-500 flex justify-start">
       <div class="">
-         <button v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d'" class="border-2 p-5" @click="showAddModelPanel = !showAddModelPanel">+添加模型</button>
+         <button
+            v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d'"
+            class="border-2 p-5" @click="showAddModelPanel = !showAddModelPanel">+添加模型</button>
          <div class="bg-yellow-600 absolute p-5" v-show="showAddModelPanel">
             <div>
                <div>
@@ -82,9 +84,7 @@
          </div>
       </div>
    </section>
-   <MyModelCardGroup group-title="未組裝" :card-list="unFinishedModels" />
-   <MyModelCardGroup group-title="已組裝" :card-list="finishedModels" />
-   <MyModelCardGroup group-title="未入庫" :card-list="unStockInModels" />
+   <MyModelTabsArea :un-stock-in-models="unStockInModels" :un-finished-models="unFinishedModels" :finished-models="finishedModels"/>
 </template>
 
 <script setup lang="ts">
@@ -101,7 +101,7 @@ import {
 } from "~/types/model"
 import { useMyModelStore } from '../../store/useMyModelStore'
 // const { handleUploadImg } = useUtils()
-const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo  } = useMyModelsAPI()
+const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo } = useMyModelsAPI()
 const {
    myModelList,
    unStockInModels,
@@ -111,7 +111,7 @@ const {
 const { fetchMyModels } = useFetchMyModels()
 const user = useSupabaseUser()
 
-if(!myModelList.value.length) fetchMyModels()
+if (!myModelList.value.length) fetchMyModels()
 
 const showAddModelPanel = ref(false)
 const modelSize = ref<ModelSize>({
@@ -133,15 +133,15 @@ const model: Model = {
 const previewImg = ref("")
 const main_img_file = ref<File>()
 
-async function uploadSpabaseStorage():Promise<string>{
-   if(!main_img_file.value) return ''
+async function uploadSpabaseStorage(): Promise<string> {
+   if (!main_img_file.value) return ''
    const supabase = useSupabaseClient()
 
    const fileName = `model_main_img_${crypto.randomUUID()}`
    const { data, error } = await supabase.storage.from("images").upload(`public/${fileName}`, main_img_file.value)
-   if(error) throw createError({
+   if (error) throw createError({
       ...error,
-      message:'無法上傳圖片',
+      message: '無法上傳圖片',
    })
    return data.path
 }
@@ -155,7 +155,7 @@ async function fetchAddMyModel() {
    const size = addMyModelsSize(myModel.id, modelSize.value)
    //添加購買明細
    const purchaseInfo = addMyModelPurchaseInfo(myModel.id, modelPurchaseInfo.value)
-   await Promise.allSettled([size,purchaseInfo])
+   await Promise.allSettled([size, purchaseInfo])
    //重新拉取資料
    await fetchMyModels()
    //reset
@@ -163,17 +163,17 @@ async function fetchAddMyModel() {
    model.name_en = ''
    showAddModelPanel.value = false
 }
-async function handleUploadImg(event:InputEvent){
-    const input = event.target as HTMLInputElement
-    if(input.files){
-        const img = input.files[0]
-        const reader = new FileReader()
-        reader.onload = (e)=>{
-            //預覽圖
-            previewImg.value = e.target?.result as string
-        }
-        reader.readAsDataURL(img)
+async function handleUploadImg(event: InputEvent) {
+   const input = event.target as HTMLInputElement
+   if (input.files) {
+      const img = input.files[0]
+      const reader = new FileReader()
+      reader.onload = (e) => {
+         //預覽圖
+         previewImg.value = e.target?.result as string
+      }
+      reader.readAsDataURL(img)
       main_img_file.value = img
-    }
-  }
+   }
+}
 </script>
