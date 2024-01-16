@@ -50,6 +50,7 @@ model ModelFinishInfo{
   id              Int @unique @id @default(autoincrement())
   finished_date    DateTime?
   describtions    String[] @default([])  
+  process_imgs    String[] @default([])
   gallery         String[] @default([])
   modelId         Int @unique
   model           MyModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
