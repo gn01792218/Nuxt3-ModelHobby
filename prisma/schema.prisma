@@ -21,9 +21,11 @@ model MyModel{
   type           String?
   size           ModelSize?
   main_img       String?
+  panting_guide  String[] @default([])
   imgs           String[] @default([])
   PD             DateTime?
   purchaseInfo   PurchaseInfo?
+  finishInfo     ModelFinishInfo?
 }
 model ModelSize {
   id          Int @unique @id @default(autoincrement())
@@ -41,6 +43,14 @@ model PurchaseInfo{
   price           Float
   shop_name       String?
   purchase_date   DateTime?
+  modelId         Int @unique
+  model           MyModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
+}
+model ModelFinishInfo{
+  id              Int @unique @id @default(autoincrement())
+  finished_date    DateTime?
+  describetion    String?
+  gallery         String[] @default([])
   modelId         Int @unique
   model           MyModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
 }
