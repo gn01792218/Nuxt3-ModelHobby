@@ -24,8 +24,8 @@ model MyModel{
   panting_guide  String[] @default([])
   imgs           String[] @default([])
   PD             DateTime?
-  purchaseInfo   PurchaseInfo?
-  finishInfo     ModelFinishInfo?
+  purchase_info   PurchaseInfo?
+  finish_info     ModelFinishInfo?
 }
 model ModelSize {
   id          Int @unique @id @default(autoincrement())
@@ -49,7 +49,7 @@ model PurchaseInfo{
 model ModelFinishInfo{
   id              Int @unique @id @default(autoincrement())
   finished_date    DateTime?
-  describetion    String?
+  describtions    String[] @default([])  
   gallery         String[] @default([])
   modelId         Int @unique
   model           MyModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
