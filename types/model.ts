@@ -57,6 +57,12 @@ export declare interface PurchaseInfo{
     shop_name?:string,
     purchase_date?:Date,
 }
+export declare interface ModelFinishInfo{
+    finished_date?:Date,
+    descriptions?:string[],
+    process_imgs?:string[],
+    gallery?:string[]
+}
 export declare interface Model{
     id?:number,
     name_zh:string,
@@ -68,8 +74,10 @@ export declare interface Model{
     type?:ModelType,
     size?:ModelSize,
     main_img?:string,
+    panting_guid?:string[]
     imgs?:string[],
     PD?:Date, //生產日期
     purchaseInfo?:PurchaseInfo
+    finish_info?:ModelFinishInfo
 }
 
