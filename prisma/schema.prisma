@@ -49,7 +49,7 @@ model PurchaseInfo{
 model ModelFinishInfo{
   id              Int @unique @id @default(autoincrement())
   finished_date    DateTime?
-  describtions    String[] @default([])  
+  describtion    String?   
   process_imgs    String[] @default([])
   gallery         String[] @default([])
   modelId         Int @unique

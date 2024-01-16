@@ -1,4 +1,4 @@
-import { type Model, type ModelSize, type PurchaseInfo } from "~/types/model";
+import { type Model, type ModelSize, type PurchaseInfo, type ModelFinishInfo } from "~/types/model";
 
 export default () => {
   //MyModel API
@@ -75,6 +75,26 @@ export default () => {
     });
     return r as unknown as PurchaseInfo;
   }
+   //ModelFinishInfo API
+  async function getModelFinishInfo(modelId: number): Promise<ModelFinishInfo> {
+    const { data, error } = await useFetch(`/api/myModels/ModelFinishInfo/${modelId}`);
+    if (error.value) throw createError({ ...error.value, message: "資料異常" });
+    return data.value as unknown as ModelFinishInfo;
+  }
+  async function addMyModelFinishInfo(modelId: number, payload: ModelFinishInfo): Promise<ModelFinishInfo> {
+    const r = await fetch(`/api/myModels/ModelFinishInfo/${modelId}`, {
+      method: "post",
+      body: JSON.stringify(payload),
+    });
+    return r as unknown as ModelFinishInfo;
+  }
+  async function updateMyModelFinishInfo(modelId: number, payload: ModelFinishInfo): Promise<ModelFinishInfo> {
+    const r = await fetch(`/api/myModels/ModelFinishInfo/${modelId}`, {
+      method: "put",
+      body: JSON.stringify(payload),
+    });
+    return r as unknown as ModelFinishInfo;
+  }
   return {
     //data
     //methods
@@ -89,5 +109,8 @@ export default () => {
     getModelPurchaseInfo,
     addMyModelPurchaseInfo,
     updateMyModelPurchaseInfo,
+    getModelFinishInfo,
+    addMyModelFinishInfo,
+    updateMyModelFinishInfo
   };
 };

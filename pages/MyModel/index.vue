@@ -5,7 +5,7 @@
          <button
             v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d'"
             class="border-2 p-5" @click="showAddModelPanel = !showAddModelPanel">+添加模型</button>
-         <div class="bg-yellow-600 absolute p-5" v-show="showAddModelPanel">
+         <div class="bg-yellow-600 absolute p-5 z-[2]" v-show="showAddModelPanel">
             <div>
                <div>
                   <label for="model_name_zh">中文名稱</label>
@@ -79,12 +79,34 @@
                      <input id="model_purchase_info_shop_name" type="date" v-model="modelPurchaseInfo.purchase_date">
                   </div>
                </div>
+               <div>
+                  --------------完成資訊------------
+                  <div>
+                     <label for="model_finish_info_finished_date">完成日期</label>
+                     <input id="model_finish_info_finished_date" type="date" v-model="modelFinishInfo.finished_date">
+                  </div>
+                  <div>
+                     <label for="model_process_imgs">製作圖片</label>
+                     <input type="file" id="model_process_imgs" @change="handleUploadProcessImgs" multiple>
+                     <div v-for="img in previewProcessImgs" :key="img">
+                        <img :src="img" alt="預覽圖">
+                     </div>
+                  </div>
+                  <div>
+                     <label for="model_finished_imgs">完成圖片</label>
+                     <input type="file" id="model_finished_imgs" @change="handleUploadFinishedImgs" multiple>
+                     <div v-for="img in previewFinishedImgs" :key="img">
+                        <img :src="img" alt="預覽圖">
+                     </div>
+                  </div>
+               </div>
             </div>
             <button class="ml-auto block border-2" @click="fetchAddMyModel">確認</button>
          </div>
       </div>
    </section>
-   <MyModelTabsArea :un-stock-in-models="unStockInModels" :un-finished-models="unFinishedModels" :finished-models="finishedModels"/>
+   <MyModelTabsArea :un-stock-in-models="unStockInModels" :un-finished-models="unFinishedModels"
+      :finished-models="finishedModels" />
 </template>
 
 <script setup lang="ts">
@@ -92,6 +114,7 @@
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import {
    type ModelSize,
+   type ModelFinishInfo,
    type PurchaseInfo,
    type Model,
    ModelStatus,
@@ -101,7 +124,7 @@ import {
 } from "~/types/model"
 import { useMyModelStore } from '../../store/useMyModelStore'
 // const { handleUploadImg } = useUtils()
-const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo } = useMyModelsAPI()
+const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo, addMyModelFinishInfo } = useMyModelsAPI()
 const {
    myModelList,
    unStockInModels,
@@ -110,6 +133,7 @@ const {
 } = storeToRefs(useMyModelStore())
 const { fetchMyModels } = useFetchMyModels()
 const user = useSupabaseUser()
+const supabase = useSupabaseClient()
 
 if (!myModelList.value.length) fetchMyModels()
 
@@ -125,17 +149,22 @@ const modelPurchaseInfo = ref<PurchaseInfo>({
    currency: Currency.RMB,
    price: 0,
 })
+const modelFinishInfo:ModelFinishInfo = ({
+})
 const model: Model = {
    status: ModelStatus.未入庫,
    name_zh: '',
    name_en: '',
 }
 const previewImg = ref("")
+const previewProcessImgs = ref<string[]>([])
+const previewFinishedImgs = ref<string[]>([])
 const main_img_file = ref<File>()
+const process_imgs = ref<FileList>()
+const finished_imgs = ref<FileList>()
 
 async function uploadSpabaseStorage(): Promise<string> {
    if (!main_img_file.value) return ''
-   const supabase = useSupabaseClient()
 
    const fileName = `model_main_img_${crypto.randomUUID()}`
    const { data, error } = await supabase.storage.from("images").upload(`public/${fileName}`, main_img_file.value)
@@ -145,17 +174,57 @@ async function uploadSpabaseStorage(): Promise<string> {
    })
    return data.path
 }
+async function uploadModelProcessImagesStorage(): Promise<any[]> {
+   if (!process_imgs.value?.length) return []
+
+   const paths:any[] = []
+   const promises: Promise<any>[] = []
+      for (let i = 0; i < process_imgs.value.length; i++) {
+      const fileName = `model_process_imgs_modelId_${model.id}_${crypto.randomUUID()}`
+      const imgRes = supabase.storage.from("model_finish_info_images").upload(`public/${fileName}`, process_imgs.value[i])
+      promises.push(imgRes)
+   }
+   const reses = await Promise.allSettled(promises)
+   console.log(reses)
+   reses.forEach((res: any) => {
+      paths.push(res.value.data.path)
+   })
+
+   return paths
+}
+async function uploadModelGalleryImagesStorage(): Promise<any[]> {
+   if (!finished_imgs.value?.length) return []
+
+   const paths:any[] = []
+   const promises: Promise<any>[] = []
+      for (let i = 0; i < finished_imgs.value.length; i++) {
+      const fileName = `model_finished_imgs_modelId_${model.id}_${crypto.randomUUID()}`
+      const imgRes = supabase.storage.from("model_finish_info_images").upload(`public/${fileName}`, finished_imgs.value[i])
+      promises.push(imgRes)
+   }
+   const reses = await Promise.allSettled(promises)
+   reses.forEach((res: any) => {
+      paths.push(res.value.data.path)
+   })
+
+   return paths
+}
 
 async function fetchAddMyModel() {
    //先處理圖片
    model.main_img = await uploadSpabaseStorage()
+   modelFinishInfo.process_imgs = await uploadModelProcessImagesStorage()
+   modelFinishInfo.gallery = await uploadModelGalleryImagesStorage()
    const myModel = await addMyModel(model)
    if (!myModel.id) return alert('出問題了')
    //添加尺寸
    const size = addMyModelsSize(myModel.id, modelSize.value)
    //添加購買明細
    const purchaseInfo = addMyModelPurchaseInfo(myModel.id, modelPurchaseInfo.value)
-   await Promise.allSettled([size, purchaseInfo])
+   //添加完成資訊
+   const finishedInfo = addMyModelFinishInfo(myModel.id, modelFinishInfo)
+   //等待全部完成
+   await Promise.allSettled([size, purchaseInfo, finishedInfo])
    //重新拉取資料
    await fetchMyModels()
    //reset
@@ -174,6 +243,44 @@ async function handleUploadImg(event: InputEvent) {
       }
       reader.readAsDataURL(img)
       main_img_file.value = img
+   }
+}
+async function handleUploadProcessImgs(event: InputEvent) {
+   const input = event.target as HTMLInputElement
+   const files = input.files
+   if (files) {
+      previewProcessImgs.value.length = 0
+      for (let i = 0; i < files.length; i++) {
+         const img = files[i]
+         if (img.type.startsWith('image/')) {
+            const reader = new FileReader()
+            reader.onload = (e) => {
+               //預覽圖
+               previewProcessImgs.value.push(e.target?.result as string)
+            }
+            reader.readAsDataURL(img)
+            process_imgs.value = files
+         }
+      }
+   }
+}
+async function handleUploadFinishedImgs(event: InputEvent) {
+   const input = event.target as HTMLInputElement
+   const files = input.files
+   if (files) {
+      previewFinishedImgs.value.length = 0
+      for (let i = 0; i < files.length; i++) {
+         const img = files[i]
+         if (img.type.startsWith('image/')) {
+            const reader = new FileReader()
+            reader.onload = (e) => {
+               //預覽圖
+               previewFinishedImgs.value.push(e.target?.result as string)
+            }
+            reader.readAsDataURL(img)
+            finished_imgs.value = files
+         }
+      }
    }
 }
 </script>

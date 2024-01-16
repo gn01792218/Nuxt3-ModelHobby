@@ -59,7 +59,7 @@ export declare interface PurchaseInfo{
 }
 export declare interface ModelFinishInfo{
     finished_date?:Date,
-    descriptions?:string[],
+    description?:string,
     process_imgs?:string[],
     gallery?:string[]
 }
