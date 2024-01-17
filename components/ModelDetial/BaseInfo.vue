@@ -2,7 +2,7 @@
 <template>
     <section class="border-2">
         <section>
-            <img :src="`${supabaseBaseUrl}/storage/v1/object/public/images/${currentModel.main_img}`" alt="">
+            <img :src="getModelImagePublicUrl(currentModel.main_img? currentModel.main_img : '')" alt="">
             <p>{{ modelId }}</p>
             <p>{{ currentModel?.name_zh }}</p>
             <p>{{ currentModel?.name_en }}</p>
@@ -46,7 +46,7 @@ const props = defineProps<{
 }>()
 
 const supabase = useSupabaseClient()
-const { supabaseBaseUrl } = useSupabase()
+const { getModelImagePublicUrl } = useSupabase()
 const { myModelList } = storeToRefs(useMyModelStore())
 const { updateMyModelData } = useMyModelStore()
 const { updateMyModel, getMyModel } = useMyModelsAPI()
@@ -61,7 +61,7 @@ const editModel = ref<Model>({
     status: currentModel.value.status,
     main_img: currentModel.value.main_img
 })
-const previewImg = ref(`${supabaseBaseUrl}/storage/v1/object/public/images/${currentModel.value.main_img}`)
+const previewImg = ref(getModelImagePublicUrl(currentModel.value.main_img!))
 const main_img_file = ref<File>()
 
 async function uploadSpabaseStorage():Promise<string>{

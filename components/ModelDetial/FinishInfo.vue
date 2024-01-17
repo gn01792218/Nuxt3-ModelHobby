@@ -9,7 +9,7 @@
                 製作過程圖片
                 <ul v-for="img in finishInfo?.process_imgs" :key="img">
                     <li>
-                        <img :src="`${supabaseBaseUrl}/storage/v1/object/public/model_finish_info_images/${img}`" alt="">
+                        <img :src="getFinishImagePublicUrl(img)" alt="">
                     </li>
                 </ul>
             </div>
@@ -17,7 +17,7 @@
                 完成圖片
                 <ul v-for="img in finishInfo?.gallery" :key="img">
                     <li>
-                        <img :src="`${supabaseBaseUrl}/storage/v1/object/public/model_finish_info_images/${img}`" alt="">
+                        <img :src="getFinishImagePublicUrl(img)" alt="">
                     </li>
                 </ul>
             </div>
@@ -61,7 +61,7 @@ const props = defineProps<{
 
 const { getModelFinishInfo, addMyModelFinishInfo, updateMyModelFinishInfo } = useMyModelsAPI()
 const supabase = useSupabaseClient()
-const { supabaseBaseUrl } = useSupabase()
+const { getFinishImagePublicUrl } = useSupabase()
 
 const showEditPanel = ref(false)
 const finishInfo = ref<ModelFinishInfo>()

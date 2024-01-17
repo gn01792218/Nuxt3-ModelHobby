@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center items-center">
     <div class="cursor-pointer" @click="navigateTo(`MyModel/ModelDetail-${modelData.id}`)">
-        <img v-if="modelData.main_img" :src="`${supabaseBaseUrl}/storage/v1/object/public/images/${modelData.main_img}`" :alt="modelData.name_zh">
+        <img v-if="modelData.main_img" :src="getModelImagePublicUrl(modelData.main_img)" :alt="modelData.name_zh">
         <img v-else src="" alt="沒有上傳圖片">
     </div>
     <div>
@@ -25,7 +25,7 @@ import useSupabase from "~/composables/useSupabase"
 const props = defineProps<{
     modelData:Model
 }>()
-const { supabaseBaseUrl } = useSupabase()
+const { getModelImagePublicUrl } = useSupabase()
 const { deleteMyModel } = useFetchMyModels()
 const { setmyModelList } = useMyModelStore()
 const { myModelList } = storeToRefs(useMyModelStore())

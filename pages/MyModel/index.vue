@@ -149,8 +149,7 @@ const modelPurchaseInfo = ref<PurchaseInfo>({
    currency: Currency.RMB,
    price: 0,
 })
-const modelFinishInfo:ModelFinishInfo = ({
-})
+const modelFinishInfo:ModelFinishInfo = ({})
 const model: Model = {
    status: ModelStatus.未入庫,
    name_zh: '',
