@@ -95,7 +95,7 @@
                   <div>
                      <label for="model_finished_imgs">完成圖片</label>
                      <input type="file" id="model_finished_imgs" @change="handleUploadFinishedImgs" multiple>
-                     <div v-for="img in previewFinishedImgs" :key="img">
+                     <div v-for="img in previewGalleryImgs" :key="img">
                         <img :src="img" alt="預覽圖">
                      </div>
                   </div>
@@ -132,6 +132,7 @@ const {
    finishedModels,
 } = storeToRefs(useMyModelStore())
 const { fetchMyModels } = useFetchMyModels()
+const {uploadImageToSpabaseStorage, uploadMultipleImagesToSupabaseStorage } = useSupabase()
 const user = useSupabaseUser()
 const supabase = useSupabaseClient()
 
@@ -157,63 +158,30 @@ const model: Model = {
 }
 const previewImg = ref("")
 const previewProcessImgs = ref<string[]>([])
-const previewFinishedImgs = ref<string[]>([])
+const previewGalleryImgs = ref<string[]>([])
 const main_img_file = ref<File>()
 const process_imgs = ref<FileList>()
-const finished_imgs = ref<FileList>()
+const gallery_imgs = ref<FileList>()
 
-async function uploadSpabaseStorage(): Promise<string> {
-   if (!main_img_file.value) return ''
 
-   const fileName = `model_main_img_${crypto.randomUUID()}`
-   const { data, error } = await supabase.storage.from("images").upload(`public/${fileName}`, main_img_file.value)
-   if (error) throw createError({
-      ...error,
-      message: '無法上傳圖片',
-   })
-   return data.path
-}
-async function uploadModelProcessImagesStorage(): Promise<any[]> {
-   if (!process_imgs.value?.length) return []
-
-   const paths:any[] = []
-   const promises: Promise<any>[] = []
-      for (let i = 0; i < process_imgs.value.length; i++) {
-      const fileName = `model_process_imgs_modelId_${model.id}_${crypto.randomUUID()}`
-      const imgRes = supabase.storage.from("model_finish_info_images").upload(`public/${fileName}`, process_imgs.value[i])
-      promises.push(imgRes)
-   }
-   const reses = await Promise.allSettled(promises)
-   console.log(reses)
-   reses.forEach((res: any) => {
-      paths.push(res.value.data.path)
-   })
-
-   return paths
-}
-async function uploadModelGalleryImagesStorage(): Promise<any[]> {
-   if (!finished_imgs.value?.length) return []
-
-   const paths:any[] = []
-   const promises: Promise<any>[] = []
-      for (let i = 0; i < finished_imgs.value.length; i++) {
-      const fileName = `model_finished_imgs_modelId_${model.id}_${crypto.randomUUID()}`
-      const imgRes = supabase.storage.from("model_finish_info_images").upload(`public/${fileName}`, finished_imgs.value[i])
-      promises.push(imgRes)
-   }
-   const reses = await Promise.allSettled(promises)
-   reses.forEach((res: any) => {
-      paths.push(res.value.data.path)
-   })
-
-   return paths
-}
 
 async function fetchAddMyModel() {
    //先處理圖片
-   model.main_img = await uploadSpabaseStorage()
-   modelFinishInfo.process_imgs = await uploadModelProcessImagesStorage()
-   modelFinishInfo.gallery = await uploadModelGalleryImagesStorage()
+   model.main_img = await uploadImageToSpabaseStorage(main_img_file.value!,{
+      bucketName:'images',
+      modelId:model.id!,
+      fileNameTitle:'model_main_img'
+   })
+   modelFinishInfo.process_imgs = await uploadMultipleImagesToSupabaseStorage(process_imgs.value!,{
+      bucketName:'model_finish_info_images',
+      modelId:model.id!,
+      fileNameTitle:'model_process_img'
+   })
+   modelFinishInfo.gallery = await uploadMultipleImagesToSupabaseStorage(gallery_imgs.value!,{
+      bucketName:'model_finish_info_images',
+      modelId:model.id!,
+      fileNameTitle:'model_gallery_img'
+   })
    const myModel = await addMyModel(model)
    if (!myModel.id) return alert('出問題了')
    //添加尺寸
@@ -267,17 +235,17 @@ async function handleUploadFinishedImgs(event: InputEvent) {
    const input = event.target as HTMLInputElement
    const files = input.files
    if (files) {
-      previewFinishedImgs.value.length = 0
+      previewGalleryImgs.value.length = 0
       for (let i = 0; i < files.length; i++) {
          const img = files[i]
          if (img.type.startsWith('image/')) {
             const reader = new FileReader()
             reader.onload = (e) => {
                //預覽圖
-               previewFinishedImgs.value.push(e.target?.result as string)
+               previewGalleryImgs.value.push(e.target?.result as string)
             }
             reader.readAsDataURL(img)
-            finished_imgs.value = files
+            gallery_imgs.value = files
          }
       }
    }

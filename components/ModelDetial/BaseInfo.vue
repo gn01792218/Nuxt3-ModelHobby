@@ -46,7 +46,7 @@ const props = defineProps<{
 }>()
 
 const supabase = useSupabaseClient()
-const { getModelImagePublicUrl } = useSupabase()
+const { getModelImagePublicUrl, uploadImageToSpabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
 const { myModelList } = storeToRefs(useMyModelStore())
 const { updateMyModelData } = useMyModelStore()
 const { updateMyModel, getMyModel } = useMyModelsAPI()
@@ -64,17 +64,6 @@ const editModel = ref<Model>({
 const previewImg = ref(getModelImagePublicUrl(currentModel.value.main_img!))
 const main_img_file = ref<File>()
 
-async function uploadSpabaseStorage():Promise<string>{
-   if(!main_img_file.value) return ''
-
-   const fileName = `model_main_img_${crypto.randomUUID()}`
-   const { data, error } = await supabase.storage.from("images").upload(`public/${fileName}`, main_img_file.value)
-   if(error) throw createError({
-      ...error,
-      message:'無法上傳圖片',
-   })
-   return data.path
-}
 async function handleUploadImg(event:InputEvent){
     const input = event.target as HTMLInputElement
     if(input.files){
@@ -92,10 +81,14 @@ async function handleUploadImg(event:InputEvent){
 async function fetchUpdateModel() {
     if(currentModel.value?.main_img){
         //先刪除supabase storage裡原本的圖片
-        await supabase.storage.from('images').remove([currentModel.value.main_img])
+        removeImageFromSupabaseStorage('images', currentModel.value.main_img)
     }
     //上傳圖片到supabase storage中, 並獲取要存於DB的路徑string
-    editModel.value.main_img = await uploadSpabaseStorage()
+    editModel.value.main_img = await uploadImageToSpabaseStorage(main_img_file.value!, {
+        bucketName:'images',
+        modelId:props.modelId!,
+        fileNameTitle:'model_main_img'
+    })
     await updateMyModel(props.modelId, editModel.value)
     await fetchMyModel()
 }

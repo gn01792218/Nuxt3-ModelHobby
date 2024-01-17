@@ -39,7 +39,7 @@
                 <div>
                     <label for="model_finished_imgs">完成圖片</label>
                     <input type="file" id="model_finished_imgs" @change="handleUploadFinishedImgs" multiple>
-                    <div v-for="img in previewFinishedImgs" :key="img">
+                    <div v-for="img in previewGalleryImgs" :key="img">
                         <img :src="img" alt="預覽圖">
                     </div>
                 </div>
@@ -61,7 +61,7 @@ const props = defineProps<{
 
 const { getModelFinishInfo, addMyModelFinishInfo, updateMyModelFinishInfo } = useMyModelsAPI()
 const supabase = useSupabaseClient()
-const { getFinishImagePublicUrl } = useSupabase()
+const { getFinishImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
 
 const showEditPanel = ref(false)
 const finishInfo = ref<ModelFinishInfo>()
@@ -69,10 +69,10 @@ const editFinishInfo = ref<ModelFinishInfo>({
 })
 
 const previewProcessImgs = ref<string[]>([])
-const previewFinishedImgs = ref<string[]>([])
+const previewGalleryImgs = ref<string[]>([])
 
 const process_imgs_file_list = ref<FileList>()
-const finished_imgs_file_list = ref<FileList>()
+const gallery_imgs_file_list = ref<FileList>()
 
 init()
 
@@ -85,30 +85,26 @@ async function init() {
 async function fetchUpdatePurchaseInfo() {
     if(finishInfo.value?.gallery?.length || finishInfo.value?.process_imgs?.length){
         //先刪除supabase storage裡原本的圖片
-        const promises:Promise<any>[] = []
         if(finishInfo.value?.gallery?.length){
             finishInfo.value?.gallery?.forEach(img=>{
-                promises.push(supabase.storage.from('model_finish_info_images').remove([img]))
+                removeImageFromSupabaseStorage('model_finish_info_images', img)
             })
         }
         if(finishInfo.value?.process_imgs?.length){
             finishInfo.value?.process_imgs?.forEach(img=>{
-                promises.push(supabase.storage.from('model_finish_info_images').remove([img]))
+                removeImageFromSupabaseStorage('model_finish_info_images', img)
             })
         }
-        await Promise.all(promises)
     }
     //1.先處理圖片
-    editFinishInfo.value.process_imgs = await uploadModelProcessImagesStorage()
-    editFinishInfo.value.gallery = await uploadModelGalleryImagesStorage()
+    await fetchUploadImageToSupabaseStorage()
     await updateMyModelFinishInfo(props.modelId, editFinishInfo.value)
     await fetchModelFinishInfo()
 }
 
 async function fetchAddModelPurchaseInfo() {
     //1.先處理圖片
-    editFinishInfo.value.process_imgs = await uploadModelProcessImagesStorage()
-    editFinishInfo.value.gallery = await uploadModelGalleryImagesStorage()
+    fetchUploadImageToSupabaseStorage() 
     await addMyModelFinishInfo(props.modelId, editFinishInfo.value)
     await fetchModelFinishInfo()
 }
@@ -125,40 +121,6 @@ function resetData() {
 
 function showEditPanelHandel() {
     showEditPanel.value = !showEditPanel.value
-}
-async function uploadModelProcessImagesStorage(): Promise<any[]> {
-    if (!process_imgs_file_list.value?.length) return []
-
-    const paths: any[] = []
-    const promises: Promise<any>[] = []
-    for (let i = 0; i < process_imgs_file_list.value.length; i++) {
-        const fileName = `model_process_imgs_modelId_${props.modelId}_${crypto.randomUUID()}`
-        const imgRes = supabase.storage.from("model_finish_info_images").upload(`public/${fileName}`, process_imgs_file_list.value[i])
-        promises.push(imgRes)
-    }
-    const reses = await Promise.allSettled(promises)
-    reses.forEach((res: any) => {
-        paths.push(res.value.data.path)
-    })
-
-    return paths
-}
-async function uploadModelGalleryImagesStorage(): Promise<any[]> {
-    if (!finished_imgs_file_list.value?.length) return []
-
-    const paths: any[] = []
-    const promises: Promise<any>[] = []
-    for (let i = 0; i < finished_imgs_file_list.value.length; i++) {
-        const fileName = `model_finished_imgs_modelId_${props.modelId}_${crypto.randomUUID()}`
-        const imgRes = supabase.storage.from("model_finish_info_images").upload(`public/${fileName}`, finished_imgs_file_list.value[i])
-        promises.push(imgRes)
-    }
-    const reses = await Promise.allSettled(promises)
-    reses.forEach((res: any) => {
-        paths.push(res.value.data.path)
-    })
-
-    return paths
 }
 async function handleUploadProcessImgs(event: InputEvent) {
     const input = event.target as HTMLInputElement
@@ -183,19 +145,31 @@ async function handleUploadFinishedImgs(event: InputEvent) {
     const input = event.target as HTMLInputElement
     const files = input.files
     if (files) {
-        previewFinishedImgs.value.length = 0
+        previewGalleryImgs.value.length = 0
         for (let i = 0; i < files.length; i++) {
             const img = files[i]
             if (img.type.startsWith('image/')) {
                 const reader = new FileReader()
                 reader.onload = (e) => {
                     //預覽圖
-                    previewFinishedImgs.value.push(e.target?.result as string)
+                    previewGalleryImgs.value.push(e.target?.result as string)
                 }
                 reader.readAsDataURL(img)
-                finished_imgs_file_list.value = files
+                gallery_imgs_file_list.value = files
             }
         }
     }
+}
+async function fetchUploadImageToSupabaseStorage() {
+  editFinishInfo.value.process_imgs=await uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value!, {
+    bucketName: 'model_finish_info_images',
+    modelId: props.modelId!,
+    fileNameTitle: 'model_process_img'
+  })
+  editFinishInfo.value.gallery=await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value!, {
+    bucketName: 'model_finish_info_images',
+    modelId: props.modelId!,
+    fileNameTitle: 'model_gallery_img'
+  })
 }
 </script>
