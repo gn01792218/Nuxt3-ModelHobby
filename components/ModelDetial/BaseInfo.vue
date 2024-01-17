@@ -2,7 +2,7 @@
 <template>
     <section class="border-2">
         <section>
-            <img :src="getModelImagePublicUrl(currentModel.main_img? currentModel.main_img : '')" alt="">
+            <img :src="getModelImagePublicUrl(currentModel.main_img ? currentModel.main_img : '')" alt="">
             <p>{{ modelId }}</p>
             <p>{{ currentModel?.name_zh }}</p>
             <p>{{ currentModel?.name_en }}</p>
@@ -64,30 +64,30 @@ const editModel = ref<Model>({
 const previewImg = ref(getModelImagePublicUrl(currentModel.value.main_img!))
 const main_img_file = ref<File>()
 
-async function handleUploadImg(event:InputEvent){
+async function handleUploadImg(event: InputEvent) {
     const input = event.target as HTMLInputElement
-    if(input.files){
+    if (input.files) {
         const img = input.files[0]
         const reader = new FileReader()
-        reader.onload = (e)=>{
+        reader.onload = (e) => {
             //預覽圖
             previewImg.value = e.target?.result as string
         }
         reader.readAsDataURL(img)
-      main_img_file.value = img
+        main_img_file.value = img
     }
-  }
+}
 
 async function fetchUpdateModel() {
-    if(currentModel.value?.main_img){
+    if (currentModel.value?.main_img) {
         //先刪除supabase storage裡原本的圖片
         removeImageFromSupabaseStorage('images', currentModel.value.main_img)
     }
     //上傳圖片到supabase storage中, 並獲取要存於DB的路徑string
     editModel.value.main_img = await uploadImageToSpabaseStorage(main_img_file.value!, {
-        bucketName:'images',
-        modelId:props.modelId!,
-        fileNameTitle:'model_main_img'
+        bucketName: 'images',
+        modelId: props.modelId!,
+        fileNameTitle: 'model_main_img'
     })
     await updateMyModel(props.modelId, editModel.value)
     await fetchMyModel()

@@ -80,6 +80,13 @@ async function init() {
     const purchaseInfoRes = await getModelFinishInfo(props.modelId)
     if (!purchaseInfoRes) return
     finishInfo.value = purchaseInfoRes
+    //修改面板的預覽圖裝載
+    finishInfo.value.process_imgs?.forEach(img=>{
+        previewProcessImgs.value.push(getFinishImagePublicUrl(img))
+    })
+    finishInfo.value.gallery?.forEach(img=>{
+        previewGalleryImgs.value.push(getFinishImagePublicUrl(img))
+    })
     resetData()
 }
 async function fetchUpdatePurchaseInfo() {
@@ -161,15 +168,23 @@ async function handleUploadFinishedImgs(event: InputEvent) {
     }
 }
 async function fetchUploadImageToSupabaseStorage() {
-  editFinishInfo.value.process_imgs=await uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value!, {
-    bucketName: 'model_finish_info_images',
-    modelId: props.modelId!,
-    fileNameTitle: 'model_process_img'
-  })
-  editFinishInfo.value.gallery=await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value!, {
-    bucketName: 'model_finish_info_images',
-    modelId: props.modelId!,
-    fileNameTitle: 'model_gallery_img'
-  })
+    if(process_imgs_file_list.value?.length){
+        editFinishInfo.value.process_imgs=await uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value!, {
+          bucketName: 'model_finish_info_images',
+          modelId: props.modelId!,
+          fileNameTitle: 'model_process_img'
+        })
+    }else{
+        editFinishInfo.value.process_imgs = finishInfo.value?.process_imgs
+    }
+    if(gallery_imgs_file_list.value?.length){
+        editFinishInfo.value.gallery=await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value!, {
+          bucketName: 'model_finish_info_images',
+          modelId: props.modelId!,
+          fileNameTitle: 'model_gallery_img'
+        })
+    }else{
+        editFinishInfo.value.gallery = finishInfo.value?.gallery
+    }
 }
 </script>
