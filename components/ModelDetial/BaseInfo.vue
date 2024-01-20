@@ -62,7 +62,7 @@ const editModel = ref<Model>({
     main_img: currentModel.value.main_img
 })
 const previewImg = ref(getModelImagePublicUrl(currentModel.value.main_img!))
-const main_img_file = ref<File>()
+const main_img_file = ref<File | null>(null)
 
 async function handleUploadImg(event: InputEvent) {
     const input = event.target as HTMLInputElement
@@ -79,16 +79,19 @@ async function handleUploadImg(event: InputEvent) {
 }
 
 async function fetchUpdateModel() {
-    if (currentModel.value?.main_img) {
-        //先刪除supabase storage裡原本的圖片
-        removeImageFromSupabaseStorage('images', currentModel.value.main_img)
-    }
     //上傳圖片到supabase storage中, 並獲取要存於DB的路徑string
-    editModel.value.main_img = await uploadImageToSpabaseStorage(main_img_file.value!, {
-        bucketName: 'images',
-        modelId: props.modelId!,
-        fileNameTitle: 'model_main_img'
-    })
+    if(main_img_file.value){ //假如有上傳圖片的話
+        //假如原本有圖片，先刪除
+        if (currentModel.value?.main_img) removeImageFromSupabaseStorage('images', currentModel.value.main_img)
+
+        editModel.value.main_img = await uploadImageToSpabaseStorage(main_img_file.value, {
+            bucketName: 'images',
+            modelId: props.modelId!,
+            fileNameTitle: 'model_main_img'
+        })
+
+        main_img_file.value = null //釋放圖片資源，避免重複上傳
+    }
     await updateMyModel(props.modelId, editModel.value)
     await fetchMyModel()
 }

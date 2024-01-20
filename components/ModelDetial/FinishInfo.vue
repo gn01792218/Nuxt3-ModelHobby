@@ -71,8 +71,8 @@ const editFinishInfo = ref<ModelFinishInfo>({
 const previewProcessImgs = ref<string[]>([])
 const previewGalleryImgs = ref<string[]>([])
 
-const process_imgs_file_list = ref<FileList>()
-const gallery_imgs_file_list = ref<FileList>()
+const process_imgs_file_list = ref<FileList | null>()
+const gallery_imgs_file_list = ref<FileList | null>()
 
 init()
 
@@ -81,29 +81,15 @@ async function init() {
     if (!purchaseInfoRes) return
     finishInfo.value = purchaseInfoRes
     //修改面板的預覽圖裝載
-    finishInfo.value.process_imgs?.forEach(img=>{
+    finishInfo.value.process_imgs?.forEach(img => {
         previewProcessImgs.value.push(getFinishImagePublicUrl(img))
     })
-    finishInfo.value.gallery?.forEach(img=>{
+    finishInfo.value.gallery?.forEach(img => {
         previewGalleryImgs.value.push(getFinishImagePublicUrl(img))
     })
     resetData()
 }
 async function fetchUpdatePurchaseInfo() {
-    if(finishInfo.value?.gallery?.length || finishInfo.value?.process_imgs?.length){
-        //先刪除supabase storage裡原本的圖片
-        if(finishInfo.value?.gallery?.length){
-            finishInfo.value?.gallery?.forEach(img=>{
-                removeImageFromSupabaseStorage('model_finish_info_images', img)
-            })
-        }
-        if(finishInfo.value?.process_imgs?.length){
-            finishInfo.value?.process_imgs?.forEach(img=>{
-                removeImageFromSupabaseStorage('model_finish_info_images', img)
-            })
-        }
-    }
-    //1.先處理圖片
     await fetchUploadImageToSupabaseStorage()
     await updateMyModelFinishInfo(props.modelId, editFinishInfo.value)
     await fetchModelFinishInfo()
@@ -111,7 +97,7 @@ async function fetchUpdatePurchaseInfo() {
 
 async function fetchAddModelPurchaseInfo() {
     //1.先處理圖片
-    fetchUploadImageToSupabaseStorage() 
+    fetchUploadImageToSupabaseStorage()
     await addMyModelFinishInfo(props.modelId, editFinishInfo.value)
     await fetchModelFinishInfo()
 }
@@ -168,22 +154,34 @@ async function handleUploadFinishedImgs(event: InputEvent) {
     }
 }
 async function fetchUploadImageToSupabaseStorage() {
-    if(process_imgs_file_list.value?.length){
-        editFinishInfo.value.process_imgs=await uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value!, {
-          bucketName: 'model_finish_info_images',
-          modelId: props.modelId!,
-          fileNameTitle: 'model_process_img'
+    if (process_imgs_file_list.value?.length) {
+        if (finishInfo.value?.process_imgs?.length) {
+            finishInfo.value?.process_imgs?.forEach(img => {
+                removeImageFromSupabaseStorage('model_finish_info_images', img)
+            })
+        }
+        editFinishInfo.value.process_imgs = await uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value, {
+            bucketName: 'model_finish_info_images',
+            modelId: props.modelId!,
+            fileNameTitle: 'model_process_img'
         })
-    }else{
+        process_imgs_file_list.value = null //釋放圖片資源
+    } else {
         editFinishInfo.value.process_imgs = finishInfo.value?.process_imgs
     }
-    if(gallery_imgs_file_list.value?.length){
-        editFinishInfo.value.gallery=await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value!, {
-          bucketName: 'model_finish_info_images',
-          modelId: props.modelId!,
-          fileNameTitle: 'model_gallery_img'
+    if (gallery_imgs_file_list.value?.length) {
+        if (finishInfo.value?.gallery?.length) {  //有原圖的話要全部刪除
+            finishInfo.value?.gallery?.forEach(img => {
+                removeImageFromSupabaseStorage('model_finish_info_images', img)
+            })
+        }
+        editFinishInfo.value.gallery = await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value, {
+            bucketName: 'model_finish_info_images',
+            modelId: props.modelId!,
+            fileNameTitle: 'model_gallery_img'
         })
-    }else{
+        gallery_imgs_file_list.value = null //釋放圖片資源
+    } else {
         editFinishInfo.value.gallery = finishInfo.value?.gallery
     }
 }
