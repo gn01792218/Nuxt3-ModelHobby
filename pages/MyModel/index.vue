@@ -2,9 +2,11 @@
    <p>我的模型</p>
    <section class="p-5 w-full h-[100px] bg-red-500 flex justify-start">
       <div class="">
-         <button
-            v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d'"
-            class="border-2 p-5" @click="showAddModelPanel = !showAddModelPanel">+添加模型</button>
+         <UButton v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d'"
+          color="amber" variant="solid" @click="showAddModelPanel = !showAddModelPanel">
+          <UIcon name="i-heroicons-plus-circle-16-solid" />
+          添加模型
+         </UButton>
          <div class="bg-yellow-600 absolute p-5 z-[2]" v-show="showAddModelPanel">
             <div>
                <div>
