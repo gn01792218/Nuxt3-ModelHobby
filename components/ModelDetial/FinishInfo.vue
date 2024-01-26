@@ -97,7 +97,7 @@ async function fetchUpdatePurchaseInfo() {
 
 async function fetchAddModelPurchaseInfo() {
     //1.先處理圖片
-    fetchUploadImageToSupabaseStorage()
+    await fetchUploadImageToSupabaseStorage()
     await addMyModelFinishInfo(props.modelId, editFinishInfo.value)
     await fetchModelFinishInfo()
 }
