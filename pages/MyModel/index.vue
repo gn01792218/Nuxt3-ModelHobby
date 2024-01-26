@@ -2,10 +2,11 @@
    <p>我的模型</p>
    <section class="p-5 w-full h-[100px] bg-red-500 flex justify-start">
       <div class="">
-         <UButton v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d'"
-          color="amber" variant="solid" @click="showAddModelPanel = !showAddModelPanel">
-          <UIcon name="i-heroicons-plus-circle-16-solid" />
-          添加模型
+         <UButton
+            v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d'"
+            color="amber" variant="solid" @click="showAddModelPanel = !showAddModelPanel">
+            <UIcon name="i-heroicons-plus-circle-16-solid" />
+            添加模型
          </UButton>
          <div class="bg-yellow-600 absolute p-5 z-[2]" v-show="showAddModelPanel">
             <div>
@@ -133,8 +134,9 @@ const {
    unFinishedModels,
    finishedModels,
 } = storeToRefs(useMyModelStore())
+const { setLoadingState } = useMyModelStore()
 const { fetchMyModels } = useFetchMyModels()
-const {uploadImageToSpabaseStorage, uploadMultipleImagesToSupabaseStorage } = useSupabase()
+const { uploadImageToSpabaseStorage, uploadMultipleImagesToSupabaseStorage } = useSupabase()
 const user = useSupabaseUser()
 const supabase = useSupabaseClient()
 
@@ -152,7 +154,7 @@ const modelPurchaseInfo = ref<PurchaseInfo>({
    currency: Currency.RMB,
    price: 0,
 })
-const modelFinishInfo:ModelFinishInfo = ({})
+const modelFinishInfo: ModelFinishInfo = ({})
 const model: Model = {
    status: ModelStatus.未入庫,
    name_zh: '',
@@ -168,21 +170,22 @@ const gallery_imgs = ref<FileList>()
 
 
 async function fetchAddMyModel() {
+   setLoadingState(true)
    //先處理圖片
-   model.main_img = await uploadImageToSpabaseStorage(main_img_file.value!,{
-      bucketName:'images',
-      modelId:model.id!,
-      fileNameTitle:'model_main_img'
+   model.main_img = await uploadImageToSpabaseStorage(main_img_file.value!, {
+      bucketName: 'images',
+      modelId: model.id!,
+      fileNameTitle: 'model_main_img'
    })
-   modelFinishInfo.process_imgs = await uploadMultipleImagesToSupabaseStorage(process_imgs.value!,{
-      bucketName:'model_finish_info_images',
-      modelId:model.id!,
-      fileNameTitle:'model_process_img'
+   modelFinishInfo.process_imgs = await uploadMultipleImagesToSupabaseStorage(process_imgs.value!, {
+      bucketName: 'model_finish_info_images',
+      modelId: model.id!,
+      fileNameTitle: 'model_process_img'
    })
-   modelFinishInfo.gallery = await uploadMultipleImagesToSupabaseStorage(gallery_imgs.value!,{
-      bucketName:'model_finish_info_images',
-      modelId:model.id!,
-      fileNameTitle:'model_gallery_img'
+   modelFinishInfo.gallery = await uploadMultipleImagesToSupabaseStorage(gallery_imgs.value!, {
+      bucketName: 'model_finish_info_images',
+      modelId: model.id!,
+      fileNameTitle: 'model_gallery_img'
    })
    const myModel = await addMyModel(model)
    if (!myModel.id) return alert('出問題了')
@@ -200,6 +203,8 @@ async function fetchAddMyModel() {
    model.name_zh = ''
    model.name_en = ''
    showAddModelPanel.value = false
+   //關閉loading
+   setLoadingState(false)
 }
 async function handleUploadImg(event: InputEvent) {
    const input = event.target as HTMLInputElement

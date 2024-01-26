@@ -53,11 +53,13 @@
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { Ecommerce, Currency, type PurchaseInfo } from "~/types/model"
+import { useMyModelStore } from '~/store/useMyModelStore';
 
 const props = defineProps<{
     modelId: number
 }>()
 
+const { setLoadingState } = useMyModelStore()
 const { updateMyModelPurchaseInfo, getModelPurchaseInfo, addMyModelPurchaseInfo } = useMyModelsAPI()
 const showEditPanel = ref(false)
 const purchaseInfo = ref<PurchaseInfo>()
@@ -76,13 +78,17 @@ async function init(){
     resetData()
 }
 async function fetchUpdatePurchaseInfo() {
+    setLoadingState(true)
     await updateMyModelPurchaseInfo(props.modelId, editPurchaseInfo.value)
     await fetchModelPurchaseInfo()
+    setLoadingState(false)
 }
 
 async function fetchAddModelPurchaseInfo(){
+    setLoadingState(true)
     await addMyModelPurchaseInfo(props.modelId, editPurchaseInfo.value)
     await fetchModelPurchaseInfo()
+    setLoadingState(false)
 }
 async function fetchModelPurchaseInfo() {
   purchaseInfo.value=await getModelPurchaseInfo(props.modelId)

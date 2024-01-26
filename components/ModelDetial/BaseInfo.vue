@@ -48,6 +48,7 @@ const props = defineProps<{
 const supabase = useSupabaseClient()
 const { getModelImagePublicUrl, uploadImageToSpabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
 const { myModelList } = storeToRefs(useMyModelStore())
+const { setLoadingState } = useMyModelStore()
 const { updateMyModelData } = useMyModelStore()
 const { updateMyModel, getMyModel } = useMyModelsAPI()
 const currentModel = computed<Model>(() => {
@@ -79,6 +80,7 @@ async function handleUploadImg(event: InputEvent) {
 }
 
 async function fetchUpdateModel() {
+    setLoadingState(true)
     //上傳圖片到supabase storage中, 並獲取要存於DB的路徑string
     if(main_img_file.value){ //假如有上傳圖片的話
         //假如原本有圖片，先刪除
@@ -94,6 +96,7 @@ async function fetchUpdateModel() {
     }
     await updateMyModel(props.modelId, editModel.value)
     await fetchMyModel()
+    setLoadingState(false)
 }
 
 async function fetchMyModel() {

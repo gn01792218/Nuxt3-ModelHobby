@@ -44,11 +44,12 @@
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { type ModelSize, SizeUnit } from "~/types/model"
+import { useMyModelStore } from '~/store/useMyModelStore';
 
 const props = defineProps<{
     modelId: number
 }>()
-
+const { setLoadingState } = useMyModelStore()
 const { updateMyModelsSize, getModelSize, addMyModelsSize } = useMyModelsAPI()
 const showEditPanel = ref(false)
 const modelSize = ref<ModelSize>()
@@ -67,13 +68,17 @@ async function init(){
     resetData()
 }
 async function fetchUpdateSize() {
+    setLoadingState(true)
     await updateMyModelsSize(props.modelId, editSize.value)
     await fetchModelSize()
+    setLoadingState(false)
 }
 
 async function fetchAddModelSize(){
+    setLoadingState(true)
     await addMyModelsSize(props.modelId, editSize.value)
     await fetchModelSize()
+    setLoadingState(false)
 }
 async function fetchModelSize() {
   modelSize.value=await getModelSize(props.modelId)

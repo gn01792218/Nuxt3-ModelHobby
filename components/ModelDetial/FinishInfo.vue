@@ -54,11 +54,12 @@
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { type ModelFinishInfo } from "~/types/model"
+import { useMyModelStore } from '~/store/useMyModelStore';
 
 const props = defineProps<{
     modelId: number
 }>()
-
+const { setLoadingState } = useMyModelStore()
 const { getModelFinishInfo, addMyModelFinishInfo, updateMyModelFinishInfo } = useMyModelsAPI()
 const supabase = useSupabaseClient()
 const { getFinishImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
@@ -90,16 +91,20 @@ async function init() {
     resetData()
 }
 async function fetchUpdatePurchaseInfo() {
+    setLoadingState(true)
     await fetchUploadImageToSupabaseStorage()
     await updateMyModelFinishInfo(props.modelId, editFinishInfo.value)
     await fetchModelFinishInfo()
+    setLoadingState(false)
 }
 
 async function fetchAddModelPurchaseInfo() {
+    setLoadingState(true)
     //1.先處理圖片
     await fetchUploadImageToSupabaseStorage()
     await addMyModelFinishInfo(props.modelId, editFinishInfo.value)
     await fetchModelFinishInfo()
+    setLoadingState(false)
 }
 async function fetchModelFinishInfo() {
     finishInfo.value = await getModelFinishInfo(props.modelId)
