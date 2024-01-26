@@ -55,6 +55,7 @@
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { type ModelFinishInfo } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
+import { StorageBucket } from "~/types/supabase";
 
 const props = defineProps<{
     modelId: number
@@ -162,11 +163,11 @@ async function fetchUploadImageToSupabaseStorage() {
     if (process_imgs_file_list.value?.length) {
         if (finishInfo.value?.process_imgs?.length) {
             finishInfo.value?.process_imgs?.forEach(img => {
-                removeImageFromSupabaseStorage('model_finish_info_images', img)
+                removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, img)
             })
         }
         editFinishInfo.value.process_imgs = await uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value, {
-            bucketName: 'model_finish_info_images',
+            bucketName: StorageBucket.model_finish_info_images,
             modelId: props.modelId!,
             fileNameTitle: 'model_process_img'
         })
@@ -177,11 +178,11 @@ async function fetchUploadImageToSupabaseStorage() {
     if (gallery_imgs_file_list.value?.length) {
         if (finishInfo.value?.gallery?.length) {  //有原圖的話要全部刪除
             finishInfo.value?.gallery?.forEach(img => {
-                removeImageFromSupabaseStorage('model_finish_info_images', img)
+                removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, img)
             })
         }
         editFinishInfo.value.gallery = await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value, {
-            bucketName: 'model_finish_info_images',
+            bucketName: StorageBucket.model_finish_info_images,
             modelId: props.modelId!,
             fileNameTitle: 'model_gallery_img'
         })

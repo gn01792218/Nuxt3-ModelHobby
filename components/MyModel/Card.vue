@@ -18,22 +18,39 @@
 
 <script setup lang="ts">
 import { type Model } from "~/types/model"
+import { StorageBucket } from "~/types/supabase"
 import useFetchMyModels from "~/composables/api/useMyModelsAPI"
 import { useMyModelStore } from "~/store/useMyModelStore"
 import useSupabase from "~/composables/useSupabase"
+import model from "~/data/model"
+
 
 const props = defineProps<{
     modelData:Model
 }>()
-const { getModelImagePublicUrl } = useSupabase()
+const { getModelImagePublicUrl, removeImageFromSupabaseStorage } = useSupabase()
 const { deleteMyModel } = useFetchMyModels()
-const { setmyModelList } = useMyModelStore()
+const { setmyModelList, setLoadingState } = useMyModelStore()
 const { myModelList } = storeToRefs(useMyModelStore())
 const user = useSupabaseUser()
 const supabase = useSupabaseClient()
-
+function fetchDeleteImg(){
+  const { modelData } = props
+  //刪除mainimg
+  if(modelData.main_img) removeImageFromSupabaseStorage(StorageBucket.images,modelData.main_img)
+  //刪除完成資訊的兩種img
+  if(modelData.finish_info?.process_imgs?.length) {
+    modelData.finish_info.process_imgs.forEach(img=>removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images,img))
+  }
+  if(modelData.finish_info?.gallery?.length) {
+    modelData.finish_info.gallery.forEach(img=>removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images,img))
+  }
+} 
 async function fetchDeleteMyModel(){
+  setLoadingState(true)
   await deleteMyModel(props.modelData.id!)
+  fetchDeleteImg()
   setmyModelList(myModelList.value.filter(model=>model.id !== props.modelData.id))
+  setLoadingState(false)
 }
 </script>

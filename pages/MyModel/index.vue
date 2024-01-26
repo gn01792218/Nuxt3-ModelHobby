@@ -125,6 +125,7 @@ import {
    Ecommerce,
    Currency,
 } from "~/types/model"
+import { StorageBucket } from "~/types/supabase"
 import { useMyModelStore } from '../../store/useMyModelStore'
 // const { handleUploadImg } = useUtils()
 const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo, addMyModelFinishInfo } = useMyModelsAPI()
@@ -172,19 +173,20 @@ const gallery_imgs = ref<FileList>()
 async function fetchAddMyModel() {
    setLoadingState(true)
    //先處理圖片
+   //這裡得改成非同步進行，才不會阻塞
    model.main_img = await uploadImageToSpabaseStorage(main_img_file.value!, {
-      bucketName: 'images',
-      modelId: model.id!,
+      bucketName: StorageBucket.images,
+      modelId: -1,
       fileNameTitle: 'model_main_img'
    })
    modelFinishInfo.process_imgs = await uploadMultipleImagesToSupabaseStorage(process_imgs.value!, {
-      bucketName: 'model_finish_info_images',
-      modelId: model.id!,
+      bucketName: StorageBucket.model_finish_info_images,
+      modelId: -1,
       fileNameTitle: 'model_process_img'
    })
    modelFinishInfo.gallery = await uploadMultipleImagesToSupabaseStorage(gallery_imgs.value!, {
-      bucketName: 'model_finish_info_images',
-      modelId: model.id!,
+      bucketName: StorageBucket.model_finish_info_images,
+      modelId: -1,
       fileNameTitle: 'model_gallery_img'
    })
    const myModel = await addMyModel(model)

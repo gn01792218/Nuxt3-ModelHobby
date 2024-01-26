@@ -41,6 +41,7 @@
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { type Model, ModelStatus } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
+import { StorageBucket } from "~/types/supabase";
 const props = defineProps<{
     modelId: number
 }>()
@@ -84,10 +85,10 @@ async function fetchUpdateModel() {
     //上傳圖片到supabase storage中, 並獲取要存於DB的路徑string
     if(main_img_file.value){ //假如有上傳圖片的話
         //假如原本有圖片，先刪除
-        if (currentModel.value?.main_img) removeImageFromSupabaseStorage('images', currentModel.value.main_img)
+        if (currentModel.value?.main_img) removeImageFromSupabaseStorage(StorageBucket.images, currentModel.value.main_img)
 
         editModel.value.main_img = await uploadImageToSpabaseStorage(main_img_file.value, {
-            bucketName: 'images',
+            bucketName: StorageBucket.images,
             modelId: props.modelId!,
             fileNameTitle: 'model_main_img'
         })
