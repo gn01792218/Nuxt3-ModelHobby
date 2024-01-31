@@ -4,8 +4,8 @@ import myModels from "~/data/model"
 const prisma = new PrismaClient()
 export default defineEventHandler(async(event)=>{
     return await prisma.myModel.findMany({
-        include:{
-            finish_info:true,
-        }
+        // include:{
+        //     finish_info:true,
+        // }
     })
 })
