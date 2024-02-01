@@ -51,6 +51,7 @@ export declare interface ModelName{
     zh?:string
 }
 export declare interface PurchaseInfo{
+    id:number,
     e_commerce_name:Ecommerce,
     currency:Currency,
     price:number,
@@ -77,7 +78,7 @@ export declare interface Model{
     panting_guid?:string[]
     imgs?:string[],
     PD?:Date, //生產日期
-    purchaseInfo?:PurchaseInfo
+    purchase_infos?:PurchaseInfo[]
     finish_info?:ModelFinishInfo
 }
 

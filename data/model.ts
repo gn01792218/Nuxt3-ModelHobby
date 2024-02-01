@@ -25,7 +25,7 @@ export const model: Model[] = [
     },
     status: ModelStatus.未組裝,
     PD: new Date("2018"),
-    purchaseInfo: {
+    purchaseInfos: {
       e_commerce_name: Ecommerce.淘寶,
       price: {
         currency: Currency.RMB,
@@ -49,7 +49,7 @@ export const model: Model[] = [
     },
     status: ModelStatus.未組裝,
     PD: new Date("2020"),
-    purchaseInfo: {
+    purchaseInfos: {
       e_commerce_name: Ecommerce.淘寶,
       price: {
         currency: Currency.RMB,
@@ -73,7 +73,7 @@ export const model: Model[] = [
     },
     status: ModelStatus.已組裝,
     PD: new Date("2011"),
-    purchaseInfo: {
+    purchaseInfos: {
       e_commerce_name: Ecommerce.淘寶,
       price: {
         currency: Currency.RMB,

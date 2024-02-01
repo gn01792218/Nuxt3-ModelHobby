@@ -5,6 +5,7 @@ export default defineEventHandler(async(event)=>{
     return await prisma.myModel.findMany({
         include:{
             finish_info:true,
+            purchase_infos:true,
         }
     })
 })

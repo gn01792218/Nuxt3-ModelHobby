@@ -1,18 +1,19 @@
 import { type Model, type ModelSize, type PurchaseInfo, type ModelFinishInfo } from "~/types/model";
+import { type CreatePurchaseInfoRequest, type UpdatePurchaseInfoRequest } from "@/types/purchaseInfo"
 
 export default () => {
   //MyModel API
-  async function getMyModels(): Promise<Model[]> {
+  async function getMyModels() {
     const { data, error } = await useFetch("/api/myModels");
     if (error.value) throw createError({ ...error.value, message: "資料異常" });
     return data.value as unknown as Model[];
   }
-  async function getMyModel(id:number): Promise<Model> {
+  async function getMyModel(id:number) {
     const { data, error } = await useFetch(`/api/myModels/${id}`);
     if (error.value) throw createError({ ...error.value, message: "資料異常" });
     return data.value as unknown as Model;
   }
-  async function addMyModel(payload: Model): Promise<Model> {
+  async function addMyModel(payload: Model) {
     const { data, error } = await useFetch("/api/myModels", {
       method: "post",
       body: payload,
@@ -20,14 +21,14 @@ export default () => {
     if (error.value) throw createError({ ...error.value, message: "資料異常" });
     return data.value as unknown as Model;
   }
-  async function updateMyModel(modelId:number ,payload: Model): Promise<Model> {
+  async function updateMyModel(modelId:number ,payload: Model) {
     const r = await fetch(`/api/myModels/${modelId}`, {
       method: "put",
       body: JSON.stringify(payload),
     });
     return r as unknown as Model;
   }
-  async function deleteMyModel(modelId: number): Promise<boolean> {
+  async function deleteMyModel(modelId: number) {
     const r = await fetch(`/api/myModels/${modelId}}`, {
       method: "delete",
     });
@@ -35,20 +36,20 @@ export default () => {
     return false;
   }
   //Model Size API
-  async function getModelSize(modelId: number): Promise<ModelSize> {
+  async function getModelSize(modelId: number) {
     const { data, error } = await useFetch(`/api/myModels/ModelSize/${modelId}`);
     if (error.value) throw createError({ ...error.value, message: "資料異常" });
     return data.value as unknown as ModelSize;
   }
 
-  async function addMyModelsSize(modelId: number, payload: ModelSize): Promise<ModelSize> {
+  async function addMyModelsSize(modelId: number, payload: ModelSize) {
     const r = await fetch(`/api/myModels/ModelSize/${modelId}`, {
       method: "post",
       body: JSON.stringify(payload),
     });
     return r as unknown as ModelSize;
   }
-  async function updateMyModelsSize(modelId: number, payload: ModelSize): Promise<ModelSize> {
+  async function updateMyModelsSize(modelId: number, payload: ModelSize) {
     const r = await fetch(`/api/myModels/ModelSize/${modelId}`, {
       method: "put",
       body: JSON.stringify(payload),
@@ -56,39 +57,48 @@ export default () => {
     return r as unknown as ModelSize;
   }
   //PurchaseInfo API
-  async function getModelPurchaseInfo(modelId: number): Promise<PurchaseInfo> {
+  async function getModelPurchaseInfos(modelId: number) {
     const { data, error } = await useFetch(`/api/myModels/PurchaseInfo/${modelId}`);
     if (error.value) throw createError({ ...error.value, message: "資料異常" });
-    return data.value as unknown as PurchaseInfo;
+    return data.value as unknown as PurchaseInfo[];
   }
-  async function addMyModelPurchaseInfo(modelId: number, payload: PurchaseInfo): Promise<PurchaseInfo> {
-    const r = await fetch(`/api/myModels/PurchaseInfo/${modelId}`, {
+  async function addMyModelPurchaseInfo(modelId: number, payload: CreatePurchaseInfoRequest) {
+    const { data, error } = await useFetch(`/api/myModels/PurchaseInfo/${modelId}`, {
       method: "post",
       body: JSON.stringify(payload),
     });
-    return r as unknown as PurchaseInfo;
+    if(error.value) throw createError({ ...error.value, message: "資料異常" })
+    return data.value as unknown as PurchaseInfo;
   }
-  async function updateMyModelPurchaseInfo(modelId: number, payload: PurchaseInfo): Promise<PurchaseInfo> {
-    const r = await fetch(`/api/myModels/PurchaseInfo/${modelId}`, {
+  async function updateMyModelPurchaseInfo(purchaseInfoId: number, payload: UpdatePurchaseInfoRequest) {
+    const { data, error } = await useFetch(`/api/myModels/PurchaseInfo/${purchaseInfoId}`, {
       method: "put",
       body: JSON.stringify(payload),
     });
-    return r as unknown as PurchaseInfo;
+    if(error.value) throw createError({...error.value, message:'資料異常'})
+    return data.value as unknown as PurchaseInfo;
+  }
+   async function deleteMyModelPurchaseInfo(purchaseInfoId: number) {
+    const { data, error } = await useFetch(`/api/myModels/PurchaseInfo/${purchaseInfoId}`, {
+      method: "delete",
+    });
+    if(error.value) throw createError({...error.value, message:'資料異常'})
+    return data.value as unknown as PurchaseInfo;
   }
    //ModelFinishInfo API
-  async function getModelFinishInfo(modelId: number): Promise<ModelFinishInfo> {
+  async function getModelFinishInfo(modelId: number) {
     const { data, error } = await useFetch(`/api/myModels/ModelFinishInfo/${modelId}`);
     if (error.value) throw createError({ ...error.value, message: "資料異常" });
     return data.value as unknown as ModelFinishInfo;
   }
-  async function addMyModelFinishInfo(modelId: number, payload: ModelFinishInfo): Promise<ModelFinishInfo> {
+  async function addMyModelFinishInfo(modelId: number, payload: ModelFinishInfo) {
     const r = await fetch(`/api/myModels/ModelFinishInfo/${modelId}`, {
       method: "post",
       body: JSON.stringify(payload),
     });
     return r as unknown as ModelFinishInfo;
   }
-  async function updateMyModelFinishInfo(modelId: number, payload: ModelFinishInfo): Promise<ModelFinishInfo> {
+  async function updateMyModelFinishInfo(modelId: number, payload: ModelFinishInfo) {
     const r = await fetch(`/api/myModels/ModelFinishInfo/${modelId}`, {
       method: "put",
       body: JSON.stringify(payload),
@@ -106,9 +116,10 @@ export default () => {
     getModelSize,
     addMyModelsSize,
     updateMyModelsSize,
-    getModelPurchaseInfo,
+    getModelPurchaseInfos,
     addMyModelPurchaseInfo,
     updateMyModelPurchaseInfo,
+    deleteMyModelPurchaseInfo,
     getModelFinishInfo,
     addMyModelFinishInfo,
     updateMyModelFinishInfo

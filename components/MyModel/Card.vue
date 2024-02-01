@@ -35,7 +35,6 @@ import { StorageBucket } from "~/types/supabase"
 import useFetchMyModels from "~/composables/api/useMyModelsAPI"
 import { useMyModelStore } from "~/store/useMyModelStore"
 import useSupabase from "~/composables/useSupabase"
-import model from "~/data/model"
 
 
 const props = defineProps<{

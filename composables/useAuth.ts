@@ -11,7 +11,6 @@ export default () => {
     if (error) alert(error);
   }
   async function login() {
-    console.log(email.value, password.value);
     const { error } = await supabase.auth.signInWithPassword({
       email: email.value,
       password: password.value,

@@ -24,7 +24,7 @@ model MyModel{
   panting_guide  String[] @default([])
   imgs           String[] @default([])
   PD             DateTime?
-  purchase_info   PurchaseInfo?
+  purchase_infos  PurchaseInfo[]
   finish_info     ModelFinishInfo?
 }
 model ModelSize {
@@ -43,7 +43,7 @@ model PurchaseInfo{
   price           Float
   shop_name       String?
   purchase_date   DateTime?
-  modelId         Int @unique
+  modelId         Int
   model           MyModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
 }
 model ModelFinishInfo{

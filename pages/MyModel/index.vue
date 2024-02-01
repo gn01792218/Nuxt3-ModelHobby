@@ -113,7 +113,6 @@
 </template>
 
 <script setup lang="ts">
-// import useUtils from "~/composables/useUtils"
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import {
    type ModelSize,
@@ -127,7 +126,7 @@ import {
 } from "~/types/model"
 import { StorageBucket } from "~/types/supabase"
 import { useMyModelStore } from '../../store/useMyModelStore'
-// const { handleUploadImg } = useUtils()
+
 const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo, addMyModelFinishInfo } = useMyModelsAPI()
 const {
    myModelList,
@@ -139,9 +138,6 @@ const { setLoadingState } = useMyModelStore()
 const { fetchMyModels } = useFetchMyModels()
 const { uploadImageToSpabaseStorage, uploadMultipleImagesToSupabaseStorage } = useSupabase()
 const user = useSupabaseUser()
-const supabase = useSupabaseClient()
-
-if (!myModelList.value.length) fetchMyModels()
 
 const showAddModelPanel = ref(false)
 const modelSize = ref<ModelSize>({
