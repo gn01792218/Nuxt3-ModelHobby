@@ -11,7 +11,7 @@ export default defineEventHandler(async (event)=>{
         description,
         process_imgs,
         gallery,
-     } = JSON.parse(body)
+     } = body
 
     const myModel =await prisma.modelFinishInfo.update({
         where:{

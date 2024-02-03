@@ -11,7 +11,7 @@ export default defineEventHandler(async (event)=>{
         width,
         length,
         height
-     } = JSON.parse(body)
+     } = body
 
     const myModel =await prisma.modelSize.update({
         where:{
