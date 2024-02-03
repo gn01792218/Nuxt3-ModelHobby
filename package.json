@@ -13,7 +13,9 @@
     "@nuxt/devtools": "latest",
     "@nuxtjs/supabase": "^1.1.5",
     "@nuxtjs/tailwindcss": "^6.10.1",
+    "@samk-dev/nuxt-vcalendar": "^1.0.2",
     "nuxt": "^3.8.2",
+    "nuxt-time": "^0.1.2",
     "prisma": "^5.7.1",
     "vue": "^3.3.12",
     "vue-router": "^4.2.5"

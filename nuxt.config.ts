@@ -7,6 +7,8 @@ export default defineNuxtConfig({
   modules:[
     '@nuxt/ui',
     '@pinia/nuxt',
-    '@nuxtjs/supabase'
+    '@nuxtjs/supabase',
+    '@samk-dev/nuxt-vcalendar',
+    'nuxt-time'
   ]
 })

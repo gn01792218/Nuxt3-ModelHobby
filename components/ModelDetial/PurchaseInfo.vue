@@ -15,9 +15,11 @@
                     購買商家 : {{ purchaseInfo?.shop_name }}
                 </p>
                 <p>
-                    購買日期 : {{ purchaseInfo?.purchase_date ? purchaseInfo.purchase_date : '????/??/??' }}
+                    購買日期 :
+                    <TimeFormator v-if="purchaseInfo.purchase_date" :date="purchaseInfo.purchase_date"/>
+                    <span v-else>????/??/??</span>
                 </p>
-                <button class="mr-5" @click="fetchUpdatePurchaseInfo(purchaseInfo.id)">確認修改</button>
+                <button class="mr-5" @click="openUpdatePanel(purchaseInfo)">修改</button>
                 <button class="mr-5" @click="fetchDeletePurchaseInfo(purchaseInfo.id)">刪除</button>
             </UCard>
         </div>
@@ -49,10 +51,16 @@
                     <input id="modelSize_height" type="date" v-model="createPurchaseInfo.purchase_date">
                 </div>
                 <button class="mr-5" @click="fetchAddModelPurchaseInfo">確認</button>
-                <!-- <button  @click="resetData">重置資料</button> -->
             </div>
         </div>
     </section>
+    <ModelDetialPurchaseInfoUpdateModal
+        :is-open="isOpenUpdatePanel"
+        :update-purchase-info="updatePurchaseInfo"
+        :origin-purchase-info="originUpdatePurchaseInfo"
+        @update="fetchUpdate"
+        @close="resetData"
+    />
 </template>
 
 <script setup lang="ts">
@@ -64,27 +72,39 @@ import { type UpdatePurchaseInfoRequest, type CreatePurchaseInfoRequest } from "
 const props = defineProps<{
     modelId: number
 }>()
-
+const toast = useToast()
 const { setLoadingState } = useMyModelStore()
 const { myModelList } = storeToRefs(useMyModelStore())
 const { updateMyModelPurchaseInfo, addMyModelPurchaseInfo, deleteMyModelPurchaseInfo} = useMyModelsAPI()
 const showEditPanel = ref(false)
+const isOpenUpdatePanel = ref(false)
 const createPurchaseInfo = ref<CreatePurchaseInfoRequest>({
     e_commerce_name: Ecommerce.淘寶,
     currency: Currency.RMB,
     price: 0,
 })
+const updatePurchaseInfo = ref<PurchaseInfo>()
+const originUpdatePurchaseInfo = ref<PurchaseInfo>()
 const myModel = computed(() => {
     return myModelList.value.find((model: Model) => model.id === props.modelId)
 })
 
-async function fetchUpdatePurchaseInfo(purchaseInfoId: number) {
+async function openUpdatePanel(purchaseInfo: PurchaseInfo) {
+    isOpenUpdatePanel.value = true
+    updatePurchaseInfo.value = purchaseInfo
+    originUpdatePurchaseInfo.value = {...purchaseInfo} //舊的保留給取消用
+}
+async function fetchUpdate() {
     setLoadingState(true)
-    const purchaseInfo = await updateMyModelPurchaseInfo(purchaseInfoId, createPurchaseInfo.value)
-    myModel.value?.purchase_infos?.find((info: PurchaseInfo) => {
-        if (info.id === purchaseInfo.id) info = purchaseInfo
-    })
+    const purchaseInfo = await updateMyModelPurchaseInfo(updatePurchaseInfo.value?.id!, updatePurchaseInfo.value!)
     setLoadingState(false)
+    isOpenUpdatePanel.value = false
+    toast.add({
+        title: '修改成功',
+        icon: "i-heroicons-information-circle",
+        color: "green",
+        description: `對id為:${purchaseInfo.id}的購買訊息修改成功`
+    })
 }
 
 async function fetchAddModelPurchaseInfo() {
@@ -101,12 +121,12 @@ async function fetchDeletePurchaseInfo(purchaseInfoId:number){
     if(deleteIndex) myModel.value?.purchase_infos?.splice(deleteIndex,1)
     setLoadingState(false)
 }
-function resetData() {
-    // editPurchaseInfo.value.e_commerce_name = purchaseInfos.value?.e_commerce_name!
-    // editPurchaseInfo.value.currency = purchaseInfos.value?.currency!
-    // editPurchaseInfo.value.price = purchaseInfos.value?.price!
-    // editPurchaseInfo.value.shop_name = purchaseInfos.value?.shop_name
-    // editPurchaseInfo.value.purchase_date = purchaseInfos.value?.purchase_date
+function resetData(originPurchaseInfoId:number) {
+    isOpenUpdatePanel.value = false
+    const infoList = myModel.value?.purchase_infos
+    const targetDataIndex = infoList?.findIndex((info:PurchaseInfo) => info.id === originPurchaseInfoId)
+    if(!targetDataIndex) return 
+    if(infoList) infoList[targetDataIndex] = originUpdatePurchaseInfo.value!
 }
 
 function showEditPanelHandel() {

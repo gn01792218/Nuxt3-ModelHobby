@@ -16,7 +16,7 @@ export default defineEventHandler(async (event)=>{
 
     const myModelPurchaseInfo =await prisma.purchaseInfo.update({
         where:{
-            id:Id
+            id:parseInt(Id)
         },
         data:{
             e_commerce_name,
