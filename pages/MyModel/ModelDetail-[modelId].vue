@@ -1,8 +1,13 @@
 <template>
-    <ModelDetialBaseInfo :model-id="modelId" />
-    <ModelDetialModelSize :model-id="modelId" />
-    <ModelDetialPurchaseInfo :model-id="modelId" />
-    <ModelDetialFinishInfo :model-id="modelId" />
+    <div class="p-10">
+        <ModelDetialBaseInfo :model-id="modelId" />
+        <Divider title="Size Info" icon-name="i-heroicons-rectangle-stack-solid"/>
+        <ModelDetialModelSize :model-id="modelId" />
+        <Divider title="Purchase Info" icon-name="i-heroicons-currency-dollar-20-solid"/>
+        <ModelDetialPurchaseInfo :model-id="modelId" />
+        <Divider title="Finish Info" icon-name="i-heroicons-flag-20-solid"/>
+        <ModelDetialFinishInfo :model-id="modelId" />
+    </div>
 </template>
 
 <script setup lang="ts">

@@ -1,6 +1,6 @@
 
 <template>
-    <section class="border-2">
+    <section>
         <div>
             <p>
                 長{{ modelSize?.length ? modelSize.length : '?' }}{{ modelSize?.unit }}

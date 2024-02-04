@@ -1,6 +1,6 @@
 
 <template>
-    <section class="border-2">
+    <section>
         <div>
             <p>
                 完成日期 : {{ finishInfo?.finished_date ? finishInfo?.finished_date : '????/??/??' }}

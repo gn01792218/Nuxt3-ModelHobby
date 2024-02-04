@@ -1,7 +1,6 @@
 
 <template>
-    <section class="border-2">
-        購買歷史資訊
+    <section>
         <div class="flex">
             <UCard v-for="purchaseInfo in myModel?.purchase_infos" :key="purchaseInfo.id">
                 {{ purchaseInfo.id }}

@@ -1,11 +1,11 @@
 
 <template>
-    <section class="border-2">
+    <section>
         <section>
             <img :src="getModelImagePublicUrl(currentModel.main_img ? currentModel.main_img : '')" alt="">
             <p>{{ modelId }}</p>
-            <p>{{ currentModel?.name_zh }}</p>
-            <p>{{ currentModel?.name_en }}</p>
+            <p class="text-3xl font-extrabold">{{ currentModel?.name_zh }}</p>
+            <p class="text-2xl">{{ currentModel?.name_en }}</p>
         </section>
         <div>
             <button @click="showEditPanelHandel">修改</button>
