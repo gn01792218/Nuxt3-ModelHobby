@@ -15,6 +15,7 @@ export enum ModelBrand{
     S_MODEL = '六分儀_S-Model',
     FLVHAWK = '鷹翔_Flvhawk',
     ZVEZDA = '紅星_Zvezda',
+    DRAGON = '威龍_Dragon',
     SPECIALHOBBY = 'SpecialHobby',
     BANDAI = '萬代_Bandai'
 }

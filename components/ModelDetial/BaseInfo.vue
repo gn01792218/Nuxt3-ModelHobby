@@ -35,6 +35,7 @@
                         <option :value="ModelBrand.ZVEZDA">{{ ModelBrand.ZVEZDA }}</option>
                         <option :value="ModelBrand.SPECIALHOBBY">{{ ModelBrand.SPECIALHOBBY }}</option>
                         <option :value="ModelBrand.TAMIYA">{{ ModelBrand.TAMIYA}}</option>
+                        <option :value="ModelBrand.DRAGON">{{ ModelBrand.DRAGON}}</option>
                         <option :value="ModelBrand.FLVHAWK">{{ ModelBrand.FLVHAWK }}</option>
                         <option :value="ModelBrand.S_MODEL">{{ ModelBrand.S_MODEL }}</option>
                         <option :value="ModelBrand.BANDAI">{{ ModelBrand.BANDAI }}</option>
