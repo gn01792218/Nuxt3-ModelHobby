@@ -6,7 +6,6 @@
             <p>品牌 : {{ currentModel.brand }} ({{ currentModel.article_number }})</p>
             <p class="text-3xl font-extrabold">{{ currentModel?.name_zh }}</p>
             <p class="text-2xl">{{ currentModel?.name_en }}</p>
-            <p class="text-xl">{{ currentModel?.article_number }}</p>
         </section>
         <div>
             <button @click="showEditPanelHandel">修改</button>
@@ -78,10 +77,7 @@ const currentModel = computed<Model>(() => {
 const showEditPanel = ref(false)
 
 const editModel = ref<Model>({
-    name_zh: currentModel.value.name_zh,
-    name_en: currentModel.value.name_en,
-    status: currentModel.value.status,
-    main_img: currentModel.value.main_img
+    ...currentModel.value
 })
 const previewImg = ref(getModelImagePublicUrl(currentModel.value.main_img!))
 const main_img_file = ref<File | null>(null)
@@ -126,10 +122,7 @@ async function fetchMyModel() {
     showEditPanel.value = false
 }
 function resetData() {
-    editModel.value.name_en = currentModel.value!.name_en
-    editModel.value.name_zh = currentModel.value!.name_zh
-    editModel.value.status = currentModel.value!.status
-    editModel.value.main_img = currentModel.value!.main_img
+    editModel.value = currentModel.value
 }
 
 function showEditPanelHandel() {
