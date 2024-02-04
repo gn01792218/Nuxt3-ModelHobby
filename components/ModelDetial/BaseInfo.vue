@@ -3,9 +3,10 @@
     <section>
         <section>
             <img :src="getModelImagePublicUrl(currentModel.main_img ? currentModel.main_img : '')" alt="">
-            <p>{{ modelId }}</p>
+            <p>品牌 : {{ currentModel.brand }} ({{ currentModel.article_number }})</p>
             <p class="text-3xl font-extrabold">{{ currentModel?.name_zh }}</p>
             <p class="text-2xl">{{ currentModel?.name_en }}</p>
+            <p class="text-xl">{{ currentModel?.article_number }}</p>
         </section>
         <div>
             <button @click="showEditPanelHandel">修改</button>
@@ -26,6 +27,25 @@
                     <input id="model_name_en" type="text" v-model="editModel.name_en">
                 </div>
                 <div>
+                    <label for="model_name_en">品牌</label>
+                    <select name="" id="" v-model="editModel.brand">
+                        <option :value="ModelBrand.ACADEMY">{{ ModelBrand.ACADEMY }}</option>
+                        <option :value="ModelBrand.HASEGAWA">{{ ModelBrand.HASEGAWA }}</option>
+                        <option :value="ModelBrand.TRUMPETER">{{ ModelBrand.TRUMPETER }}</option>
+                        <option :value="ModelBrand.TRUMPETER_HOBBYBOSS">{{ ModelBrand.TRUMPETER_HOBBYBOSS }}</option>
+                        <option :value="ModelBrand.ZVEZDA">{{ ModelBrand.ZVEZDA }}</option>
+                        <option :value="ModelBrand.SPECIALHOBBY">{{ ModelBrand.SPECIALHOBBY }}</option>
+                        <option :value="ModelBrand.TAMIYA">{{ ModelBrand.TAMIYA}}</option>
+                        <option :value="ModelBrand.FLVHAWK">{{ ModelBrand.FLVHAWK }}</option>
+                        <option :value="ModelBrand.S_MODEL">{{ ModelBrand.S_MODEL }}</option>
+                        <option :value="ModelBrand.BANDAI">{{ ModelBrand.BANDAI }}</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="model_name_en">產品編號</label>
+                    <input id="model_name_en" type="text" v-model="editModel.article_number">
+                </div>
+                <div>
                     <label for="model_main_img">封面圖片</label>
                     <input type="file" id="model_main_img" @change="handleUploadImg">
                     <img v-show="previewImg" :src="previewImg" alt="預覽圖">
@@ -39,7 +59,7 @@
 
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
-import { type Model, ModelStatus } from "~/types/model"
+import { type Model, ModelStatus, ModelBrand } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
 import { StorageBucket } from "~/types/supabase";
 const props = defineProps<{

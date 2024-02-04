@@ -7,14 +7,16 @@ export enum SizeUnit{
     CM = "cm"
 }
 export enum ModelBrand{
-    TRUMPETER = '小號手',
-    TRUMPETER_HOBBYBOSS = '小號手_HOBBYBOSS',
-    ACADEMY = '愛德美',
-    TAMIYA = '田宮',
-    HASEGAWA = '長谷川',
-    S_MODEL = '六分儀',
-    FLVHAWK = '鷹翔',
-    BANDAI = '萬代'
+    TRUMPETER = '小號手_Tumpeter',
+    TRUMPETER_HOBBYBOSS = '小號手_HobbyBoss',
+    ACADEMY = '愛德美_Academy',
+    TAMIYA = '田宮_Tamiya',
+    HASEGAWA = '長谷川_Hasegawa',
+    S_MODEL = '六分儀_S-Model',
+    FLVHAWK = '鷹翔_Flvhawk',
+    ZVEZDA = '紅星_Zvezda',
+    SPECIALHOBBY = 'SpecialHobby',
+    BANDAI = '萬代_Bandai'
 }
 export enum ModelScale{
     S144="1:144",
