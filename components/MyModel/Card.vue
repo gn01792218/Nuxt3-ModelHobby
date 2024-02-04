@@ -1,5 +1,5 @@
 <template>
-  <UCard class="bg-red-100">
+  <UCard v-if="!loadSkeleton" class="bg-red-100">
     <template #header>
       <p>{{ modelData.name_zh }}</p>
       <p>{{ modelData.name_en }}</p>
@@ -27,6 +27,7 @@
       </div>
     </template>
   </UCard>
+  <MyModelCardSkeleton v-else/>
 </template>
 
 <script setup lang="ts">
@@ -36,6 +37,7 @@ import useFetchMyModels from "~/composables/api/useMyModelsAPI"
 import { useMyModelStore } from "~/store/useMyModelStore"
 import useSupabase from "~/composables/useSupabase"
 
+const { loadSkeleton } = useSkeleton()
 
 const props = defineProps<{
   modelData: Model
