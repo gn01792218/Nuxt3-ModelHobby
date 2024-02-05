@@ -17,7 +17,8 @@ export enum ModelBrand{
     ZVEZDA = '紅星_Zvezda',
     DRAGON = '威龍_Dragon',
     SPECIALHOBBY = 'SpecialHobby',
-    BANDAI = '萬代_Bandai'
+    BANDAI = '萬代_Bandai',
+    OTHER = '其他_未知品牌'
 }
 export enum ModelScale{
     S144="1:144",

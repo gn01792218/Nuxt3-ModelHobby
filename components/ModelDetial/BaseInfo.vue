@@ -39,6 +39,7 @@
                         <option :value="ModelBrand.FLVHAWK">{{ ModelBrand.FLVHAWK }}</option>
                         <option :value="ModelBrand.S_MODEL">{{ ModelBrand.S_MODEL }}</option>
                         <option :value="ModelBrand.BANDAI">{{ ModelBrand.BANDAI }}</option>
+                        <option :value="ModelBrand.OTHER">{{ ModelBrand.OTHER }}</option>
                     </select>
                 </div>
                 <div>
