@@ -6,8 +6,8 @@
       <p v-if="modelData.scale">{{ modelData.scale }}</p>
     </template>
     <div>
-      <div class="cursor-pointer" @click="navigateTo(`MyModel/ModelDetail-${modelData.id}`)">
-        <img v-if="modelData.main_img" :src="getModelImagePublicUrl(modelData.main_img)" :alt="modelData.name_zh">
+      <div class="w-full md:h-[250px] cursor-pointer" @click="navigateTo(`MyModel/ModelDetail-${modelData.id}`)">
+        <img class="w-full md:h-full" v-if="modelData.main_img" :src="getModelImagePublicUrl(modelData.main_img)" :alt="modelData.name_zh">
         <img v-else src="" alt="沒有上傳圖片">
       </div>
     </div>
