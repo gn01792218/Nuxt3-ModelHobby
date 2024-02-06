@@ -3,7 +3,9 @@
    <section class="p-5 w-full h-[100px] bg-red-500 flex justify-start">
       <div class="">
          <UButton
-            v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d'"
+            v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || 
+            user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d' || 
+            user?.id === '66a7e0cc-99e5-4cbf-8bc7-72021b26b362'"
             color="amber" variant="solid" @click="showAddModelPanel = !showAddModelPanel">
             <UIcon name="i-heroicons-plus-circle-16-solid" />
             添加模型
