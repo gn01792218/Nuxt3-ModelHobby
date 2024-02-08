@@ -3,6 +3,7 @@
         <NuxtPage />
     </NuxtLayout>
     <Loading />
+    <UNotifications />
 </template>
 
 <script setup lang="ts">

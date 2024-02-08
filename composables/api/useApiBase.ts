@@ -13,6 +13,7 @@ export default () => {
         title:'請求發生錯誤',
         description:`${error.value}`,
         icon:'i-heroicons-exclamation-circle-16-solid',
+        timeout:0
        })
       throw createError({ ...error.value, message: "資料異常" });
     }
