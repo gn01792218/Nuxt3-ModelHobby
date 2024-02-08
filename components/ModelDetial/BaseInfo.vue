@@ -28,20 +28,7 @@
                 <div>
                     <label for="model_name_en">品牌</label>
                     <select name="" id="" v-model="editModel.brand">
-                        <option :value="ModelBrand.ACADEMY">{{ ModelBrand.ACADEMY }}</option>
-                        <option :value="ModelBrand.HASEGAWA">{{ ModelBrand.HASEGAWA }}</option>
-                        <option :value="ModelBrand.TRUMPETER">{{ ModelBrand.TRUMPETER }}</option>
-                        <option :value="ModelBrand.ITALERI">{{ ModelBrand.ITALERI }}</option>
-                        <option :value="ModelBrand.MODEL_4D">{{ ModelBrand.MODEL_4D }}</option>
-                        <option :value="ModelBrand.TRUMPETER_HOBBYBOSS">{{ ModelBrand.TRUMPETER_HOBBYBOSS }}</option>
-                        <option :value="ModelBrand.ZVEZDA">{{ ModelBrand.ZVEZDA }}</option>
-                        <option :value="ModelBrand.SPECIALHOBBY">{{ ModelBrand.SPECIALHOBBY }}</option>
-                        <option :value="ModelBrand.TAMIYA">{{ ModelBrand.TAMIYA}}</option>
-                        <option :value="ModelBrand.DRAGON">{{ ModelBrand.DRAGON}}</option>
-                        <option :value="ModelBrand.FLVHAWK">{{ ModelBrand.FLVHAWK }}</option>
-                        <option :value="ModelBrand.S_MODEL">{{ ModelBrand.S_MODEL }}</option>
-                        <option :value="ModelBrand.BANDAI">{{ ModelBrand.BANDAI }}</option>
-                        <option :value="ModelBrand.OTHER">{{ ModelBrand.OTHER }}</option>
+                        <option v-for="brand in ModelBrand" :key="brand" :value="brand">{{ brand }}</option>
                     </select>
                 </div>
                 <div>
