@@ -48,8 +48,8 @@
                 </div>
                 <div>
                     <label for="model_main_img">封面圖片</label>
-                    <input type="file" id="model_main_img" @change="handleUploadImg">
-                    <img v-show="previewImg" :src="previewImg" alt="預覽圖">
+                    <input type="file" id="model_main_img" @change="(e)=> main_img_file = handleUploadMutipleImgs(e, ref(previewImg))">
+                    <img v-show="previewImg[0]" :src="previewImg[0]" alt="預覽圖">
                 </div>
                 <button v-show="currentModel" class="mr-5" @click="fetchUpdateModel">確認修改</button>
                 <button v-show="currentModel" @click="resetData">重置資料</button>
@@ -66,9 +66,8 @@ import { StorageBucket } from "~/types/supabase";
 const props = defineProps<{
     modelId: number
 }>()
-
-const supabase = useSupabaseClient()
-const { getModelImagePublicUrl, uploadImageToSpabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
+const { handleUploadMutipleImgs } = useUploadImage()
+const { getModelImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
 const { myModelList } = storeToRefs(useMyModelStore())
 const { setLoadingState } = useMyModelStore()
 const { updateMyModelData } = useMyModelStore()
@@ -81,22 +80,8 @@ const showEditPanel = ref(false)
 const editModel = ref<Model>({
     ...currentModel.value
 })
-const previewImg = ref(getModelImagePublicUrl(currentModel.value.main_img!))
-const main_img_file = ref<File | null>(null)
-
-async function handleUploadImg(event: InputEvent) {
-    const input = event.target as HTMLInputElement
-    if (input.files) {
-        const img = input.files[0]
-        const reader = new FileReader()
-        reader.onload = (e) => {
-            //預覽圖
-            previewImg.value = e.target?.result as string
-        }
-        reader.readAsDataURL(img)
-        main_img_file.value = img
-    }
-}
+const previewImg = ref<string[]>([getModelImagePublicUrl(currentModel.value.main_img!)])
+const main_img_file = ref<FileList | null>(null)
 
 async function fetchUpdateModel() {
     setLoadingState(true)
@@ -105,11 +90,12 @@ async function fetchUpdateModel() {
         //假如原本有圖片，先刪除
         if (currentModel.value?.main_img) removeImageFromSupabaseStorage(StorageBucket.images, currentModel.value.main_img)
 
-        editModel.value.main_img = await uploadImageToSpabaseStorage(main_img_file.value, {
+        const imgs = await uploadMultipleImagesToSupabaseStorage(main_img_file.value, {
             bucketName: StorageBucket.images,
             modelId: props.modelId!,
             fileNameTitle: 'model_main_img'
         })
+        editModel.value.main_img = imgs[0]
 
         main_img_file.value = null //釋放圖片資源，避免重複上傳
     }

@@ -30,8 +30,8 @@
                </div>
                <div>
                   <label for="model_main_img">封面圖片</label>
-                  <input type="file" id="model_main_img" @change="handleUploadImg">
-                  <img v-show="previewImg" :src="previewImg" alt="預覽圖">
+                  <input type="file" id="model_main_img" @change="(e)=> main_img_file = handleUploadMutipleImgs(e, toRef(preview_main_Img))">
+                  <img v-show="preview_main_Img[0]" :src="preview_main_Img[0]" alt="預覽圖">
                </div>
                <div>
                   --------------模型尺寸資訊------------
@@ -92,14 +92,14 @@
                   </div>
                   <div>
                      <label for="model_process_imgs">製作圖片</label>
-                     <input type="file" id="model_process_imgs" @change="handleUploadProcessImgs" multiple>
+                     <input type="file" id="model_process_imgs" @change="(e)=>process_imgs = handleUploadMutipleImgs(e, ref(previewProcessImgs))" multiple>
                      <div v-for="img in previewProcessImgs" :key="img">
                         <img :src="img" alt="預覽圖">
                      </div>
                   </div>
                   <div>
                      <label for="model_finished_imgs">完成圖片</label>
-                     <input type="file" id="model_finished_imgs" @change="handleUploadFinishedImgs" multiple>
+                     <input type="file" id="model_finished_imgs" @change="(e)=>gallery_imgs = handleUploadMutipleImgs(e, ref(previewGalleryImgs))" multiple>
                      <div v-for="img in previewGalleryImgs" :key="img">
                         <img :src="img" alt="預覽圖">
                      </div>
@@ -128,6 +128,7 @@ import {
 } from "~/types/model"
 import { StorageBucket } from "~/types/supabase"
 import { useMyModelStore } from '../../store/useMyModelStore'
+const { handleUploadMutipleImgs, handleUploadImg } = useUploadImage()
 
 const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo, addMyModelFinishInfo } = useMyModelsAPI()
 const {
@@ -159,24 +160,23 @@ const model: Model = {
    name_zh: '',
    name_en: '',
 }
-const previewImg = ref("")
+const preview_main_Img = ref<string[]>([])
 const previewProcessImgs = ref<string[]>([])
 const previewGalleryImgs = ref<string[]>([])
-const main_img_file = ref<File>()
-const process_imgs = ref<FileList>()
-const gallery_imgs = ref<FileList>()
-
-
+const main_img_file = ref<FileList | null>(null)
+const process_imgs = ref<FileList | null>(null)
+const gallery_imgs = ref<FileList | null>(null)
 
 async function fetchAddMyModel() {
    setLoadingState(true)
    //先處理圖片
-   //這裡得改成非同步進行，才不會阻塞
-   model.main_img = await uploadImageToSpabaseStorage(main_img_file.value!, {
+   // 這裡得改成非同步進行，才不會阻塞
+   const mainImgs = await uploadMultipleImagesToSupabaseStorage(main_img_file.value!, {
       bucketName: StorageBucket.images,
       modelId: -1,
       fileNameTitle: 'model_main_img'
    })
+   model.main_img = mainImgs[0]
    modelFinishInfo.process_imgs = await uploadMultipleImagesToSupabaseStorage(process_imgs.value!, {
       bucketName: StorageBucket.model_finish_info_images,
       modelId: -1,
@@ -203,58 +203,16 @@ async function fetchAddMyModel() {
    model.name_zh = ''
    model.name_en = ''
    showAddModelPanel.value = false
+   resetAllUploadImageProcess()
    //關閉loading
    setLoadingState(false)
 }
-async function handleUploadImg(event: InputEvent) {
-   const input = event.target as HTMLInputElement
-   if (input.files) {
-      const img = input.files[0]
-      const reader = new FileReader()
-      reader.onload = (e) => {
-         //預覽圖
-         previewImg.value = e.target?.result as string
-      }
-      reader.readAsDataURL(img)
-      main_img_file.value = img
-   }
-}
-async function handleUploadProcessImgs(event: InputEvent) {
-   const input = event.target as HTMLInputElement
-   const files = input.files
-   if (files) {
-      previewProcessImgs.value.length = 0
-      for (let i = 0; i < files.length; i++) {
-         const img = files[i]
-         if (img.type.startsWith('image/')) {
-            const reader = new FileReader()
-            reader.onload = (e) => {
-               //預覽圖
-               previewProcessImgs.value.push(e.target?.result as string)
-            }
-            reader.readAsDataURL(img)
-            process_imgs.value = files
-         }
-      }
-   }
-}
-async function handleUploadFinishedImgs(event: InputEvent) {
-   const input = event.target as HTMLInputElement
-   const files = input.files
-   if (files) {
-      previewGalleryImgs.value.length = 0
-      for (let i = 0; i < files.length; i++) {
-         const img = files[i]
-         if (img.type.startsWith('image/')) {
-            const reader = new FileReader()
-            reader.onload = (e) => {
-               //預覽圖
-               previewGalleryImgs.value.push(e.target?.result as string)
-            }
-            reader.readAsDataURL(img)
-            gallery_imgs.value = files
-         }
-      }
-   }
+function resetAllUploadImageProcess() {
+  preview_main_Img.value.length = 0
+  main_img_file.value=null
+  process_imgs.value=null
+  gallery_imgs.value=null
+  previewProcessImgs.value.length = 0
+  previewGalleryImgs.value.length = 0
 }
 </script>

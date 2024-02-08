@@ -31,14 +31,14 @@
                 </div>
                 <div>
                     <label for="model_process_imgs">製作圖片</label>
-                    <input type="file" id="model_process_imgs" @change="handleUploadProcessImgs" multiple>
+                    <input type="file" id="model_process_imgs" @change="(e)=> process_imgs_file_list = handleUploadMutipleImgs(e, ref(previewProcessImgs))" multiple>
                     <div v-for="img in previewProcessImgs" :key="img">
                         <img :src="img" alt="預覽圖">
                     </div>
                 </div>
                 <div>
                     <label for="model_finished_imgs">完成圖片</label>
-                    <input type="file" id="model_finished_imgs" @change="handleUploadFinishedImgs" multiple>
+                    <input type="file" id="model_finished_imgs" @change="(e)=> gallery_imgs_file_list = handleUploadMutipleImgs(e, ref(previewGalleryImgs))" multiple>
                     <div v-for="img in previewGalleryImgs" :key="img">
                         <img :src="img" alt="預覽圖">
                     </div>
@@ -64,6 +64,7 @@ const { setLoadingState } = useMyModelStore()
 const { getModelFinishInfo, addMyModelFinishInfo, updateMyModelFinishInfo } = useMyModelsAPI()
 const supabase = useSupabaseClient()
 const { getFinishImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
+const { handleUploadMutipleImgs } = useUploadImage()
 
 const showEditPanel = ref(false)
 const finishInfo = ref<ModelFinishInfo>()
@@ -73,8 +74,8 @@ const editFinishInfo = ref<ModelFinishInfo>({
 const previewProcessImgs = ref<string[]>([])
 const previewGalleryImgs = ref<string[]>([])
 
-const process_imgs_file_list = ref<FileList | null>()
-const gallery_imgs_file_list = ref<FileList | null>()
+const process_imgs_file_list = ref<FileList | null>(null)
+const gallery_imgs_file_list = ref<FileList | null>(null)
 
 init()
 
@@ -120,44 +121,6 @@ function resetData() {
 
 function showEditPanelHandel() {
     showEditPanel.value = !showEditPanel.value
-}
-async function handleUploadProcessImgs(event: InputEvent) {
-    const input = event.target as HTMLInputElement
-    const files = input.files
-    if (files) {
-        previewProcessImgs.value.length = 0
-        for (let i = 0; i < files.length; i++) {
-            const img = files[i]
-            if (img.type.startsWith('image/')) {
-                const reader = new FileReader()
-                reader.onload = (e) => {
-                    //預覽圖
-                    previewProcessImgs.value.push(e.target?.result as string)
-                }
-                reader.readAsDataURL(img)
-                process_imgs_file_list.value = files
-            }
-        }
-    }
-}
-async function handleUploadFinishedImgs(event: InputEvent) {
-    const input = event.target as HTMLInputElement
-    const files = input.files
-    if (files) {
-        previewGalleryImgs.value.length = 0
-        for (let i = 0; i < files.length; i++) {
-            const img = files[i]
-            if (img.type.startsWith('image/')) {
-                const reader = new FileReader()
-                reader.onload = (e) => {
-                    //預覽圖
-                    previewGalleryImgs.value.push(e.target?.result as string)
-                }
-                reader.readAsDataURL(img)
-                gallery_imgs_file_list.value = files
-            }
-        }
-    }
 }
 async function fetchUploadImageToSupabaseStorage() {
     if (process_imgs_file_list.value?.length) {
