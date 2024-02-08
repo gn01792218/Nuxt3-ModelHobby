@@ -31,6 +31,8 @@
                         <option :value="ModelBrand.ACADEMY">{{ ModelBrand.ACADEMY }}</option>
                         <option :value="ModelBrand.HASEGAWA">{{ ModelBrand.HASEGAWA }}</option>
                         <option :value="ModelBrand.TRUMPETER">{{ ModelBrand.TRUMPETER }}</option>
+                        <option :value="ModelBrand.ITALERI">{{ ModelBrand.ITALERI }}</option>
+                        <option :value="ModelBrand.MODEL_4D">{{ ModelBrand.MODEL_4D }}</option>
                         <option :value="ModelBrand.TRUMPETER_HOBBYBOSS">{{ ModelBrand.TRUMPETER_HOBBYBOSS }}</option>
                         <option :value="ModelBrand.ZVEZDA">{{ ModelBrand.ZVEZDA }}</option>
                         <option :value="ModelBrand.SPECIALHOBBY">{{ ModelBrand.SPECIALHOBBY }}</option>
