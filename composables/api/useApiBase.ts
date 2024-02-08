@@ -11,7 +11,7 @@ export default () => {
     if (error.value) {
       toast.add({ 
         title:'請求發生錯誤',
-        description:`${error.value}`,
+        description:`${error.value.message}`,
         icon:'i-heroicons-exclamation-circle-16-solid',
         timeout:0
        })
