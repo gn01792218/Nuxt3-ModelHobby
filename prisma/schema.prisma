@@ -41,6 +41,7 @@ model PurchaseInfo{
   e_commerce_name String
   currency        String
   price           Float
+  amount          Int @default(1)
   shop_name       String?
   purchase_date   DateTime?
   modelId         Int

@@ -76,6 +76,10 @@
                      <input id="model_purchase_info_price" type="number" step="0.0001" v-model="(modelPurchaseInfo.price)">
                   </div>
                   <div>
+                     <label for="model_purchase_info_amount">數量</label>
+                     <input id="model_purchase_info_amount" type="number" v-model="(modelPurchaseInfo.amount)">
+                  </div>
+                  <div>
                      <label for="model_purchase_info_shop_name">店家名稱</label>
                      <input id="model_purchase_info_shop_name" type="text" v-model="modelPurchaseInfo.shop_name">
                   </div>
@@ -119,16 +123,19 @@ import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import {
    type ModelSize,
    type ModelFinishInfo,
-   type PurchaseInfo,
    type Model,
    ModelStatus,
    SizeUnit,
    Ecommerce,
    Currency,
 } from "~/types/model"
+import {  
+   type PurchaseInfo,
+   type CreatePurchaseInfoRequest
+} from "~/types/purchaseInfo"
 import { StorageBucket } from "~/types/supabase"
 import { useMyModelStore } from '../../store/useMyModelStore'
-const { handleUploadMutipleImgs, handleUploadImg } = useUploadImage()
+const { handleUploadMutipleImgs } = useUploadImage()
 
 const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo, addMyModelFinishInfo } = useMyModelsAPI()
 const {
@@ -149,10 +156,11 @@ const modelSize = ref<ModelSize>({
    length: 0,
    height: 0
 })
-const modelPurchaseInfo = ref<PurchaseInfo>({
+const modelPurchaseInfo = ref<CreatePurchaseInfoRequest>({
    e_commerce_name: Ecommerce.淘寶,
    currency: Currency.RMB,
    price: 0,
+   amount:1
 })
 const modelFinishInfo: ModelFinishInfo = ({})
 const model: Model = {

@@ -11,7 +11,8 @@ export default defineEventHandler(async (event)=>{
        currency,
        price,
        shop_name,
-       purchase_date 
+       purchase_date,
+       amount
      } = body
 
     const myModelPurchaseInfo =await prisma.purchaseInfo.update({
@@ -23,6 +24,7 @@ export default defineEventHandler(async (event)=>{
             currency,
             price,
             shop_name,
+            amount,
             purchase_date:purchase_date? new Date(purchase_date) : null,
         }
     })

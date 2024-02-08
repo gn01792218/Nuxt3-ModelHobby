@@ -9,7 +9,8 @@
                 <div class="flex">
                     <UInput type="number" color="primary" variant="outline" placeholder="購買價格" v-model="editPurchaseInfo.price" />
                     <USelect color="primary" size="md" v-model="editPurchaseInfo.currency" :options="currencyOptions"
-                        placeholder="選擇購買平台" />
+                        placeholder="選擇幣種" />
+                    <UInput type="number" color="primary" variant="outline" placeholder="購買數量" v-model="editPurchaseInfo.amount" />
                 </div>
             </UFormGroup>
             <UFormGroup label="購買商家">

@@ -8,7 +8,7 @@
                     購買平台 : {{ purchaseInfo?.e_commerce_name }}
                 </p>
                 <p>
-                    購買價格 : {{ purchaseInfo?.price }} ( {{ purchaseInfo?.currency }} )
+                    購買價格 : {{ purchaseInfo?.price }} ( {{ purchaseInfo?.currency }} ) / 數量 {{ purchaseInfo.amount }}
                 </p>
                 <p>
                     購買商家 : {{ purchaseInfo?.shop_name }}
@@ -64,9 +64,9 @@
 
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
-import { Ecommerce, Currency, type PurchaseInfo, type Model } from "~/types/model"
+import { Ecommerce, Currency, type Model } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
-import { type UpdatePurchaseInfoRequest, type CreatePurchaseInfoRequest } from "~/types/purchaseInfo";
+import { type PurchaseInfo, type UpdatePurchaseInfoRequest, type CreatePurchaseInfoRequest } from "~/types/purchaseInfo";
 
 const props = defineProps<{
     modelId: number
@@ -81,6 +81,7 @@ const createPurchaseInfo = ref<CreatePurchaseInfoRequest>({
     e_commerce_name: Ecommerce.淘寶,
     currency: Currency.RMB,
     price: 0,
+    amount:1
 })
 const updatePurchaseInfo = ref<PurchaseInfo>()
 const originUpdatePurchaseInfo = ref<PurchaseInfo>()
@@ -117,7 +118,7 @@ async function fetchDeletePurchaseInfo(purchaseInfoId:number){
     setLoadingState(true)
     const deleteData = await deleteMyModelPurchaseInfo(purchaseInfoId)
     const deleteIndex = myModel.value?.purchase_infos?.findIndex((info:PurchaseInfo)=> info.id === deleteData.id)
-    if(deleteIndex) myModel.value?.purchase_infos?.splice(deleteIndex,1)
+    if(deleteIndex!>=0) myModel.value?.purchase_infos?.splice(deleteIndex!,1)
     setLoadingState(false)
 }
 function resetData(originPurchaseInfoId:number) {

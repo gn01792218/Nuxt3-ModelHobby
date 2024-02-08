@@ -1,3 +1,4 @@
+import { type PurchaseInfo } from "./purchaseInfo"
 export enum Currency{
     RMB = 'rmb',
     TW = 'tw'
@@ -53,14 +54,6 @@ export declare interface ModelSize{
 export declare interface ModelName{
     en?:string,
     zh?:string
-}
-export declare interface PurchaseInfo{
-    id:number,
-    e_commerce_name:Ecommerce,
-    currency:Currency,
-    price:number,
-    shop_name?:string,
-    purchase_date?:Date,
 }
 export declare interface ModelFinishInfo{
     finished_date?:Date,
