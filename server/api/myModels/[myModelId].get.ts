@@ -7,6 +7,10 @@ export default defineEventHandler(async (event)=>{
     const myModel =await prisma.myModel.findUnique({
         where:{
             id:parseInt(myModelId)
+        },
+        include:{
+            finish_info:true,
+            purchase_infos:true,
         }
     })
     return myModel

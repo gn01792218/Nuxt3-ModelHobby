@@ -88,15 +88,10 @@ async function fetchUpdateModel() {
 
         main_img_file.value = null //釋放圖片資源，避免重複上傳
     }
-    await updateMyModel(props.modelId, editModel.value)
-    await fetchMyModel()
-    setLoadingState(false)
-}
-
-async function fetchMyModel() {
-    const model = await getMyModel(props.modelId)
-    updateMyModelData(model)
+    const updateModel = await updateMyModel(props.modelId, editModel.value)
+    updateMyModelData(updateModel)
     showEditPanel.value = false
+    setLoadingState(false)
 }
 function resetData() {
     editModel.value = currentModel.value

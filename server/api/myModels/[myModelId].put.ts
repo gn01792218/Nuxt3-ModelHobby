@@ -11,13 +11,17 @@ export default defineEventHandler(async (event) => {
     where: {
       id: parseInt(myModelId),
     },
+    include: {
+      finish_info: true,
+      purchase_infos: true,
+    },
     data: {
       name_zh,
       name_en,
       status,
       main_img,
       article_number,
-      brand
+      brand,
     },
   });
   return myModel;
