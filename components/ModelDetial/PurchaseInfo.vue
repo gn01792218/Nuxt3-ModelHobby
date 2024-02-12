@@ -2,7 +2,7 @@
 <template>
     <section>
         <div class="flex">
-            <UCard v-for="purchaseInfo in myModel?.purchase_infos" :key="purchaseInfo.id">
+            <UCard v-for="purchaseInfo in currentModel?.purchase_infos" :key="purchaseInfo.id">
                 {{ purchaseInfo.id }}
                 <p>
                     購買平台 : {{ purchaseInfo?.e_commerce_name }}
@@ -70,14 +70,14 @@
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { Ecommerce, Currency, type Model } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
-import { type PurchaseInfo, type UpdatePurchaseInfoRequest, type CreatePurchaseInfoRequest } from "~/types/purchaseInfo";
+import { type PurchaseInfo, type CreatePurchaseInfoRequest } from "~/types/purchaseInfo";
 
 const props = defineProps<{
     modelId: number
+    currentModel:Model
 }>()
 const toast = useToast()
 const { setLoadingState } = useMyModelStore()
-const { myModelList } = storeToRefs(useMyModelStore())
 const { updateMyModelPurchaseInfo, addMyModelPurchaseInfo, deleteMyModelPurchaseInfo} = useMyModelsAPI()
 const showEditPanel = ref(false)
 const isOpenUpdatePanel = ref(false)
@@ -89,9 +89,6 @@ const createPurchaseInfo = ref<CreatePurchaseInfoRequest>({
 })
 const updatePurchaseInfo = ref<PurchaseInfo>()
 const originUpdatePurchaseInfo = ref<PurchaseInfo>()
-const myModel = computed(() => {
-    return myModelList.value.find((model: Model) => model.id === props.modelId)
-})
 
 async function openUpdatePanel(purchaseInfo: PurchaseInfo) {
     isOpenUpdatePanel.value = true
@@ -115,19 +112,19 @@ async function fetchAddModelPurchaseInfo() {
     setLoadingState(true)
     const purchaseInfo = await addMyModelPurchaseInfo(props.modelId, createPurchaseInfo.value)
     //為該Model添加購買資訊
-    myModel.value?.purchase_infos?.push(purchaseInfo)
+    props.currentModel?.purchase_infos?.push(purchaseInfo)
     setLoadingState(false)
 }
 async function fetchDeletePurchaseInfo(purchaseInfoId:number){
     setLoadingState(true)
     const deleteData = await deleteMyModelPurchaseInfo(purchaseInfoId)
-    const deleteIndex = myModel.value?.purchase_infos?.findIndex((info:PurchaseInfo)=> info.id === deleteData.id)
-    if(deleteIndex!>=0) myModel.value?.purchase_infos?.splice(deleteIndex!,1)
+    const deleteIndex = props.currentModel?.purchase_infos?.findIndex((info:PurchaseInfo)=> info.id === deleteData.id)
+    if(deleteIndex!>=0) props.currentModel?.purchase_infos?.splice(deleteIndex!,1)
     setLoadingState(false)
 }
 function resetData(originPurchaseInfoId:number) {
     isOpenUpdatePanel.value = false
-    const infoList = myModel.value?.purchase_infos
+    const infoList = props.currentModel?.purchase_infos
     const targetDataIndex = infoList?.findIndex((info:PurchaseInfo) => info.id === originPurchaseInfoId)
     if(!targetDataIndex) return 
     if(infoList) infoList[targetDataIndex] = originUpdatePurchaseInfo.value!

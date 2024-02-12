@@ -1,18 +1,23 @@
 import { type Model, ModelStatus } from "../types/model";
 
 // 使用composition API模式定义store
-export const useMyModelStore = defineStore("TestStore", () => {
+export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   // 初始状态
   const initState = {
     myModelList: [],
     loading: false,
+    currentModelId:0
   };
 
   //state
   const myModelList = ref<Model[]>(initState.myModelList);
   const loading = ref<boolean>(initState.loading);
+  const currentModelId = ref<number>(initState.currentModelId)
 
   //gatters
+ const currentModel = computed(() =>
+    myModelList.value.find((model) => model.id === currentModelId.value)
+  );
   const unStockInModels = computed(() =>
     myModelList.value.filter((model) => model.status === ModelStatus.未入庫)
   );
@@ -38,6 +43,9 @@ export const useMyModelStore = defineStore("TestStore", () => {
   function setLoadingState(payload: boolean) {
     loading.value = payload;
   }
+  function setCurrentModelId(payload:number){
+    currentModelId.value = payload
+  }
 
   return {
     //data
@@ -46,10 +54,12 @@ export const useMyModelStore = defineStore("TestStore", () => {
     unStockInModels,
     unFinishedModels,
     finishedModels,
+    currentModel,
     //methods
     setmyModelList,
     addModel,
     updateMyModelData,
-    setLoadingState
+    setLoadingState,
+    setCurrentModelId
   };
 });

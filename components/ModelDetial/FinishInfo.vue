@@ -55,16 +55,16 @@
 
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
-import { type ModelFinishInfo } from "~/types/model"
+import { type Model, type ModelFinishInfo } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
 import { StorageBucket } from "~/types/supabase";
 
 const props = defineProps<{
-    modelId: number
+    modelId: number,
+    currentModel:Model
 }>()
 const { setLoadingState } = useMyModelStore()
-const { getModelFinishInfo, addMyModelFinishInfo, updateMyModelFinishInfo } = useMyModelsAPI()
-const supabase = useSupabaseClient()
+const { addMyModelFinishInfo, updateMyModelFinishInfo } = useMyModelsAPI()
 const { getFinishImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
 const { handleUploadMutipleImgs } = useUploadImage()
 
@@ -85,9 +85,7 @@ const deleteGalleryImgs = ref<string[]>([])
 init()
 
 async function init() {
-    const purchaseInfoRes = await getModelFinishInfo(props.modelId)
-    if (!purchaseInfoRes) return
-    finishInfo.value = purchaseInfoRes
+    finishInfo.value = props.currentModel?.finish_info!
     //修改面板的預覽圖裝載
     finishInfo.value.process_imgs?.forEach(img => {
         previewProcessImgs.value.push(getFinishImagePublicUrl(img))
@@ -100,27 +98,21 @@ async function init() {
 async function fetchUpdatePurchaseInfo() {
     setLoadingState(true)
     await fetchUploadImageToSupabaseStorage()
-    await updateMyModelFinishInfo(props.modelId, editFinishInfo.value)
-    await fetchModelFinishInfo()
+    finishInfo.value = await updateMyModelFinishInfo(props.modelId, editFinishInfo.value)
+    showEditPanel.value = false
     setLoadingState(false)
 }
 async function fetchAddModelPurchaseInfo() {
     setLoadingState(true)
     //1.先處理圖片
     await fetchUploadImageToSupabaseStorage()
-    await addMyModelFinishInfo(props.modelId, editFinishInfo.value)
-    await fetchModelFinishInfo()
+    finishInfo.value = await addMyModelFinishInfo(props.modelId, editFinishInfo.value)
+    showEditPanel.value = false
     setLoadingState(false)
 }
-async function fetchModelFinishInfo() {
-    finishInfo.value = await getModelFinishInfo(props.modelId)
-    showEditPanel.value = false
-}
+
 function resetData() {
-    editFinishInfo.value.gallery = finishInfo.value?.gallery
-    editFinishInfo.value.process_imgs = finishInfo.value?.process_imgs
-    editFinishInfo.value.description = finishInfo.value?.description
-    editFinishInfo.value.finished_date = finishInfo.value?.finished_date
+    editFinishInfo.value = finishInfo.value!
 }
 
 function showEditPanelHandel() {

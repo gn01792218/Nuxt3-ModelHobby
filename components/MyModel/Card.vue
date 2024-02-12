@@ -49,7 +49,6 @@ const { deleteMyModel } = useFetchMyModels()
 const { setmyModelList, setLoadingState } = useMyModelStore()
 const { myModelList } = storeToRefs(useMyModelStore())
 const user = useSupabaseUser()
-const supabase = useSupabaseClient()
 function fetchDeleteImg() {
   const { modelData } = props
   //刪除mainimg

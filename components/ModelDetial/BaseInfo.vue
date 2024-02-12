@@ -60,7 +60,7 @@ const { getModelImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeIma
 const { myModelList } = storeToRefs(useMyModelStore())
 const { setLoadingState } = useMyModelStore()
 const { updateMyModelData } = useMyModelStore()
-const { updateMyModel, getMyModel } = useMyModelsAPI()
+const { updateMyModel } = useMyModelsAPI()
 const currentModel = computed<Model>(() => {
     return myModelList.value.find(model => model.id === props.modelId) as Model
 })

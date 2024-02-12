@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { Ecommerce, Currency, type PurchaseInfo, type Model } from "~/types/model"
+import { Ecommerce, Currency, type PurchaseInfo } from "~/types/model"
 const props = defineProps<{
     isOpen: boolean,
     updatePurchaseInfo: PurchaseInfo | undefined,

@@ -35,7 +35,7 @@
                 </div>
                 <button v-if="!modelSize" @click="fetchAddModelSize">新增Size資料</button>
                 <button v-show="modelSize" class="mr-5" @click="fetchUpdateSize">確認修改</button>
-                <button v-show="modelSize" @click="resetData">重置資料</button>
+                <button v-show="modelSize" @click="setOriginData">重置資料</button>
             </div>
         </div>
     </section>
@@ -43,14 +43,15 @@
 
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
-import { type ModelSize, SizeUnit } from "~/types/model"
+import { type ModelSize, SizeUnit, type Model } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
 
 const props = defineProps<{
-    modelId: number
+    modelId: number,
+    currentModel:Model
 }>()
 const { setLoadingState } = useMyModelStore()
-const { updateMyModelsSize, getModelSize, addMyModelsSize } = useMyModelsAPI()
+const { updateMyModelsSize, addMyModelsSize } = useMyModelsAPI()
 const showEditPanel = ref(false)
 const modelSize = ref<ModelSize>()
 const editSize = ref<ModelSize>({
@@ -60,35 +61,28 @@ const editSize = ref<ModelSize>({
     length: 0
 })
 init()
-
 async function init(){
-    const size = await getModelSize(props.modelId)
-    if(!size) return 
-    modelSize.value = size
-    resetData()
+    modelSize.value = props.currentModel?.size
+    setOriginData()
 }
 async function fetchUpdateSize() {
     setLoadingState(true)
-    await updateMyModelsSize(props.modelId, editSize.value)
-    await fetchModelSize()
+    props.currentModel.size = await updateMyModelsSize(props.modelId, editSize.value)
+    modelSize.value = props.currentModel.size
+    showEditPanel.value=false
     setLoadingState(false)
 }
 
 async function fetchAddModelSize(){
     setLoadingState(true)
-    await addMyModelsSize(props.modelId, editSize.value)
-    await fetchModelSize()
+    props.currentModel.size = await addMyModelsSize(props.modelId, editSize.value)
+    modelSize.value = props.currentModel.size
+    showEditPanel.value=false
     setLoadingState(false)
 }
-async function fetchModelSize() {
-  modelSize.value=await getModelSize(props.modelId)
-  showEditPanel.value=false
-}
-function resetData() {
-    editSize.value.unit = modelSize.value!.unit
-    editSize.value.width = modelSize.value!.width
-    editSize.value.length = modelSize.value!.length
-    editSize.value.height = modelSize.value!.height
+
+function setOriginData() {
+    editSize.value = modelSize.value!
 }
 
 function showEditPanelHandel() {

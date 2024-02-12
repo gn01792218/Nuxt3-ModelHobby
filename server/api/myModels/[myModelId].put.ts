@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
       id: parseInt(myModelId),
     },
     include: {
+      size:true,
       finish_info: true,
       purchase_infos: true,
     },
