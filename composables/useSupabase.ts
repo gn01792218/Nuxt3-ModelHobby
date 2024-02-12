@@ -25,7 +25,7 @@ export default () => {
    })
    return data.path
 }
-  async function uploadMultipleImagesToSupabaseStorage(imgs: FileList, option: UploadImageToSupabaseOption): Promise<any[]> {
+  async function uploadMultipleImagesToSupabaseStorage(imgs: File[], option: UploadImageToSupabaseOption): Promise<any[]> {
     const { modelId, bucketName, fileNameTitle } = option;
     if (!imgs?.length) return [];
 

@@ -96,14 +96,20 @@
                   </div>
                   <div>
                      <label for="model_process_imgs">製作圖片</label>
-                     <input type="file" id="model_process_imgs" @change="(e)=>process_imgs = handleUploadMutipleImgs(e, ref(previewProcessImgs))" multiple>
+                     <input type="file" id="model_process_imgs" @change="(e)=>{
+                        process_imgs = handleUploadMutipleImgs(e, ref(previewProcessImgs))
+                        previewProcessImgs.length = 0
+                        }" multiple>
                      <div v-for="img in previewProcessImgs" :key="img">
                         <img :src="img" alt="預覽圖">
                      </div>
                   </div>
                   <div>
                      <label for="model_finished_imgs">完成圖片</label>
-                     <input type="file" id="model_finished_imgs" @change="(e)=>gallery_imgs = handleUploadMutipleImgs(e, ref(previewGalleryImgs))" multiple>
+                     <input type="file" id="model_finished_imgs" @change="(e)=>{
+                        gallery_imgs = handleUploadMutipleImgs(e, ref(previewGalleryImgs))
+                        previewGalleryImgs.length = 0
+                        }" multiple>
                      <div v-for="img in previewGalleryImgs" :key="img">
                         <img :src="img" alt="預覽圖">
                      </div>
