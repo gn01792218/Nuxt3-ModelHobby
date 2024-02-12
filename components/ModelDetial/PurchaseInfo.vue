@@ -42,6 +42,10 @@
                     <input id="purchase_price" type="number" v-model="createPurchaseInfo.price">
                 </div>
                 <div>
+                    <label for="purchase_price">購買數量</label>
+                    <input id="purchase_price" type="number" v-model="createPurchaseInfo.amount">
+                </div>
+                <div>
                     <label for="purchase_shop_name">購買商家</label>
                     <input id="purchase_shop_name" type="text" v-model="createPurchaseInfo.shop_name">
                 </div>
