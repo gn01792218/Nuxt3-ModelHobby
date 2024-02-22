@@ -6,13 +6,15 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const initState = {
     myModelList: [],
     loading: false,
-    currentModelId:0
+    currentModelId:0,
+    currentModeStatusTab:1
   };
 
   //state
   const myModelList = ref<Model[]>(initState.myModelList);
   const loading = ref<boolean>(initState.loading);
   const currentModelId = ref<number>(initState.currentModelId)
+  const currentModeStatusTab = ref<number>(initState.currentModeStatusTab)
 
   //gatters
  const currentModel = computed(() =>
@@ -46,6 +48,9 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   function setCurrentModelId(payload:number){
     currentModelId.value = payload
   }
+  function setCurrentModelStatusTab(payload:number){
+    currentModeStatusTab.value = payload
+  }
 
   return {
     //data
@@ -55,11 +60,13 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     unFinishedModels,
     finishedModels,
     currentModel,
+    currentModeStatusTab,
     //methods
     setmyModelList,
     addModel,
     updateMyModelData,
     setLoadingState,
-    setCurrentModelId
+    setCurrentModelId,
+    setCurrentModelStatusTab
   };
 });
