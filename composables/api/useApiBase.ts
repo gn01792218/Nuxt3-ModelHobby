@@ -1,9 +1,10 @@
 import { useMyModelStore } from "~/store/useMyModelStore";
+import useMyToast from "../useMyToast";
 
 export default () => {
-  const toast = useToast()
   const { apiBaseUrl } = useRuntimeConfig().public
   const { setLoadingState } = useMyModelStore()
+  const { sendToast } = useMyToast()
 
   async function fetchApiBase(url:string, method:'post' | 'get' | 'delete' | 'patch' | 'put',body?: any): Promise<any> {
     const { data, error } = await useFetch(url, {
@@ -12,10 +13,11 @@ export default () => {
       body
     });
     if (error.value) {
-      toast.add({ 
+      sendToast({ 
         title:'請求發生錯誤,請稍後再嘗試',
         description:`${error.value.message}`,
         icon:'i-heroicons-exclamation-circle-16-solid',
+        color:'red',
         timeout:0
        })
        setLoadingState(false)

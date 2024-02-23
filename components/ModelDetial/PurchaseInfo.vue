@@ -71,12 +71,12 @@ import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { Ecommerce, Currency, type Model } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
 import { type PurchaseInfo, type CreatePurchaseInfoRequest } from "~/types/purchaseInfo";
-
+import useMyToast from "~/composables/useMyToast";
 const props = defineProps<{
     modelId: number
     currentModel:Model
 }>()
-const toast = useToast()
+const { sendToast } = useMyToast()
 const { setLoadingState } = useMyModelStore()
 const { updateMyModelPurchaseInfo, addMyModelPurchaseInfo, deleteMyModelPurchaseInfo} = useMyModelsAPI()
 const showEditPanel = ref(false)
@@ -100,7 +100,7 @@ async function fetchUpdate() {
     const purchaseInfo = await updateMyModelPurchaseInfo(updatePurchaseInfo.value?.id!, updatePurchaseInfo.value!)
     setLoadingState(false)
     isOpenUpdatePanel.value = false
-    toast.add({
+    sendToast({
         title: '修改成功',
         icon: "i-heroicons-information-circle",
         color: "green",
