@@ -32,7 +32,7 @@ function search(){
     searchResult.value = myModelList.value.filter(model=>{
         if(!keyword.value) return false
         const modelString = converTradictionalToSimple(JSON.stringify(model).toLocaleLowerCase())
-        const keywordArray = converTradictionalToSimple(keyword.value.toLowerCase()).split(" ") as string[]
+        const keywordArray = converTradictionalToSimple(keyword.value.trim().toLowerCase()).split(" ") as string[]
         return keywordArray.some(keyword=> modelString.includes(keyword))
     })
 }
