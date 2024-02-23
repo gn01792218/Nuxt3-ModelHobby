@@ -28,7 +28,12 @@ const searchResult = ref<Model[]>([])
 const openSearchResultModal = ref(false)
 function search(){
     openSearchResultModal.value = true
-    searchResult.value = myModelList.value.filter(model=>keyword.value ? JSON.stringify(model).toLocaleLowerCase().includes(keyword.value.toLocaleLowerCase()): false)
+    searchResult.value = myModelList.value.filter(model=>{
+        if(!keyword.value) return false
+        const modelString = JSON.stringify(model).toLocaleLowerCase()
+        const keywordArray = keyword.value.toLowerCase().split(" ")
+        return keywordArray.some(keyword=> modelString.includes(keyword))
+    })
 }
 async function logout(){
     const { error } =await supabase.auth.signOut()
