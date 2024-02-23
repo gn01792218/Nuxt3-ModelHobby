@@ -4,9 +4,9 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
   const { myModelId } = event.context.params as any;
   const body = await readBody(event);
-  //選擇要傳送的欄位
-  const { name_zh, name_en, status, main_img, article_number, brand } = body;
-
+  delete body.finish_info
+  delete body.purchase_infos
+  delete body.size
   const myModel = await prisma.myModel.update({
     where: {
       id: parseInt(myModelId),
@@ -16,14 +16,7 @@ export default defineEventHandler(async (event) => {
       finish_info: true,
       purchase_infos: true,
     },
-    data: {
-      name_zh,
-      name_en,
-      status,
-      main_img,
-      article_number,
-      brand,
-    },
+    data: body
   });
   return myModel;
 });

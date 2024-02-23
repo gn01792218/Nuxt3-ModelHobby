@@ -5,23 +5,12 @@ export default defineEventHandler(async (event)=>{
     const { modelId } = event.context.params as any
     const body = await readBody(event)
 
-    //選擇要傳送的欄位
-    const { 
-        unit,
-        width,
-        length,
-        height
-     } = body
-
     const myModel =await prisma.modelSize.update({
         where:{
             modelId:parseInt(modelId)
         },
         data:{
-            unit,
-            width,
-            length,
-            height,
+            ...body, 
             modelId:parseInt(modelId),
         }
     })

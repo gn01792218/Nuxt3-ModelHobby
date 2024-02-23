@@ -5,19 +5,12 @@ export default defineEventHandler(async (event)=>{
     const { modelId } = event.context.params as any
     const body = await readBody(event)
 
-    //選擇要傳送的欄位
-    const { 
-        finished_date,
-        description,
-        process_imgs,
-        gallery,
-     } = body
+    
+    body.finished_date =  body.finished_date? new Date(body.finished_date) : null
+
     const myModel =await prisma.modelFinishInfo.create({
         data:{
-            finished_date: finished_date? new Date(finished_date) : null,
-            process_imgs,
-            gallery,
-            description,
+            ...body,
             modelId:parseInt(modelId),
         }
     })

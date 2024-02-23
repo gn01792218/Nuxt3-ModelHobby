@@ -5,25 +5,12 @@ export default defineEventHandler(async (event)=>{
     const { Id } = event.context.params as any //這個id要帶ModelId
     const body = await readBody(event)
 
-    //選擇要傳送的欄位
-    const { 
-       e_commerce_name,
-       currency,
-       price,
-       shop_name,
-       purchase_date,
-       amount 
-     } = body
+    body.purchase_date = body.purchase_date? new Date(body.purchase_date) : null
 
     const myModelPurchaseInfo =await prisma.purchaseInfo.create({
         data:{
-            e_commerce_name,
-            currency,
-            price,
-            shop_name,
-            amount,
-            purchase_date:purchase_date? new Date(purchase_date) : null,
-            modelId:parseInt(Id),
+            ...body,
+            modelId:parseInt(Id)
         }
     })
     return myModelPurchaseInfo

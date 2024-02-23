@@ -29,6 +29,16 @@
                   </select>
                </div>
                <div>
+                    <label for="model_name_en">品牌</label>
+                    <select name="" id="" v-model="model.brand">
+                        <option v-for="brand in ModelBrand" :key="brand" :value="brand">{{ brand }}</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="model_name_en">產品編號</label>
+                    <input id="model_name_en" type="text" v-model="model.article_number">
+                </div>
+               <div>
                   <label for="model_main_img">封面圖片</label>
                   <input type="file" id="model_main_img" @change="(e)=> main_img_file = handleUploadMutipleImgs(e, toRef(preview_main_Img))">
                   <img v-show="preview_main_Img[0]" :src="preview_main_Img[0]" alt="預覽圖">
@@ -134,6 +144,7 @@ import {
    SizeUnit,
    Ecommerce,
    Currency,
+   ModelBrand
 } from "~/types/model"
 import {  
    type PurchaseInfo,
