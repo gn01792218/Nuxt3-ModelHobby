@@ -13,7 +13,7 @@
             <NuxtLink v-else to="/login">Login</NuxtLink>
         </div>
     </header>
-    <SearchModal :is-open="openSearchResultModal" :search-result="searchResult" @close="openSearchResultModal = false"/>
+    <SearchModal :search-result="searchResult"/>
 </template>
 
 <script setup lang="ts">
@@ -22,13 +22,14 @@ import { type Model } from "~/types/model"
 
 const { converTradictionalToSimple } = useChinessConverter()
 const user = useSupabaseUser()
+const { setOpenSearchPanel } = useMyModelStore()
 const { myModelList } = storeToRefs(useMyModelStore())
 const supabase = useSupabaseClient()
 const keyword = ref('')
 const searchResult = ref<Model[]>([])
-const openSearchResultModal = ref(false)
+
 function search(){
-    openSearchResultModal.value = true
+    setOpenSearchPanel(true)
     searchResult.value = myModelList.value.filter(model=>{
         if(!keyword.value) return false
         const modelString = converTradictionalToSimple(JSON.stringify(model).toLocaleLowerCase())

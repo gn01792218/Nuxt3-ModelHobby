@@ -1,5 +1,5 @@
 <template>
-    <UModal v-model="isopen">
+    <UModal v-model="openSearchPanel">
         <UCard>
             <template #header>
                 <div class="flex items-center justify-between">
@@ -7,14 +7,14 @@
                         搜尋結果
                     </h3>
                     <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-                        @click="$emit('close')" />
+                        @click="setOpenSearchPanel(false)" />
                 </div>
             </template>
             <section v-if="searchResult.length">
-                <UCard class="cursor-pointer" v-for="model in searchResult" :key="model.id" @click="gottoItem(model.id)">
-                    <p>{{ model.name_zh }}</p>
-                    <img class="w-[100px]" :src="getModelImagePublicUrl(model.main_img)" :alt="model.name_zh">
-                </UCard>
+               <MyModelSearchCard
+                v-for="model in searchResult" :key="model.id"
+                :model="model"
+               /> 
             </section>
             <section class="h-[200px] flex justify-center items-center" v-else>
                 <p>沒有尋找到東西...</p>
@@ -24,17 +24,12 @@
 </template>
 
 <script setup lang="ts">
+import { useMyModelStore } from "~/store/useMyModelStore"
 import { type Model } from "~/types/model"
-const { getModelImagePublicUrl } = useSupabase()
-const emit = defineEmits(['close'])
 const props = defineProps<{
-    isOpen: boolean,
     searchResult: Model[]
 }>()
 
-const isopen = computed(() => props.isOpen)
-function gottoItem(modelId: number) {
-    emit('close')
-    navigateTo(`/MyModel/ModelDetail-${modelId}`)
-}
+const { setOpenSearchPanel } = useMyModelStore()
+const { openSearchPanel } = storeToRefs(useMyModelStore())
 </script>
