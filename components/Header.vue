@@ -20,6 +20,7 @@
 import { useMyModelStore } from "~/store/useMyModelStore"
 import { type Model } from "~/types/model"
 
+const { converTradictionalToSimple } = useChinessConverter()
 const user = useSupabaseUser()
 const { myModelList } = storeToRefs(useMyModelStore())
 const supabase = useSupabaseClient()
@@ -30,8 +31,8 @@ function search(){
     openSearchResultModal.value = true
     searchResult.value = myModelList.value.filter(model=>{
         if(!keyword.value) return false
-        const modelString = JSON.stringify(model).toLocaleLowerCase()
-        const keywordArray = keyword.value.toLowerCase().split(" ")
+        const modelString = converTradictionalToSimple(JSON.stringify(model).toLocaleLowerCase())
+        const keywordArray = converTradictionalToSimple(keyword.value.toLowerCase()).split(" ") as string[]
         return keywordArray.some(keyword=> modelString.includes(keyword))
     })
 }
