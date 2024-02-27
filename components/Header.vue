@@ -1,5 +1,5 @@
 <template>
-    <header class="p-5 bg-red-200 flex justify-between">
+    <header class="p-5 bg-red-200 flex flex-col items-center xs:flex-row xs:justify-between">
         <NavBar/>
         <div class="flex">
             <div class="flex items-center mr-2">
