@@ -6,6 +6,17 @@
         <p>未組裝:{{ unFinishedModels.length }}個</p>
         <p>已組裝:{{ finishedModels.length }}個</p>
     </div>
+    <Divider title="完成統計"/>
+    <div>
+        <p>{{ getThisMonth() }} 月</p>
+        <p>已完成<span class="text-green-500">{{ thisMonthFinishedModels.length }}</span>個模型</p>
+        <p>本月購入了<span class="text-green-800">{{ thisMonthPurchaseModelsCount }}個模型</span></p>
+        <p>完成順逆差 :
+            <span :class="[thisMonthFinishedModels.length - thisMonthPurchaseModelsCount >= 0 ? 'text-green-500' : 'text-red-500']">
+                {{ thisMonthFinishedModels.length - thisMonthPurchaseModelsCount }}
+            </span>
+        </p>
+    </div>
 </template>
 <script setup lang="ts">
 import { Currency } from '~/types/model'
@@ -15,7 +26,11 @@ const {
     unStockInModels,
     unFinishedModels,
     finishedModels,
+    thisMonthFinishedModels,
+    thisMonthPurchaseModels,
+    thisMonthPurchaseModelsCount
 } = storeToRefs(useMyModelStore())
+const { getThisMonth } = useDate()
 const totalCoast = computed(()=>{
     let total =0
     myModelList.value.forEach(model=>{

@@ -1,5 +1,4 @@
 <template>
-   <p>我的模型</p>
    <section class="p-5 w-full h-[100px] bg-red-500 flex justify-start">
       <div class="">
          <UButton

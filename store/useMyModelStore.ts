@@ -2,6 +2,7 @@ import { type Model, ModelStatus } from "../types/model";
 
 // 使用composition API模式定义store
 export const useMyModelStore = defineStore("MyMOdelsStore", () => {
+  const { thisMonth, getMonth } = useDate()
   // 初始状态
   const initState = {
     myModelList: [],
@@ -31,6 +32,19 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const finishedModels = computed(() =>
     myModelList.value.filter((model) => model.status === ModelStatus.已組裝)
   );
+  const thisMonthFinishedModels = computed(() =>
+    myModelList.value.filter((model) => getMonth(model.finish_info?.finished_date!) === thisMonth )
+  );
+  const thisMonthPurchaseModels = computed(() =>
+    myModelList.value.filter((model) =>model.purchase_infos?.some(info=>getMonth(info.purchase_date!) === thisMonth))
+  );
+  const thisMonthPurchaseModelsCount = computed(()=> {
+    let count = 0
+    thisMonthPurchaseModels.value.forEach(model => model.purchase_infos?.forEach(info=>{
+      if(getMonth(info.purchase_date!) === thisMonth) count += info.amount
+    }))
+    return count
+  })
   //actions
   function setmyModelList(payload: Model[]) {
     myModelList.value = payload;
@@ -64,6 +78,9 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     unStockInModels,
     unFinishedModels,
     finishedModels,
+    thisMonthFinishedModels,
+    thisMonthPurchaseModels,
+    thisMonthPurchaseModelsCount,
     currentModel,
     currentModeStatusTab,
     openSearchPanel,
