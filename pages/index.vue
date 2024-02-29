@@ -6,12 +6,12 @@
         <p>未組裝:{{ unFinishedModels.length }}個</p>
         <p>已組裝:{{ finishedModels.length }}個</p>
     </div>
-    <Divider title="完成統計"/>
+    <Divider :title="`${thisMonth}月統計`"/>
     <div>
-        <p>{{ getThisMonth() }} 月</p>
+        <p>本月花費 {{ thisMonthPurchaseCoast }} 元</p>
         <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthFinishedModels)">已完成<span class="text-green-500">{{ thisMonthFinishedModels.length }}</span>個模型</p>
         <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthPurchaseModels)">本月購入了<span class="text-green-800">{{ thisMonthPurchaseModelsCount }}個模型</span></p>
-        <p>完成順逆差 :
+        <p>模型完成數量順逆差 :
             <span :class="[thisMonthFinishedModels.length - thisMonthPurchaseModelsCount >= 0 ? 'text-green-500' : 'text-red-500']">
                 {{ thisMonthFinishedModels.length - thisMonthPurchaseModelsCount }}
             </span>
@@ -29,15 +29,16 @@ const {
     thisMonthFinishedModels,
     thisMonthPurchaseModels,
     thisMonthPurchaseModelsCount,
+    thisMonthPurchaseCoast
 } = storeToRefs(useMyModelStore())
 const { setOpenSearchPanel, setSearchResult } = useMyModelStore()
-const { getThisMonth } = useDate()
+const { thisMonth } = useDate()
+const { toTWD } = useExchange()
 const totalCoast = computed(()=>{
     let total =0
     myModelList.value.forEach(model=>{
         model.purchase_infos?.forEach(info=>{
-            if(info.currency === Currency.RMB) total+= info.price*4.5*info.amount
-            else total += info.price*info.amount
+            total += toTWD(info.currency, info.price, info.amount)
         })
     })
     return total

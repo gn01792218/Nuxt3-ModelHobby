@@ -3,6 +3,7 @@ import { type Model, ModelStatus } from "../types/model";
 // 使用composition API模式定义store
 export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const { thisMonth, getMonth } = useDate()
+  const { toTWD } = useExchange()
   // 初始状态
   const initState = {
     myModelList: [],
@@ -47,6 +48,13 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     }))
     return count
   })
+  const thisMonthPurchaseCoast = computed(()=> {
+    let coast = 0
+    thisMonthPurchaseModels.value.forEach(model => model.purchase_infos?.forEach(info=>{
+      if(getMonth(info.purchase_date!) === thisMonth) coast += toTWD(info.currency, info.price, info.amount)
+    }))
+    return coast
+  })
   //actions
   function setmyModelList(payload: Model[]) {
     myModelList.value = payload;
@@ -86,6 +94,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     thisMonthFinishedModels,
     thisMonthPurchaseModels,
     thisMonthPurchaseModelsCount,
+    thisMonthPurchaseCoast,
     currentModel,
     currentModeStatusTab,
     openSearchPanel,
