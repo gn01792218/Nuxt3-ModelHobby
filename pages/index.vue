@@ -9,8 +9,8 @@
     <Divider title="完成統計"/>
     <div>
         <p>{{ getThisMonth() }} 月</p>
-        <p>已完成<span class="text-green-500">{{ thisMonthFinishedModels.length }}</span>個模型</p>
-        <p>本月購入了<span class="text-green-800">{{ thisMonthPurchaseModelsCount }}個模型</span></p>
+        <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthFinishedModels)">已完成<span class="text-green-500">{{ thisMonthFinishedModels.length }}</span>個模型</p>
+        <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthPurchaseModels)">本月購入了<span class="text-green-800">{{ thisMonthPurchaseModelsCount }}個模型</span></p>
         <p>完成順逆差 :
             <span :class="[thisMonthFinishedModels.length - thisMonthPurchaseModelsCount >= 0 ? 'text-green-500' : 'text-red-500']">
                 {{ thisMonthFinishedModels.length - thisMonthPurchaseModelsCount }}
@@ -19,7 +19,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { Currency } from '~/types/model'
+import { Currency, type Model } from '~/types/model'
 import { useMyModelStore } from '../store/useMyModelStore'
 const {
     myModelList,
@@ -28,8 +28,9 @@ const {
     finishedModels,
     thisMonthFinishedModels,
     thisMonthPurchaseModels,
-    thisMonthPurchaseModelsCount
+    thisMonthPurchaseModelsCount,
 } = storeToRefs(useMyModelStore())
+const { setOpenSearchPanel, setSearchResult } = useMyModelStore()
 const { getThisMonth } = useDate()
 const totalCoast = computed(()=>{
     let total =0
@@ -41,4 +42,9 @@ const totalCoast = computed(()=>{
     })
     return total
 })
+
+function openModelsDetailModal(models:Model[]){
+    setOpenSearchPanel(true)
+    setSearchResult(models)
+}
 </script>

@@ -11,7 +11,7 @@
                 </div>
             </template>
             <section v-if="searchResult.length">
-               <MyModelSearchCard
+               <MyModelSmallCard
                 v-for="model in searchResult" :key="model.id"
                 :model="model"
                /> 

@@ -1,10 +1,11 @@
 <template>
     <header class="p-5 bg-red-200 flex flex-col items-center xs:flex-row xs:justify-between">
-        <NavBar/>
+        <NavBar />
         <div class="flex">
             <div class="flex items-center mr-2">
-                <UInput type="text" color="primary" variant="outline" placeholder="search" v-model="keyword"/>
-                <UButton icon="i-heroicons-magnifying-glass" size="sm" color="red" variant="solid" :trailing="false" @click="search"/>
+                <UInput type="text" color="primary" variant="outline" placeholder="search" v-model="keyword" />
+                <UButton icon="i-heroicons-magnifying-glass" size="sm" color="red" variant="solid" :trailing="false"
+                    @click="search" />
             </div>
             <div v-if="user">
                 <p>歡迎 {{ user.user_metadata.full_name }}</p>
@@ -13,7 +14,7 @@
             <NuxtLink v-else to="/login">Login</NuxtLink>
         </div>
     </header>
-    <SearchModal :search-result="searchResult"/>
+    <SearchModal :search-result="searchResult" />
 </template>
 
 <script setup lang="ts">
@@ -22,23 +23,25 @@ import { type Model } from "~/types/model"
 
 const { converTradictionalToSimple } = useChinessConverter()
 const user = useSupabaseUser()
-const { setOpenSearchPanel } = useMyModelStore()
-const { myModelList } = storeToRefs(useMyModelStore())
+const { setOpenSearchPanel, setSearchResult } = useMyModelStore()
+const { myModelList, searchResult } = storeToRefs(useMyModelStore())
 const supabase = useSupabaseClient()
 const keyword = ref('')
-const searchResult = ref<Model[]>([])
 
-function search(){
+
+function search() {
     setOpenSearchPanel(true)
-    searchResult.value = myModelList.value.filter(model=>{
-        if(!keyword.value) return false
-        const modelString = converTradictionalToSimple(JSON.stringify(model).toLocaleLowerCase())
-        const keywordArray = converTradictionalToSimple(keyword.value.trim().toLowerCase()).split(" ") as string[]
-        return keywordArray.some(keyword=> modelString.includes(keyword))
-    })
+    setSearchResult(
+        myModelList.value.filter(model => {
+            if (!keyword.value) return false
+            const modelString = converTradictionalToSimple(JSON.stringify(model).toLocaleLowerCase())
+            const keywordArray = converTradictionalToSimple(keyword.value.trim().toLowerCase()).split(" ") as string[]
+            return keywordArray.some(keyword => modelString.includes(keyword))
+        })
+    )
 }
-async function logout(){
-    const { error } =await supabase.auth.signOut()
-    if(error) console.log(error)
+async function logout() {
+    const { error } = await supabase.auth.signOut()
+    if (error) console.log(error)
 }
 </script>
