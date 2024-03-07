@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 body{
-    @apply touch-pan-y
+    @apply touch-pan-y min-h-screen
 }
