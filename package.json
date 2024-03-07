@@ -12,7 +12,6 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxtjs/supabase": "^1.1.5",
-    "@nuxtjs/tailwindcss": "^6.10.1",
     "@samk-dev/nuxt-vcalendar": "^1.0.2",
     "@types/opencc-js": "^1.0.3",
     "nuxt": "^3.8.2",
