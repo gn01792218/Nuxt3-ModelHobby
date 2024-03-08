@@ -3,7 +3,7 @@
         <NavBar />
         <div class="flex">
             <div class="flex items-center mr-2">
-                <UInput type="text" color="primary" variant="outline" placeholder="search" v-model="keyword" />
+                <input type="text" class="my-input mr-1" v-model="keyword" placeholder="search">
                 <UButton color="pink" icon="i-heroicons-magnifying-glass" size="sm" variant="solid" :trailing="false"
                     @click="search" />
             </div>

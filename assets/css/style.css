@@ -6,7 +6,8 @@ body {
     @apply touch-pan-y min-h-screen bg-main-900;
 }
 
-input,
-textarea {
-    font-size: initial;
+/* 自訂義class */
+
+.my-input{
+    @apply w-[100px] p-2 rounded-md
 }
