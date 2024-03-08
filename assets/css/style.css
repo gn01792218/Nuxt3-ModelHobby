@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 body{
-    @apply touch-pan-y min-h-screen
+    @apply touch-pan-y min-h-screen bg-main-900;
 }

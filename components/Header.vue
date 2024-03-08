@@ -1,10 +1,10 @@
 <template>
-    <header class="p-5 bg-red-200 flex flex-col items-center xs:flex-row xs:justify-between">
+    <header class="p-5 bg-main flex flex-col items-center xs:flex-row xs:justify-between">
         <NavBar />
         <div class="flex">
             <div class="flex items-center mr-2">
                 <UInput type="text" color="primary" variant="outline" placeholder="search" v-model="keyword" />
-                <UButton icon="i-heroicons-magnifying-glass" size="sm" color="red" variant="solid" :trailing="false"
+                <UButton color="pink" icon="i-heroicons-magnifying-glass" size="sm" variant="solid" :trailing="false"
                     @click="search" />
             </div>
             <div v-if="user">

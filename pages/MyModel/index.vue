@@ -1,136 +1,138 @@
 <template>
-   <section class="p-5 w-full h-[100px] bg-red-500 flex justify-start">
-      <div class="">
-         <UButton
-            v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || 
-            user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d' || 
-            user?.id === '66a7e0cc-99e5-4cbf-8bc7-72021b26b362'"
-            color="amber" variant="solid" @click="showAddModelPanel = !showAddModelPanel">
-            <UIcon name="i-heroicons-plus-circle-16-solid" />
-            添加模型
-         </UButton>
-         <div class="bg-yellow-600 absolute p-5 z-[2]" v-show="showAddModelPanel">
-            <div>
+   <main>
+      <section class="w-full h-[100px] bg-red-500 flex justify-start">
+         <div class="">
+            <UButton
+               v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || 
+               user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d' || 
+               user?.id === '66a7e0cc-99e5-4cbf-8bc7-72021b26b362'"
+               color="amber" variant="solid" @click="showAddModelPanel = !showAddModelPanel">
+               <UIcon name="i-heroicons-plus-circle-16-solid" />
+               添加模型
+            </UButton>
+            <div class="bg-yellow-600 absolute p-5 z-[2]" v-show="showAddModelPanel">
                <div>
-                  <label for="model_name_zh">中文名稱</label>
-                  <input id="model_name_zh" type="text" v-model="model.name_zh">
-               </div>
-               <div>
-                  <label for="model_name_en">英文名稱</label>
-                  <input id="model_name_en" type="text" v-model="model.name_en">
-               </div>
-               <div>
-                  <label for="model_status">選擇狀態</label>
-                  <select name="" id="" v-model="model.status">
-                     <option :value="ModelStatus.未入庫">未入庫</option>
-                     <option :value="ModelStatus.未組裝">未組裝</option>
-                     <option :value="ModelStatus.已組裝">已組裝</option>
-                  </select>
-               </div>
-               <div>
-                    <label for="model_name_en">品牌</label>
-                    <select name="" id="" v-model="model.brand">
-                        <option v-for="brand in ModelBrand" :key="brand" :value="brand">{{ brand }}</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="model_name_en">產品編號</label>
-                    <input id="model_name_en" type="text" v-model="model.article_number">
-                </div>
-               <div>
-                  <label for="model_main_img">封面圖片</label>
-                  <input type="file" id="model_main_img" @change="(e)=> main_img_file = handleUploadMutipleImgs(e, toRef(preview_main_Img))">
-                  <img v-show="preview_main_Img[0]" :src="preview_main_Img[0]" alt="預覽圖">
-               </div>
-               <div>
-                  --------------模型尺寸資訊------------
                   <div>
-                     <label for="model_size_unit">選擇尺吋單位</label>
-                     <select name="" id="" v-model="modelSize.unit">
-                        <option :value="SizeUnit.MM">{{ SizeUnit.MM }}</option>
-                        <option :value="SizeUnit.CM">{{ SizeUnit.CM }}</option>
+                     <label for="model_name_zh">中文名稱</label>
+                     <input id="model_name_zh" type="text" v-model="model.name_zh">
+                  </div>
+                  <div>
+                     <label for="model_name_en">英文名稱</label>
+                     <input id="model_name_en" type="text" v-model="model.name_en">
+                  </div>
+                  <div>
+                     <label for="model_status">選擇狀態</label>
+                     <select name="" id="" v-model="model.status">
+                        <option :value="ModelStatus.未入庫">未入庫</option>
+                        <option :value="ModelStatus.未組裝">未組裝</option>
+                        <option :value="ModelStatus.已組裝">已組裝</option>
                      </select>
                   </div>
                   <div>
-                     <label for="model_size_length">長度</label>
-                     <input id="model_size_length" type="number" step="0.0001" v-model="modelSize.length">
+                       <label for="model_name_en">品牌</label>
+                       <select name="" id="" v-model="model.brand">
+                           <option v-for="brand in ModelBrand" :key="brand" :value="brand">{{ brand }}</option>
+                       </select>
+                   </div>
+                   <div>
+                       <label for="model_name_en">產品編號</label>
+                       <input id="model_name_en" type="text" v-model="model.article_number">
+                   </div>
+                  <div>
+                     <label for="model_main_img">封面圖片</label>
+                     <input type="file" id="model_main_img" @change="(e)=> main_img_file = handleUploadMutipleImgs(e, toRef(preview_main_Img))">
+                     <img v-show="preview_main_Img[0]" :src="preview_main_Img[0]" alt="預覽圖">
                   </div>
                   <div>
-                     <label for="model_size_width">寬度</label>
-                     <input id="model_size_width" type="number" step="0.0001" v-model="(modelSize.width)">
-                  </div>
-                  <div>
-                     <label for="model_size_height">高度</label>
-                     <input id="model_size_height" type="number" step="0.0001" v-model="(modelSize.height)">
-                  </div>
-               </div>
-               <div>
-                  --------------購買訊息------------
-                  <div>
-                     <label for="model_purchase_info_ecommerce">購買平台</label>
-                     <select name="" id="" v-model="modelPurchaseInfo.e_commerce_name">
-                        <option :value="Ecommerce.淘寶">{{ Ecommerce.淘寶 }}</option>
-                        <option :value="Ecommerce.蝦皮">{{ Ecommerce.蝦皮 }}</option>
-                     </select>
-                  </div>
-                  <div>
-                     <label for="model_purchase_info_currency">幣種</label>
-                     <select name="" id="" v-model="modelPurchaseInfo.currency">
-                        <option :value="Currency.RMB">{{ Currency.RMB }}</option>
-                        <option :value="Currency.TW">{{ Currency.TW }}</option>
-                     </select>
-                  </div>
-                  <div>
-                     <label for="model_purchase_info_price">價格</label>
-                     <input id="model_purchase_info_price" type="number" step="0.0001" v-model="(modelPurchaseInfo.price)">
-                  </div>
-                  <div>
-                     <label for="model_purchase_info_amount">數量</label>
-                     <input id="model_purchase_info_amount" type="number" v-model="(modelPurchaseInfo.amount)">
-                  </div>
-                  <div>
-                     <label for="model_purchase_info_shop_name">店家名稱</label>
-                     <input id="model_purchase_info_shop_name" type="text" v-model="modelPurchaseInfo.shop_name">
-                  </div>
-                  <div>
-                     <label for="model_purchase_info_shop_name">購買日期</label>
-                     <input id="model_purchase_info_shop_name" type="date" v-model="modelPurchaseInfo.purchase_date">
-                  </div>
-               </div>
-               <div>
-                  --------------完成資訊------------
-                  <div>
-                     <label for="model_finish_info_finished_date">完成日期</label>
-                     <input id="model_finish_info_finished_date" type="date" v-model="modelFinishInfo.finished_date">
-                  </div>
-                  <div>
-                     <label for="model_process_imgs">製作圖片</label>
-                     <input type="file" id="model_process_imgs" @change="(e)=>{
-                        process_imgs = handleUploadMutipleImgs(e, ref(previewProcessImgs))
-                        previewProcessImgs.length = 0
-                        }" multiple>
-                     <div v-for="img in previewProcessImgs" :key="img">
-                        <img :src="img" alt="預覽圖">
+                     --------------模型尺寸資訊------------
+                     <div>
+                        <label for="model_size_unit">選擇尺吋單位</label>
+                        <select name="" id="" v-model="modelSize.unit">
+                           <option :value="SizeUnit.MM">{{ SizeUnit.MM }}</option>
+                           <option :value="SizeUnit.CM">{{ SizeUnit.CM }}</option>
+                        </select>
+                     </div>
+                     <div>
+                        <label for="model_size_length">長度</label>
+                        <input id="model_size_length" type="number" step="0.0001" v-model="modelSize.length">
+                     </div>
+                     <div>
+                        <label for="model_size_width">寬度</label>
+                        <input id="model_size_width" type="number" step="0.0001" v-model="(modelSize.width)">
+                     </div>
+                     <div>
+                        <label for="model_size_height">高度</label>
+                        <input id="model_size_height" type="number" step="0.0001" v-model="(modelSize.height)">
                      </div>
                   </div>
                   <div>
-                     <label for="model_finished_imgs">完成圖片</label>
-                     <input type="file" id="model_finished_imgs" @change="(e)=>{
-                        gallery_imgs = handleUploadMutipleImgs(e, ref(previewGalleryImgs))
-                        previewGalleryImgs.length = 0
-                        }" multiple>
-                     <div v-for="img in previewGalleryImgs" :key="img">
-                        <img :src="img" alt="預覽圖">
+                     --------------購買訊息------------
+                     <div>
+                        <label for="model_purchase_info_ecommerce">購買平台</label>
+                        <select name="" id="" v-model="modelPurchaseInfo.e_commerce_name">
+                           <option :value="Ecommerce.淘寶">{{ Ecommerce.淘寶 }}</option>
+                           <option :value="Ecommerce.蝦皮">{{ Ecommerce.蝦皮 }}</option>
+                        </select>
+                     </div>
+                     <div>
+                        <label for="model_purchase_info_currency">幣種</label>
+                        <select name="" id="" v-model="modelPurchaseInfo.currency">
+                           <option :value="Currency.RMB">{{ Currency.RMB }}</option>
+                           <option :value="Currency.TW">{{ Currency.TW }}</option>
+                        </select>
+                     </div>
+                     <div>
+                        <label for="model_purchase_info_price">價格</label>
+                        <input id="model_purchase_info_price" type="number" step="0.0001" v-model="(modelPurchaseInfo.price)">
+                     </div>
+                     <div>
+                        <label for="model_purchase_info_amount">數量</label>
+                        <input id="model_purchase_info_amount" type="number" v-model="(modelPurchaseInfo.amount)">
+                     </div>
+                     <div>
+                        <label for="model_purchase_info_shop_name">店家名稱</label>
+                        <input id="model_purchase_info_shop_name" type="text" v-model="modelPurchaseInfo.shop_name">
+                     </div>
+                     <div>
+                        <label for="model_purchase_info_shop_name">購買日期</label>
+                        <input id="model_purchase_info_shop_name" type="date" v-model="modelPurchaseInfo.purchase_date">
+                     </div>
+                  </div>
+                  <div>
+                     --------------完成資訊------------
+                     <div>
+                        <label for="model_finish_info_finished_date">完成日期</label>
+                        <input id="model_finish_info_finished_date" type="date" v-model="modelFinishInfo.finished_date">
+                     </div>
+                     <div>
+                        <label for="model_process_imgs">製作圖片</label>
+                        <input type="file" id="model_process_imgs" @change="(e)=>{
+                           process_imgs = handleUploadMutipleImgs(e, ref(previewProcessImgs))
+                           previewProcessImgs.length = 0
+                           }" multiple>
+                        <div v-for="img in previewProcessImgs" :key="img">
+                           <img :src="img" alt="預覽圖">
+                        </div>
+                     </div>
+                     <div>
+                        <label for="model_finished_imgs">完成圖片</label>
+                        <input type="file" id="model_finished_imgs" @change="(e)=>{
+                           gallery_imgs = handleUploadMutipleImgs(e, ref(previewGalleryImgs))
+                           previewGalleryImgs.length = 0
+                           }" multiple>
+                        <div v-for="img in previewGalleryImgs" :key="img">
+                           <img :src="img" alt="預覽圖">
+                        </div>
                      </div>
                   </div>
                </div>
+               <button class="ml-auto block border-2" @click="fetchAddMyModel">確認</button>
             </div>
-            <button class="ml-auto block border-2" @click="fetchAddMyModel">確認</button>
          </div>
-      </div>
-   </section>
-   <MyModelTabsArea :un-stock-in-models="unStockInModels" :un-finished-models="unFinishedModels"
-      :finished-models="finishedModels" />
+      </section>
+      <MyModelTabsArea :un-stock-in-models="unStockInModels" :un-finished-models="unFinishedModels"
+         :finished-models="finishedModels" />
+   </main>
 </template>
 
 <script setup lang="ts">

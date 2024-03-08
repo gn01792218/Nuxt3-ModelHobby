@@ -1,5 +1,5 @@
 <template>
-    <div class="p-10">
+    <div class="">
         <ModelDetialBaseInfo :model-id="modelId" />
         <Divider title="Size Info" icon-name="i-heroicons-rectangle-stack-solid"/>
         <ModelDetialModelSize :model-id="modelId" :current-model="currentModel"/>
