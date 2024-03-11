@@ -3,7 +3,6 @@
     <section>
         <div class="flex">
             <UCard v-for="purchaseInfo in currentModel?.purchase_infos" :key="purchaseInfo.id">
-                {{ purchaseInfo.id }}
                 <p>
                     購買平台 : {{ purchaseInfo?.e_commerce_name }}
                 </p>

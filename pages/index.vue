@@ -1,15 +1,15 @@
 <template>
     <main>
         <div>
-            <p>總花費 : {{ totalCoast }} 台幣</p>
+            <p>總花費 : <span class="text-acent-500">{{ totalCoast }}</span>台幣</p>
             <p>目前共有{{ myModelList.length }} 個模型</p>
             <p>未入庫:{{ unStockInModels.length }}個</p>
             <p>未組裝:{{ unFinishedModels.length }}個</p>
             <p>已組裝:{{ finishedModels.length }}個</p>
         </div>
-        <Divider color="primary" :title="`${thisMonth}月統計`"/>
+        <Divider  :title="`${thisMonth}月統計`"/>
         <div>
-            <p>本月花費 {{ thisMonthPurchaseCoast }} 元</p>
+            <p>本月花費 <span class="text-acent-500">{{ thisMonthPurchaseCoast }}</span>元</p>
             <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthFinishedModels)">已完成<span class="text-green-500">{{ thisMonthFinishedModels.length }}</span>個模型</p>
             <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthPurchaseModels)">本月購入了<span class="text-green-800">{{ thisMonthPurchaseModelsCount }}個模型</span></p>
             <p>模型完成數量順逆差 :
