@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { useMyModelStore } from "~/store/useMyModelStore"
 import { type Model } from "~/types/model"
-const props = defineProps<{
+defineProps<{
     searchResult: Model[]
 }>()
 

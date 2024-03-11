@@ -19,13 +19,12 @@
 
 <script setup lang="ts">
 import { useMyModelStore } from "~/store/useMyModelStore"
-import { type Model } from "~/types/model"
 
 const { converTradictionalToSimple } = useChinessConverter()
 const user = useSupabaseUser()
 const { setOpenSearchPanel, setSearchResult } = useMyModelStore()
 const { myModelList, searchResult } = storeToRefs(useMyModelStore())
-const supabase = useSupabaseClient()
+const { logout } = useAuth()
 const keyword = ref('')
 
 
@@ -40,8 +39,5 @@ function search() {
         })
     )
 }
-async function logout() {
-    const { error } = await supabase.auth.signOut()
-    if (error) console.log(error)
-}
+
 </script>

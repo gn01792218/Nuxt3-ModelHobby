@@ -21,12 +21,13 @@ export default () => {
   async function loginWithGoogle() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      // options:{
-      //     redirectTo:`/MyModel`
-      // }
     });
     if (error) alert(error);
   }
+  async function logout() {
+    const { error } = await supabase.auth.signOut()
+    if (error) console.log(error)
+}
 
   return {
     //data
@@ -36,5 +37,6 @@ export default () => {
     signUp,
     login,
     loginWithGoogle,
+    logout
   };
 };
