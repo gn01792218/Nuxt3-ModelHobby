@@ -27,8 +27,7 @@
             <div v-show="showEditPanel" class="bg-red-200">
                 <div>
                     <select name="" id="" v-model="createPurchaseInfo.e_commerce_name">
-                        <option :value="Ecommerce.淘寶">淘寶</option>
-                        <option :value="Ecommerce.蝦皮">蝦皮</option>
+                         <option v-for="ecommerce in Ecommerce" :key="ecommerce" :value="ecommerce">{{ ecommerce }}</option>
                     </select>
                 </div>
                 <div>

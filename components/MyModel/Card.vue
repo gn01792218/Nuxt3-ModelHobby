@@ -1,5 +1,5 @@
 <template>
-  <UCard v-if="!loadSkeleton" class="bg-red-100">
+  <UCard v-if="!loadSkeleton" class="bg-main-200">
     <template #header>
       <p>{{ modelData.name_zh }}</p>
       <p>{{ modelData.name_en }}</p>

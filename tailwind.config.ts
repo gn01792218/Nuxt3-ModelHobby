@@ -23,6 +23,7 @@ export default <Partial<Config>>{
           "950": "#112c40",
         },
         acent: {
+          DEFAULT:"#e63f66",
           "50": "#fef2f4",
           "100": "#fde6e9",
           "200": "#fbd0d9",

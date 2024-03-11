@@ -16,6 +16,7 @@ export enum ModelBrand{
     HASEGAWA = '長谷川_Hasegawa',
     S_MODEL = '六分儀_S-Model',
     MODEL_4D = '4D模型_4D-Model',
+    MODELCOLLECT = '搜模閣_Modelcollect',
     FLVHAWK = '鷹翔_Flvhawk',
     ZVEZDA = '紅星_Zvezda',
     DRAGON = '威龍_Dragon',
@@ -46,7 +47,8 @@ export enum ModelStatus{
 }
 export enum Ecommerce{
     淘寶 = "淘寶",
-    蝦皮 = "蝦皮"
+    蝦皮 = "蝦皮",
+    露天 = "露天"
 }
 export declare interface ModelSize{
     unit:SizeUnit,

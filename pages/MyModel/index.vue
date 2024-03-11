@@ -1,6 +1,6 @@
 <template>
    <main>
-      <section class="w-full h-[100px] bg-red-500 flex justify-start">
+      <section class="w-full h-[100px] bg-acent-500 flex justify-start">
          <div class="">
             <UButton
                v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || 
@@ -70,8 +70,7 @@
                      <div>
                         <label for="model_purchase_info_ecommerce">購買平台</label>
                         <select name="" id="" v-model="modelPurchaseInfo.e_commerce_name">
-                           <option :value="Ecommerce.淘寶">{{ Ecommerce.淘寶 }}</option>
-                           <option :value="Ecommerce.蝦皮">{{ Ecommerce.蝦皮 }}</option>
+                           <option v-for="ecommerce in Ecommerce" :key="ecommerce" :value="ecommerce">{{ ecommerce }}</option>
                         </select>
                      </div>
                      <div>

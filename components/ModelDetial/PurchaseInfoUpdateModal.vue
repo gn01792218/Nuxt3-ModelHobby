@@ -2,8 +2,9 @@
     <UModal v-model="isOpen">
         <div class="p-4" v-if="editPurchaseInfo">
             <UFormGroup label="購買平台">
-                <USelect icon="i-heroicons-magnifying-glass-20-solid" color="primary" size="md"
-                    v-model="editPurchaseInfo.e_commerce_name" :options="ecommerceOptions" placeholder="選擇購買平台" />
+                <select name="" id="" v-model="editPurchaseInfo.e_commerce_name">
+                    <option v-for="ecommerce in Ecommerce" :key="ecommerce" :value="ecommerce">{{ ecommerce }}</option>
+                </select>
             </UFormGroup>
             <UFormGroup label="購買價格">
                 <div class="flex">
@@ -18,11 +19,12 @@
             </UFormGroup>
             <UFormGroup label="購買日期">
                 <VDatePicker v-model="editPurchaseInfo.purchase_date" />
-                <TimeFormator v-if="editPurchaseInfo.purchase_date" :date="editPurchaseInfo.purchase_date"/>
+                <TimeFormator v-if="editPurchaseInfo.purchase_date" :date="editPurchaseInfo.purchase_date" />
             </UFormGroup>
             <div class="ml-auto flex">
-                <UButton class="block mr-5" label="確認修改" @click="$emit('update')" color="primary"/>
-                <UButton class="block" label="取消" @click="$emit('close', originPurchaseInfo?.id)" color="secondary" variant="outline"/>
+                <UButton class="block mr-5" label="確認修改" @click="$emit('update')" color="primary" />
+                <UButton class="block" label="取消" @click="$emit('close', originPurchaseInfo?.id)" color="secondary"
+                    variant="outline" />
             </div>
         </div>
     </UModal>
@@ -33,10 +35,9 @@ import { Ecommerce, Currency, type PurchaseInfo } from "~/types/model"
 const props = defineProps<{
     isOpen: boolean,
     updatePurchaseInfo: PurchaseInfo | undefined,
-    originPurchaseInfo:PurchaseInfo | undefined
+    originPurchaseInfo: PurchaseInfo | undefined
 }>()
 const isOpen = computed(() => props.isOpen)
-const ecommerceOptions = [Ecommerce.淘寶, Ecommerce.蝦皮]
 const currencyOptions = [Currency.RMB, Currency.TW]
 const editPurchaseInfo = computed<PurchaseInfo>(() => props.updatePurchaseInfo!)
 </script>
