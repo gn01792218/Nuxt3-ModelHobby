@@ -10,18 +10,18 @@ export default () => {
     const { data, error } = await useFetch(url, {
       baseURL:apiBaseUrl,
       method,
-      body
+      body:JSON.stringify(body)
     });
     if (error.value) {
       sendToast({ 
         title:'請求發生錯誤,請稍後再嘗試',
-        description:`${error.value.message}`,
+        description:`${error.value.response?._data.message}`,
         icon:'i-heroicons-exclamation-circle-16-solid',
         color:'red',
         timeout:0
        })
        setLoadingState(false)
-      throw createError({ ...error.value, message: "資料異常" });
+      throw createError({ ...error.value, message:error.value.message });
     }
     return data.value as unknown as any;
   }
