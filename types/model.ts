@@ -1,4 +1,6 @@
 import { type PurchaseInfo } from "./purchaseInfo"
+import { type ModelFinishInfo } from "./finishInfo"
+
 export enum Currency{
     RMB = 'rmb',
     TW = 'tw'
@@ -60,12 +62,7 @@ export declare interface ModelName{
     en?:string,
     zh?:string
 }
-export declare interface ModelFinishInfo{
-    finished_date?:Date,
-    description?:string,
-    process_imgs?:string[],
-    gallery?:string[]
-}
+
 export declare interface Model{
     id?:number,
     name_zh:string,
@@ -81,6 +78,6 @@ export declare interface Model{
     imgs?:string[],
     PD?:Date, //生產日期
     purchase_infos?:PurchaseInfo[]
-    finish_info?:ModelFinishInfo
+    finish_infos:ModelFinishInfo[]
 }
 

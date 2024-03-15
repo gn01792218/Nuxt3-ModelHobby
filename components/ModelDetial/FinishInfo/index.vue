@@ -1,13 +1,15 @@
 
 <template>
-    <section>
+    <button @click="openCreateFinishInfoPanel = true">新增完成資料</button>
+    <section v-for="finish_info in finishInfos" :key="finish_info.id">
         <div>
+            <p>{{ finish_info.title }}</p>
             <p>
-                完成日期 : {{ finishInfo?.finished_date ? finishInfo?.finished_date : '????/??/??' }}
+                完成日期 : {{ finish_info?.finished_date ? finish_info?.finished_date : '????/??/??' }}
             </p>
             <div>
                 製作過程圖片
-                <ul v-for="img in finishInfo?.process_imgs" :key="img">
+                <ul v-for="img in finish_info?.process_imgs" :key="img">
                     <li>
                         <img :src="getFinishImagePublicUrl(img)" alt="">
                     </li>
@@ -15,7 +17,7 @@
             </div>
             <div>
                 完成圖片
-                <ul v-for="img in finishInfo?.gallery" :key="img">
+                <ul v-for="img in finish_info?.gallery" :key="img">
                     <li>
                         <img :src="getFinishImagePublicUrl(img)" alt="">
                     </li>
@@ -23,7 +25,8 @@
             </div>
         </div>
         <div>
-            <button @click="showEditPanelHandel">修改</button>
+            <button class="mr-2" @click="showEditPanelHandel">修改</button>
+            <button @click="fetchDeleteFinishInfo(finish_info.id)">刪除</button>
             <div v-show="showEditPanel" class="bg-red-200">
                 <div>
                     <label for="modelSize_height">完成日期</label>
@@ -45,17 +48,22 @@
                         <UButton icon="i-heroicons-trash-solid" size="sm" color="red" variant="solid" :trailing="false" @click="deleteGalleryUploadImg(index)"/>
                     </div>
                 </div>
-                <button v-if="!finishInfo" @click="fetchAddModelPurchaseInfo">新增完成資料</button>
-                <button v-show="finishInfo" class="mr-5" @click="fetchUpdatePurchaseInfo">確認修改</button>
-                <button v-show="finishInfo" @click="resetData">重置資料</button>
+                <button v-show="finishInfos" class="mr-5" @click="fetchUpdateFinishInfo">確認修改</button>
+                <button v-show="finishInfos" @click="resetData">重置資料</button>
             </div>
         </div>
     </section>
+    <ModelDetialFinishInfoCreateModal 
+    :is-open="openCreateFinishInfoPanel" 
+    :model-id="modelId"
+    @close="openCreateFinishInfoPanel = false" 
+    @success="onCreateFinishInfoSuccess"/>
 </template>
 
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
-import { type Model, type ModelFinishInfo } from "~/types/model"
+import { type Model } from "~/types/model"
+import { type ModelFinishInfo} from "~/types/finishInfo"
 import { useMyModelStore } from '~/store/useMyModelStore';
 import { StorageBucket } from "~/types/supabase";
 
@@ -64,14 +72,16 @@ const props = defineProps<{
     currentModel:Model
 }>()
 const { setLoadingState } = useMyModelStore()
-const { addMyModelFinishInfo, updateMyModelFinishInfo } = useMyModelsAPI()
+const { updateMyModelFinishInfo, deleteMyModelFinishInfo } = useMyModelsAPI()
 const { getFinishImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
 const { handleUploadMutipleImgs } = useUploadImage()
 
 const showEditPanel = ref(false)
-const finishInfo = ref<ModelFinishInfo>()
-const editFinishInfo = ref<ModelFinishInfo>({
-})
+const openCreateFinishInfoPanel = ref(false)
+const finishInfos = ref<ModelFinishInfo[]>([])
+
+// 以下是修改面板的資訊
+const editFinishInfo = ref<Partial<ModelFinishInfo>>({})
 
 const previewProcessImgs = ref<string[]>([])
 const previewGalleryImgs = ref<string[]>([])
@@ -85,34 +95,41 @@ const deleteGalleryImgs = ref<string[]>([])
 init()
 
 async function init() {
-    finishInfo.value = props.currentModel?.finish_info!
+    finishInfos.value = props.currentModel?.finish_infos!
+
     //修改面板的預覽圖裝載
-    finishInfo.value.process_imgs?.forEach(img => {
-        previewProcessImgs.value.push(getFinishImagePublicUrl(img))
-    })
-    finishInfo.value.gallery?.forEach(img => {
-        previewGalleryImgs.value.push(getFinishImagePublicUrl(img))
+    finishInfos.value.forEach(finishInfo=>{
+        finishInfo.process_imgs?.forEach((img:string) => {
+            previewProcessImgs.value.push(getFinishImagePublicUrl(img))
+        })
+        finishInfo.gallery?.forEach((img:string) => {
+            previewGalleryImgs.value.push(getFinishImagePublicUrl(img))
+        })
     })
     resetData()
 }
-async function fetchUpdatePurchaseInfo() {
+async function fetchUpdateFinishInfo() {
     setLoadingState(true)
     await fetchUploadImageToSupabaseStorage()
-    finishInfo.value = await updateMyModelFinishInfo(props.modelId, editFinishInfo.value)
+    finishInfos.value = await updateMyModelFinishInfo(props.modelId, editFinishInfo.value)
     showEditPanel.value = false
     setLoadingState(false)
 }
-async function fetchAddModelPurchaseInfo() {
+async function fetchDeleteFinishInfo(id:number){
     setLoadingState(true)
-    //1.先處理圖片
-    await fetchUploadImageToSupabaseStorage()
-    finishInfo.value = await addMyModelFinishInfo(props.modelId, editFinishInfo.value)
-    showEditPanel.value = false
+    const deleteFinishInfo = await deleteMyModelFinishInfo(id)
+    const deleteIndex = props.currentModel?.finish_infos?.findIndex((info:ModelFinishInfo)=> info.id === deleteFinishInfo.id)
+    if(deleteIndex!>=0) props.currentModel?.finish_infos?.splice(deleteIndex!,1)
+    setLoadingState(false)
+}
+async function onCreateFinishInfoSuccess(finish_info:ModelFinishInfo) {
+    finishInfos.value.push( finish_info )
+    openCreateFinishInfoPanel.value = false
     setLoadingState(false)
 }
 
 function resetData() {
-    editFinishInfo.value = finishInfo.value!
+    editFinishInfo.value = finishInfos.value!
 }
 
 function showEditPanelHandel() {
@@ -132,7 +149,7 @@ async function fetchUploadImageToSupabaseStorage() {
         newImgUrls.forEach(imgUrl=>editFinishInfo.value.process_imgs?.push(imgUrl))
         process_imgs_file_list.value.length = 0 //釋放圖片資源
     } else {
-        editFinishInfo.value.process_imgs = finishInfo.value?.process_imgs
+        editFinishInfo.value.process_imgs = finishInfos.value?.process_imgs
     }
     if (gallery_imgs_file_list.value?.length) {
         const newImgUrls = await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value, {
@@ -143,26 +160,26 @@ async function fetchUploadImageToSupabaseStorage() {
         newImgUrls.forEach(imgUrl=>editFinishInfo.value.gallery?.push(imgUrl))
         gallery_imgs_file_list.value.length = 0 //釋放圖片資源
     } else {
-        editFinishInfo.value.gallery = finishInfo.value?.gallery
+        editFinishInfo.value.gallery = finishInfos.value?.gallery
     }
 }
 function deleteProcessUploadImg(index:number){
     process_imgs_file_list.value.splice(index,1) //splice會直接改變原本數組
     previewProcessImgs.value.splice(index,1)
     //假設要刪除的存在於原本的圖檔內，也要記得要刪除
-    if(!finishInfo.value?.process_imgs?.length) return //原本沒圖片直接離開
-    if(!finishInfo.value.process_imgs[index]) return  //原本的沒有這張圖片，也離開
-    deleteProcessImgs.value?.push(finishInfo.value.process_imgs[index]) //把要刪除的圖片儲存起來，按下確定後，再刪除
-    finishInfo.value.process_imgs.splice(index,1) //將圖片剃除於原本的陣列
+    if(!finishInfos.value?.process_imgs?.length) return //原本沒圖片直接離開
+    if(!finishInfos.value.process_imgs[index]) return  //原本的沒有這張圖片，也離開
+    deleteProcessImgs.value?.push(finishInfos.value.process_imgs[index]) //把要刪除的圖片儲存起來，按下確定後，再刪除
+    finishInfos.value.process_imgs.splice(index,1) //將圖片剃除於原本的陣列
 }
 function deleteGalleryUploadImg(index:number){
    gallery_imgs_file_list.value.splice(index,1) //splice會直接改變原本數組
    previewGalleryImgs.value.splice(index,1)
     //假設要刪除的存在於原本的圖檔內，也要記得要刪除
-    if(!finishInfo.value?.gallery?.length) return //原本沒圖片直接離開
-    if(!finishInfo.value.gallery[index]) return  //原本的沒有這張圖片，也離開
-    deleteGalleryImgs.value?.push(finishInfo.value.gallery[index]) //把要刪除的圖片儲存起來，按下確定後，再刪除
-    finishInfo.value.gallery.splice(index,1) //將圖片剃除於原本的陣列
+    if(!finishInfos.value?.gallery?.length) return //原本沒圖片直接離開
+    if(!finishInfos.value.gallery[index]) return  //原本的沒有這張圖片，也離開
+    deleteGalleryImgs.value?.push(finishInfos.value.gallery[index]) //把要刪除的圖片儲存起來，按下確定後，再刪除
+    finishInfos.value.gallery.splice(index,1) //將圖片剃除於原本的陣列
 }
 function handleuploadProcessImgs(e:Event, previewImgs:string[]){
     const newUploadFiles = Array.from(handleUploadMutipleImgs(e, ref(previewImgs))!)

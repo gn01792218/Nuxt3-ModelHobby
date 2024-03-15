@@ -10,8 +10,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model MyModel{
-  id             Int @unique @id @default(autoincrement())
+model MyModel {
+  id             Int              @id @unique @default(autoincrement())
   status         Int
   name_zh        String
   name_en        String?
@@ -21,38 +21,42 @@ model MyModel{
   type           String?
   size           ModelSize?
   main_img       String?
-  panting_guide  String[] @default([])
-  imgs           String[] @default([])
+  panting_guide  String[]         @default([])
+  imgs           String[]         @default([])
   PD             DateTime?
-  purchase_infos  PurchaseInfo[]
-  finish_info     ModelFinishInfo?
+  purchase_infos PurchaseInfo[]
+  finish_infos    ModelFinishInfo[]
 }
+
 model ModelSize {
-  id          Int @unique @id @default(autoincrement())
-  unit        String
-  width       Float
-  length      Float
-  height      Float?
-  modelId     Int @unique
-  model       MyModel @relation(fields: [modelId], references: [id], onDelete: Cascade) 
+  id      Int     @id @unique @default(autoincrement())
+  unit    String
+  width   Float
+  length  Float
+  height  Float?
+  modelId Int     @unique
+  model   MyModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
 }
-model PurchaseInfo{
-  id              Int @unique @id @default(autoincrement())
+
+model PurchaseInfo {
+  id              Int       @id @unique @default(autoincrement())
   e_commerce_name String
   currency        String
   price           Float
-  amount          Int @default(1)
+  amount          Int       @default(1)
   shop_name       String?
   purchase_date   DateTime?
   modelId         Int
-  model           MyModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  model           MyModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
 }
-model ModelFinishInfo{
-  id              Int @unique @id @default(autoincrement())
-  finished_date    DateTime?
-  describtion    String?   
-  process_imgs    String[] @default([])
-  gallery         String[] @default([])
-  modelId         Int @unique
-  model           MyModel @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+model ModelFinishInfo {
+  id            Int       @id @unique @default(autoincrement())
+  title         String?
+  finished_date DateTime?
+  description   String?
+  process_imgs  String[]  @default([])
+  gallery       String[]  @default([])
+  modelId       Int 
+  model         MyModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
 }

@@ -10,7 +10,7 @@ export default defineEventHandler(async (event)=>{
         },
         include:{
             size:true,
-            finish_info:true,
+            finish_infos:true,
             purchase_infos:true,
         }
     })

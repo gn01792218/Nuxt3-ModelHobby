@@ -106,7 +106,7 @@
                      <div>
                         <label for="model_process_imgs">製作圖片</label>
                         <input type="file" id="model_process_imgs" @change="(e)=>{
-                           process_imgs = handleUploadMutipleImgs(e, ref(previewProcessImgs))
+                           process_imgs_file_list = handleUploadMutipleImgs(e, ref(previewProcessImgs))
                            previewProcessImgs.length = 0
                            }" multiple>
                         <div v-for="img in previewProcessImgs" :key="img">
@@ -116,7 +116,7 @@
                      <div>
                         <label for="model_finished_imgs">完成圖片</label>
                         <input type="file" id="model_finished_imgs" @change="(e)=>{
-                           gallery_imgs = handleUploadMutipleImgs(e, ref(previewGalleryImgs))
+                           gallery_imgs_file_list = handleUploadMutipleImgs(e, ref(previewGalleryImgs))
                            previewGalleryImgs.length = 0
                            }" multiple>
                         <div v-for="img in previewGalleryImgs" :key="img">
@@ -189,8 +189,8 @@ const preview_main_Img = ref<string[]>([])
 const previewProcessImgs = ref<string[]>([])
 const previewGalleryImgs = ref<string[]>([])
 const main_img_file = ref<FileList | null>(null)
-const process_imgs = ref<FileList | null>(null)
-const gallery_imgs = ref<FileList | null>(null)
+const process_imgs_file_list = ref<FileList | null>(null)
+const gallery_imgs_file_list = ref<FileList | null>(null)
 
 async function fetchAddMyModel() {
    setLoadingState(true)
@@ -202,12 +202,12 @@ async function fetchAddMyModel() {
       fileNameTitle: 'model_main_img'
    })
    model.main_img = mainImgs[0]
-   modelFinishInfo.process_imgs = await uploadMultipleImagesToSupabaseStorage(process_imgs.value!, {
+   modelFinishInfo.process_imgs = await uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value!, {
       bucketName: StorageBucket.model_finish_info_images,
       modelId: -1,
       fileNameTitle: 'model_process_img'
    })
-   modelFinishInfo.gallery = await uploadMultipleImagesToSupabaseStorage(gallery_imgs.value!, {
+   modelFinishInfo.gallery = await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value!, {
       bucketName: StorageBucket.model_finish_info_images,
       modelId: -1,
       fileNameTitle: 'model_gallery_img'
@@ -235,8 +235,8 @@ async function fetchAddMyModel() {
 function resetAllUploadImageProcess() {
   preview_main_Img.value.length = 0
   main_img_file.value=null
-  process_imgs.value=null
-  gallery_imgs.value=null
+  process_imgs_file_list.value=null
+  gallery_imgs_file_list.value=null
   previewProcessImgs.value.length = 0
   previewGalleryImgs.value.length = 0
 }

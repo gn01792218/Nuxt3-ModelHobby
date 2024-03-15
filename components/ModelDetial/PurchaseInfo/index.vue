@@ -22,8 +22,8 @@
             </UCard>
         </div>
         <div>
-            <button @click="showEditPanelHandel">新增購買資訊</button>
-            <div v-show="showEditPanel" class="bg-red-200">
+            <button @click="showAddPurchaseInfoPanel = !showAddPurchaseInfoPanel">新增購買資訊</button>
+            <div v-show="showAddPurchaseInfoPanel" class="bg-red-200">
                 <div>
                     <select name="" id="" v-model="createPurchaseInfo.e_commerce_name">
                          <option v-for="ecommerce in Ecommerce" :key="ecommerce" :value="ecommerce">{{ ecommerce }}</option>
@@ -56,7 +56,7 @@
         </div>
     </section>
     <ModelDetialPurchaseInfoUpdateModal
-        :is-open="isOpenUpdatePanel"
+        :is-open="showUpdatePurchaseInfoPanel"
         :update-purchase-info="updatePurchaseInfo"
         :origin-purchase-info="originUpdatePurchaseInfo"
         @update="fetchUpdate"
@@ -77,8 +77,8 @@ const props = defineProps<{
 const { sendToast } = useMyToast()
 const { setLoadingState } = useMyModelStore()
 const { updateMyModelPurchaseInfo, addMyModelPurchaseInfo, deleteMyModelPurchaseInfo} = useMyModelsAPI()
-const showEditPanel = ref(false)
-const isOpenUpdatePanel = ref(false)
+const showAddPurchaseInfoPanel = ref(false)
+const showUpdatePurchaseInfoPanel = ref(false)
 const createPurchaseInfo = ref<CreatePurchaseInfoRequest>({
     e_commerce_name: Ecommerce.淘寶,
     currency: Currency.RMB,
@@ -89,7 +89,7 @@ const updatePurchaseInfo = ref<PurchaseInfo>()
 const originUpdatePurchaseInfo = ref<PurchaseInfo>()
 
 async function openUpdatePanel(purchaseInfo: PurchaseInfo) {
-    isOpenUpdatePanel.value = true
+    showUpdatePurchaseInfoPanel.value = true
     updatePurchaseInfo.value = purchaseInfo
     originUpdatePurchaseInfo.value = {...purchaseInfo} //舊的保留給取消用
 }
@@ -97,7 +97,7 @@ async function fetchUpdate() {
     setLoadingState(true)
     const purchaseInfo = await updateMyModelPurchaseInfo(updatePurchaseInfo.value?.id!, updatePurchaseInfo.value!)
     setLoadingState(false)
-    isOpenUpdatePanel.value = false
+    showUpdatePurchaseInfoPanel.value = false
     sendToast({
         title: '修改成功',
         icon: "i-heroicons-information-circle",
@@ -111,24 +111,33 @@ async function fetchAddModelPurchaseInfo() {
     const purchaseInfo = await addMyModelPurchaseInfo(props.modelId, createPurchaseInfo.value)
     //為該Model添加購買資訊
     props.currentModel?.purchase_infos?.push(purchaseInfo)
+    sendToast({
+        title: '新增成功',
+        icon: "i-heroicons-information-circle",
+        color: "green",
+        description: `新增購買資訊成功`
+    })
     setLoadingState(false)
+    showAddPurchaseInfoPanel.value = false
 }
 async function fetchDeletePurchaseInfo(purchaseInfoId:number){
     setLoadingState(true)
     const deleteData = await deleteMyModelPurchaseInfo(purchaseInfoId)
     const deleteIndex = props.currentModel?.purchase_infos?.findIndex((info:PurchaseInfo)=> info.id === deleteData.id)
     if(deleteIndex!>=0) props.currentModel?.purchase_infos?.splice(deleteIndex!,1)
+    sendToast({
+        title: '刪除成功',
+        icon: "i-heroicons-information-circle",
+        color: "green",
+        description: `刪除Id : ${deleteData.id} 的購買資訊`
+    })
     setLoadingState(false)
 }
 function resetData(originPurchaseInfoId:number) {
-    isOpenUpdatePanel.value = false
+    showUpdatePurchaseInfoPanel.value = false
     const infoList = props.currentModel?.purchase_infos
     const targetDataIndex = infoList?.findIndex((info:PurchaseInfo) => info.id === originPurchaseInfoId)
     if(!targetDataIndex) return 
     if(infoList) infoList[targetDataIndex] = originUpdatePurchaseInfo.value!
-}
-
-function showEditPanelHandel() {
-    showEditPanel.value = !showEditPanel.value
 }
 </script>
