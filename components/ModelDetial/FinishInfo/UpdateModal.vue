@@ -1,7 +1,7 @@
 <template>
     <UModal v-model="isOpen">
-        <h1>創建面板</h1>
-        <div class="p-4">
+        <h1>更新面板</h1>
+        <div class="p-4" v-if="finishInfo">
             <UFormGroup label="標題">
                 <input class="my-input" placeholder="標題" v-model="finishInfo.title" />
             </UFormGroup>
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="ml-auto flex">
-                <UButton class="block mr-5" label="確認修改" @click="fetchCreateFinishInfo" color="primary" />
+                <UButton class="block mr-5" label="確認修改" @click="fetchUpdateFinishInfo" color="primary" />
                 <UButton class="block" label="取消" @click="$emit('close')" color="secondary" variant="outline" />
             </div>
         </div>
@@ -44,25 +44,21 @@
 import { useMyModelStore } from '~/store/useMyModelStore';
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { StorageBucket } from "~/types/supabase";
-import type { CreateFinishInfoRequest } from '~/types/finishInfo';
+import type { UpdateFinishInfoRequest } from '~/types/finishInfo';
 
 const emit = defineEmits(['success', 'close'])
 const props = defineProps<{
     isOpen: boolean,
     modelId: number,
+    finishInfo: UpdateFinishInfoRequest | null,
 }>()
 
 const { setLoadingState } = useMyModelStore()
 const { handleUploadMutipleImgs } = useUploadImage()
-const { addMyModelFinishInfo } = useMyModelsAPI()
+const { updateMyModelFinishInfo } = useMyModelsAPI()
 const { getFinishImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
 
 const isOpen = computed(() => props.isOpen)
-
-const finishInfo = ref<CreateFinishInfoRequest>({
-    process_imgs:[],
-    gallery:[]
-})
 
 const previewProcessImgs = ref<string[]>([])
 const previewGalleryImgs = ref<string[]>([])
@@ -73,23 +69,22 @@ const gallery_imgs_file_list = ref<File[]>([])
 const deleteProcessImgs = ref<string[]>([])
 const deleteGalleryImgs = ref<string[]>([])
 
-function resetData(){
-    finishInfo.value = {
-        process_imgs:[],
-        gallery:[]
-    }
-    previewProcessImgs.value = []
-    previewGalleryImgs.value = []
-}   
+watch(() => props.finishInfo, () => {  //更新previewImg
+    if(!props.finishInfo) return alert('注意:沒有更新資料')
+    if(props.finishInfo.process_imgs?.length) previewProcessImgs.value = props.finishInfo.process_imgs.map(img=> getFinishImagePublicUrl(img))
+    if(props.finishInfo.gallery?.length) previewGalleryImgs.value = props.finishInfo.gallery.map(img=>getFinishImagePublicUrl(img))
+})
 
-async function fetchCreateFinishInfo() {
+async function fetchUpdateFinishInfo() {
+    if(!props.finishInfo) return alert('注意:沒有更新資料')
     setLoadingState(true);
     await fetchUploadImageToSupabaseStorage();
-    emit('success', await addMyModelFinishInfo(props.modelId, finishInfo.value))
-    resetData()
+    await updateMyModelFinishInfo(props.finishInfo.id, props.finishInfo)
+    emit('success')
 }
 
 async function fetchUploadImageToSupabaseStorage() {
+    if(!props.finishInfo) return 
     //先處理要被刪除的圖片
     if (deleteProcessImgs.value.length) deleteProcessImgs.value.forEach(url => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, url))
     if (deleteGalleryImgs.value.length) deleteGalleryImgs.value.forEach(url => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, url))
@@ -100,18 +95,18 @@ async function fetchUploadImageToSupabaseStorage() {
             modelId: props.modelId!,
             fileNameTitle: 'model_process_img'
         })
-        newImgUrls.forEach(imgUrl => finishInfo.value.process_imgs?.push(imgUrl))
+        newImgUrls.forEach(imgUrl => props.finishInfo?.process_imgs?.push(imgUrl))
         process_imgs_file_list.value.length = 0 //釋放圖片資源
-    } 
+    }
     if (gallery_imgs_file_list.value?.length) {
         const newImgUrls = await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value, {
             bucketName: StorageBucket.model_finish_info_images,
             modelId: props.modelId!,
             fileNameTitle: 'model_gallery_img'
         })
-        newImgUrls.forEach(imgUrl => finishInfo.value.gallery?.push(imgUrl))
+        newImgUrls.forEach(imgUrl => props.finishInfo?.gallery?.push(imgUrl))
         gallery_imgs_file_list.value.length = 0 //釋放圖片資源
-    } 
+    }
 }
 
 function handleLoadProcessImgsFileList(e: Event, previewImgs: string[]) {
@@ -126,18 +121,18 @@ function deleteProcessUploadImg(index: number) {
     process_imgs_file_list.value.splice(index, 1) //splice會直接改變原本數組
     previewProcessImgs.value.splice(index, 1)
     //假設要刪除的存在於原本的圖檔內，也要記得要刪除
-    if (!finishInfo.value?.process_imgs?.length) return //原本沒圖片直接離開
-    if (!finishInfo.value.process_imgs[index]) return  //原本的沒有這張圖片，也離開
-    deleteProcessImgs.value?.push(finishInfo.value.process_imgs[index]) //把要刪除的圖片儲存起來，按下確定後，再刪除
-    finishInfo.value.process_imgs.splice(index, 1) //將圖片剃除於原本的陣列
+    if (!props.finishInfo?.process_imgs?.length) return //原本沒圖片直接離開
+    if (!props.finishInfo.process_imgs[index]) return  //原本的沒有這張圖片，也離開
+    deleteProcessImgs.value?.push(props.finishInfo.process_imgs[index]) //把要刪除的圖片儲存起來，按下確定後，再刪除
+    props.finishInfo.process_imgs.splice(index, 1) //將圖片剃除於原本的陣列
 }
 function deleteGalleryUploadImg(index: number) {
     gallery_imgs_file_list.value.splice(index, 1) //splice會直接改變原本數組
     previewGalleryImgs.value.splice(index, 1)
     //假設要刪除的存在於原本的圖檔內，也要記得要刪除
-    if (!finishInfo.value?.gallery?.length) return //原本沒圖片直接離開
-    if (!finishInfo.value.gallery[index]) return  //原本的沒有這張圖片，也離開
-    deleteGalleryImgs.value?.push(finishInfo.value.gallery[index]) //把要刪除的圖片儲存起來，按下確定後，再刪除
-    finishInfo.value.gallery.splice(index, 1) //將圖片剃除於原本的陣列
+    if (!props.finishInfo?.gallery?.length) return //原本沒圖片直接離開
+    if (!props.finishInfo.gallery[index]) return  //原本的沒有這張圖片，也離開
+    deleteGalleryImgs.value?.push(props.finishInfo.gallery[index]) //把要刪除的圖片儲存起來，按下確定後，再刪除
+    props.finishInfo.gallery.splice(index, 1) //將圖片剃除於原本的陣列
 }
 </script>

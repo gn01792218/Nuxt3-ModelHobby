@@ -3,8 +3,8 @@ export declare interface ModelFinishInfo {
   title?: string;
   finished_date?: Date;
   description?: string;
-  process_imgs?: string[];
-  gallery?: string[];
+  process_imgs: string[];
+  gallery: string[];
 }
 export declare interface CreateFinishInfoRequest {
   title?: string;
@@ -14,9 +14,10 @@ export declare interface CreateFinishInfoRequest {
   gallery?: string[];
 }
 export declare interface UpdateFinishInfoRequest {
+  id:number
   title?: string;
   finished_date?: Date;
   description?: string;
-  process_imgs?: string[];
-  gallery?: string[];
+  process_imgs: string[];
+  gallery: string[];
 }

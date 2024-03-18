@@ -2,19 +2,19 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 export default defineEventHandler(async (event)=>{
-    const { id } = event.context.params as any
+    const { id } = event.context.params as any  //這個id是FinishInfo的id
+
     const body = await readBody(event)
 
     body.finished_date =  body.finished_date? new Date(body.finished_date) : null
 
-    const myModel =await prisma.modelFinishInfo.update({
+    const modelFinishInfo =await prisma.modelFinishInfo.update({
         where:{
-            modelId:parseInt(id)
+            id:parseInt(id)
         },
         data:{
             ...body,
-            modelId:parseInt(id),
         }
     })
-    return myModel
+    return modelFinishInfo
 })
