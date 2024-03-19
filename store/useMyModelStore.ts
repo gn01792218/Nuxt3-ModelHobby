@@ -36,9 +36,17 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     myModelList.value.filter((model) => model.status === ModelStatus.已組裝)
   );
   const thisMonthFinishedModels = computed(() =>{
-    console.log('重新計算 : 原始資料 : ', myModelList.value, '過濾結果 : ', myModelList.value.filter((model) => model.finish_infos.some(info=>getMonth(info.finished_date!) === thisMonth)))
     return myModelList.value.filter((model) => model.finish_infos.some(info=>getMonth(info.finished_date!) === thisMonth))
   });
+  const thisMonthFinishedCount = computed(()=>{
+    let count = 0
+    thisMonthFinishedModels.value.forEach(model=>{
+      model.finish_infos.forEach(info=>{
+        if(getMonth(info.finished_date!) === thisMonth) count++
+      })
+    })
+    return count
+  })
   const thisMonthPurchaseModels = computed(() =>
     myModelList.value.filter((model) =>model.purchase_infos?.some(info=>getMonth(info.purchase_date!) === thisMonth))
   );
@@ -68,7 +76,6 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
       (model) => model.id === payload.id
     );
     myModelList.value[modelIndex] = payload;
-    console.log('更新Pina我的模型名單', myModelList.value[modelIndex] , 'payload', payload)
   }
   function setSearchResult(payload:Model[]) {
     searchResult.value = payload
@@ -97,6 +104,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     unFinishedModels,
     finishedModels,
     thisMonthFinishedModels,
+    thisMonthFinishedCount,
     thisMonthPurchaseModels,
     thisMonthPurchaseModelsCount,
     thisMonthPurchaseCoast,

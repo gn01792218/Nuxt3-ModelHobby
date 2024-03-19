@@ -10,18 +10,18 @@
         <Divider  :title="`${thisMonth}月統計`"/>
         <div>
             <p>本月花費 <span class="text-acent-500">{{ thisMonthPurchaseCoast }}</span>元</p>
-            <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthFinishedModels)">已完成<span class="text-green-500">{{ thisMonthFinishedModels.length }}</span>個模型</p>
+            <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthFinishedModels)">已完成<span class="text-green-500">{{ thisMonthFinishedCount }}</span>個模型</p>
             <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthPurchaseModels)">本月購入了<span class="text-green-800">{{ thisMonthPurchaseModelsCount }}個模型</span></p>
             <p>模型完成數量順逆差 :
-                <span :class="[thisMonthFinishedModels.length - thisMonthPurchaseModelsCount >= 0 ? 'text-green-500' : 'text-red-500']">
-                    {{ thisMonthFinishedModels.length - thisMonthPurchaseModelsCount }}
+                <span :class="[thisMonthFinishedCount - thisMonthPurchaseModelsCount >= 0 ? 'text-green-500' : 'text-red-500']">
+                    {{ thisMonthFinishedCount - thisMonthPurchaseModelsCount }}
                 </span>
             </p>
         </div>
     </main>
 </template>
 <script setup lang="ts">
-import { Currency, type Model } from '~/types/model'
+import { type Model } from '~/types/model'
 import { useMyModelStore } from '../store/useMyModelStore'
 const {
     myModelList,
@@ -29,6 +29,7 @@ const {
     unFinishedModels,
     finishedModels,
     thisMonthFinishedModels,
+    thisMonthFinishedCount,
     thisMonthPurchaseModels,
     thisMonthPurchaseModelsCount,
     thisMonthPurchaseCoast
