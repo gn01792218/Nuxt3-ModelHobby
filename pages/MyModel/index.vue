@@ -138,7 +138,6 @@
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import {
    type ModelSize,
-   type ModelFinishInfo,
    type Model,
    ModelStatus,
    SizeUnit,
@@ -147,9 +146,9 @@ import {
    ModelBrand
 } from "~/types/model"
 import {  
-   type PurchaseInfo,
    type CreatePurchaseInfoRequest
 } from "~/types/purchaseInfo"
+import { type ModelFinishInfo } from "~/types/finishInfo"
 import { StorageBucket } from "~/types/supabase"
 import { useMyModelStore } from '../../store/useMyModelStore'
 const { handleUploadMutipleImgs } = useUploadImage()
@@ -163,7 +162,7 @@ const {
 } = storeToRefs(useMyModelStore())
 const { setLoadingState } = useMyModelStore()
 const { fetchMyModels } = useFetchMyModels()
-const { uploadImageToSpabaseStorage, uploadMultipleImagesToSupabaseStorage } = useSupabase()
+const { uploadMultipleImagesToSupabaseStorage } = useSupabase()
 const user = useSupabaseUser()
 
 const showAddModelPanel = ref(false)

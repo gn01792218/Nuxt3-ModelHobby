@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 export default defineEventHandler(async (event) => {
   const { myModelId } = event.context.params as any;
   const body = await readBody(event);
-  delete body.finish_info
+  delete body.finish_infos
   delete body.purchase_infos
   delete body.size
   const myModel = await prisma.myModel.update({

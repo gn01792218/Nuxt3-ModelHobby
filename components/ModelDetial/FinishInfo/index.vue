@@ -1,6 +1,6 @@
 <template>
     <button @click="processAddFinishInfo">新增完成資料</button>
-    <section v-for="finish_info in finishInfos" :key="finish_info.id">
+    <section v-for="finish_info in currentModel.finish_infos" :key="finish_info.id">
         <div>
             <p>{{ finish_info.title }}</p>
             <p>{{ finish_info.description }}</p>
@@ -51,18 +51,10 @@ const { setLoadingState } = useMyModelStore()
 const { deleteMyModelFinishInfo } = useMyModelsAPI()
 const { getFinishImagePublicUrl, removeImageFromSupabaseStorage } = useSupabase()
 
-const finishInfos = ref<ModelFinishInfo[]>([])
-
 // 以下是修改面板的資訊
 const openCreatePanel = ref(false)
 const openUpdatePanel = ref(false)
 const updateFinishInfo = ref<UpdateFinishInfoRequest | null>(null)
-
-init()
-
-async function init() {
-    finishInfos.value = props.currentModel?.finish_infos!
-}
 
 async function processAddFinishInfo() {
     openCreatePanel.value = true
@@ -85,7 +77,7 @@ function processRemoveSupabaseImgs(deleteFinishInfo: ModelFinishInfo) {
 }
 
 async function onCreateFinishInfoSuccess(finish_info: ModelFinishInfo) {
-    finishInfos.value.push(finish_info)
+    props.currentModel.finish_infos.push(finish_info)
     openCreatePanel.value = false
     setLoadingState(false)
 }

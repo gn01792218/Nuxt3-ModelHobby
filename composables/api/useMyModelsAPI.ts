@@ -23,7 +23,7 @@ export default () => {
   }
   async function deleteMyModel(modelId: number) {
     const model = await fetchApiBase(`/api/myModels/${modelId}}`, "delete");
-    returModel;
+    return model as Model;
   }
   //Model Size API
   async function getModelSize(modelId: number) {

@@ -54,12 +54,14 @@ function fetchDeleteImg() {
   //刪除mainimg
   if (modelData.main_img) removeImageFromSupabaseStorage(StorageBucket.images, modelData.main_img)
   //刪除完成資訊的兩種img
-  if (modelData.finish_info?.process_imgs?.length) {
-    modelData.finish_info.process_imgs.forEach(img => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, img))
-  }
-  if (modelData.finish_info?.gallery?.length) {
-    modelData.finish_info.gallery.forEach(img => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, img))
-  }
+  modelData.finish_infos.forEach(info=>{
+    if (info?.process_imgs?.length) {
+      info.process_imgs.forEach(img => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, img))
+    }
+    if (info?.gallery?.length) {
+      info.gallery.forEach(img => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, img))
+    }
+  })
 }
 async function fetchDeleteMyModel() {
   setLoadingState(true)
