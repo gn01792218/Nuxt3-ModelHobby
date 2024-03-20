@@ -2,7 +2,7 @@ import { type Model, ModelStatus } from "../types/model";
 
 // 使用composition API模式定义store
 export const useMyModelStore = defineStore("MyMOdelsStore", () => {
-  const { thisMonth, getMonth } = useDate()
+  const { isThisMoth } = useDate()
   const { toTWD } = useExchange()
   // 初始状态
   const initState = {
@@ -36,31 +36,31 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     myModelList.value.filter((model) => model.status === ModelStatus.已組裝)
   );
   const thisMonthFinishedModels = computed(() =>{
-    return myModelList.value.filter((model) => model.finish_infos.some(info=>getMonth(info.finished_date!) === thisMonth))
+    return myModelList.value.filter((model) => model.finish_infos.some(info=>isThisMoth(info.finished_date!)))
   });
   const thisMonthFinishedCount = computed(()=>{
     let count = 0
     thisMonthFinishedModels.value.forEach(model=>{
       model.finish_infos.forEach(info=>{
-        if(getMonth(info.finished_date!) === thisMonth) count++
+        if(isThisMoth(info.finished_date!)) count++
       })
     })
     return count
   })
   const thisMonthPurchaseModels = computed(() =>
-    myModelList.value.filter((model) =>model.purchase_infos?.some(info=>getMonth(info.purchase_date!) === thisMonth))
+    myModelList.value.filter((model) =>model.purchase_infos?.some(info=>isThisMoth(info.purchase_date!)))
   );
   const thisMonthPurchaseModelsCount = computed(()=> {
     let count = 0
     thisMonthPurchaseModels.value.forEach(model => model.purchase_infos?.forEach(info=>{
-      if(getMonth(info.purchase_date!) === thisMonth) count += info.amount
+      if(isThisMoth(info.purchase_date!)) count += info.amount
     }))
     return count
   })
   const thisMonthPurchaseCoast = computed(()=> {
     let coast = 0
     thisMonthPurchaseModels.value.forEach(model => model.purchase_infos?.forEach(info=>{
-      if(getMonth(info.purchase_date!) === thisMonth) coast += toTWD(info.currency, info.price, info.amount)
+      if(isThisMoth(info.purchase_date!)) coast += toTWD(info.currency, info.price, info.amount)
     }))
     return coast
   })
