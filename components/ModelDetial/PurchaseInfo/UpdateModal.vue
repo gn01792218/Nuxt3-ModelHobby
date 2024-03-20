@@ -31,7 +31,8 @@
 </template>
 
 <script setup lang="ts">
-import { Ecommerce, Currency, type PurchaseInfo } from "~/types/model"
+import { Ecommerce, Currency } from "~/types/model"
+import { type PurchaseInfo } from '~/types/purchaseInfo'
 const props = defineProps<{
     isOpen: boolean,
     updatePurchaseInfo: PurchaseInfo | undefined,

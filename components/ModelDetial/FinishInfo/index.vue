@@ -25,7 +25,7 @@
             </div>
         </div>
         <div>
-            <button class="mr-2" @click="processUpdateFinishInfo(finish_info)">修改{{ finish_info.id }}</button>
+            <button class="mr-2" @click="processUpdateFinishInfo(finish_info)">修改</button>
             <button @click="fetchDeleteFinishInfo(finish_info.id)">刪除</button>
         </div>
     </section>
