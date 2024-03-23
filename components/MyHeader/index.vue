@@ -15,7 +15,7 @@
                 <NuxtLink v-else to="/login">Login</NuxtLink>
             </div>
         </header>
-        <div class="w-full h-[72px]"></div>
+        <div class="w-full h-[112px] xs:h-[72px]"></div>
         <Carousel v-if="route.path === '/'" :model-list="bannerItems"/>
     </section>
     <SearchModal :search-result="searchResult" />
