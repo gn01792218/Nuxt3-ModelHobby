@@ -40,7 +40,7 @@ const keyword = ref('')
 function search() {
     setOpenSearchPanel(true)
     setSearchResult(
-        myModelList.value.filter(model => {
+        myModelList.value.filter((model:Model) => {
             if (!keyword.value) return false
             const modelString = converTradictionalToSimple(JSON.stringify(model).toLocaleLowerCase())
             const keywordArray = converTradictionalToSimple(keyword.value.trim().toLowerCase()).split(" ") as string[]
