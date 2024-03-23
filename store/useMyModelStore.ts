@@ -33,7 +33,11 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     myModelList.value.filter((model) => model.status <= ModelStatus.未組裝)
   );
   const finishedModels = computed(() =>
-    myModelList.value.filter((model) => model.status === ModelStatus.已組裝)
+    myModelList.value.filter((model) => {
+      if(!model.finish_infos.length) return false
+      if(!model.finish_infos[0].finished_date) return false
+      return true
+    } )
   );
   const thisMonthFinishedModels = computed(() =>{
     return myModelList.value.filter((model) => model.finish_infos.some(info=>isThisMoth(info.finished_date!)))

@@ -31,7 +31,7 @@ const user = useSupabaseUser()
 const { logout } = useAuth()
 
 //pinan資料取用
-const { myModelList, searchResult } = storeToRefs(useMyModelStore())
+const { myModelList, searchResult, finishedModels } = storeToRefs(useMyModelStore())
 
 //搜尋相關
 const { setOpenSearchPanel, setSearchResult } = useMyModelStore()
@@ -51,11 +51,8 @@ function search() {
 
 //banner相關
 const bannerItems = computed(()=>{
-    return myModelList.value.sort((a:Model,b:Model)=>{
-        if(!a.finish_infos.length) return -1
-        if(!a.finish_infos[0]) return -1
-        return (new Date(b.finish_infos[0].finished_date).getTime() - new Date(a.finish_infos[0].finished_date).getTime())
-    }).slice(0,6)
+    return finishedModels.value.sort((a:Model,b:Model)=> new Date(b.finish_infos[0].finished_date).getTime() - new Date(a.finish_infos[0].finished_date).getTime())
+    .slice(0,6)
 })
 
 </script>

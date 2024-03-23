@@ -62,6 +62,7 @@ const editSize = ref<ModelSize>({
 })
 init()
 async function init(){
+    if(!props.currentModel.size) return
     modelSize.value = props.currentModel?.size
     setOriginData()
 }
