@@ -1,6 +1,11 @@
 <template>
-    <UCarousel ref="carouselRef" v-if="modelList" v-slot="{ item }" :items="modelList" :ui="{ item: 'basis-full md:basis-1/2 lg:basis-1/3' }" indicators
-        class="banner-clip-path rounded-lg overflow-hidden bg-white min-h-[300px]" arrows>
+    <UCarousel ref="carouselRef" v-if="modelList" v-slot="{ item }" :items="modelList" 
+    :ui="{ item: 'basis-full md:basis-1/2 lg:basis-1/3', 
+    indicators: {
+        wrapper: 'relative bottom-10 mt-[50px]'
+      } 
+      }" 
+        class="banner-clip-path rounded-lg overflow-hidden min-h-[300px]" :arrows="usePreNextButton" :indicators="useInddicators">
         <img :src="getModelImagePublicUrl(item.main_img)" class="w-full" draggable="false" @click="handleClick(item.id)">
     </UCarousel>
 </template>
@@ -17,6 +22,8 @@ onMounted(()=>{
 
 const { getModelImagePublicUrl } = useSupabase()
 const carouselRef = ref()
+const useInddicators = true
+const usePreNextButton = true
 
 function handleClick(id:string){
     navigateTo(`/MyModel/ModelDetail-${id}`)
