@@ -7,6 +7,9 @@ body {
 }
 
 /* 自訂義class */
+.banner-clip-path{
+    clip-path: polygon(0% 0%, 100% 0, 100% 65%, 51% 100%, 0 86%);
+}
 
 .my-input{
     @apply w-[100px] p-2 rounded-md
