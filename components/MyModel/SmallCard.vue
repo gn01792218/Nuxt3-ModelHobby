@@ -18,9 +18,10 @@ defineProps<{
 
 const { getModelImagePublicUrl } = useSupabase()
 const { setOpenSearchPanel } = useMyModelStore()
+const { navergateToMyModelDetial } = useMyModel()
 
 function gottoItem(modelId: number) {
     setOpenSearchPanel(false)
-    navigateTo(`/MyModel/ModelDetail-${modelId}`)
+    navergateToMyModelDetial(modelId)
 }
 </script>

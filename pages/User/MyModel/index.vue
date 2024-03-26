@@ -1,5 +1,6 @@
 <template>
    <main>
+      <MyModelStatisticsBoard/>
       <section class="w-full h-[100px] bg-acent-500 flex justify-start">
          <div class="">
             <UButton
@@ -150,7 +151,7 @@ import {
 } from "~/types/purchaseInfo"
 import { type ModelFinishInfo } from "~/types/finishInfo"
 import { StorageBucket } from "~/types/supabase"
-import { useMyModelStore } from '../../store/useMyModelStore'
+import { useMyModelStore } from '~/store/useMyModelStore'
 const { handleUploadMutipleImgs } = useUploadImage()
 
 const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo, addMyModelFinishInfo } = useMyModelsAPI()

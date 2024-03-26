@@ -21,12 +21,13 @@ onMounted(()=>{
 })
 
 const { getModelImagePublicUrl } = useSupabase()
+const { navergateToMyModelDetial } = useMyModel()
 const carouselRef = ref()
 const useInddicators = true
 const usePreNextButton = true
 
-function handleClick(id:string){
-    navigateTo(`/MyModel/ModelDetail-${id}`)
+function handleClick(id:number){
+    navergateToMyModelDetial(id)
 }
 function autoPlay(){
     setInterval(() => {

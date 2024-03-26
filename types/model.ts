@@ -64,7 +64,7 @@ export declare interface ModelName{
 }
 
 export declare interface Model{
-    id?:number,
+    id:number,
     name_zh:string,
     name_en:string,
     status:ModelStatus,

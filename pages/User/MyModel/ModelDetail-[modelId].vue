@@ -14,13 +14,11 @@
 import { useMyModelStore } from '~/store/useMyModelStore';
 
 const modelId = Number(useRoute().params.modelId)
-const { myModelList, currentModel } = storeToRefs(useMyModelStore())
+const { currentModel } = storeToRefs(useMyModelStore())
 const { setCurrentModelId } = useMyModelStore()
-const { fetchMyModels } = useFetchMyModels()
 
 initModelDetial()
 async function initModelDetial() {
-    setCurrentModelId(modelId)
-    if (!myModelList.value.length) fetchMyModels()
+    if (!currentModel.value) setCurrentModelId(modelId)
 }
 </script>
