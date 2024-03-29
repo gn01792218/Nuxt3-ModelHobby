@@ -1,6 +1,6 @@
 <template>
     <UCarousel ref="carouselRef" v-if="modelList" v-slot="{ item }" :items="modelList" 
-    :ui="{ item: 'basis-1/2 md:basis-1/3 lg:basis-1/4', 
+    :ui="{ item: 'basis-full md:basis-1/3 lg:basis-1/4', 
     indicators: {
         wrapper: 'relative bottom-10 mt-[50px]'
       } 
