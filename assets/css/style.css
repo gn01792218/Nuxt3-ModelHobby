@@ -7,6 +7,9 @@ body {
 }
 
 /* 自訂義class */
+.text-overflow-ellipsis{
+    @apply overflow-hidden text-ellipsis whitespace-nowrap
+}
 .banner-clip-path{
    clip-path: polygon(0 0, 100% 0%, 100% 80%, 51% 100%, 0 81%);
 }

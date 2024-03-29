@@ -16,7 +16,7 @@
             </div>
         </header>
         <div class="w-full h-[112px] xs:h-[72px]"></div>
-        <SwiperBase class="banner-clip-path max-w-[1520px] w-full h-[500px] " v-if="route.path === '/'" :slider-items="bannerItems"/>
+        <SwiperBase class="banner-clip-path w-full h-[500px] " v-if="route.path === '/'" :slider-items="bannerItems"/>
     </section>
     <SearchModal :search-result="searchResult" />
 </template>

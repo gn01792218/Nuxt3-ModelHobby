@@ -12,10 +12,10 @@
     }"
   >
     <SwiperSlide class="relative" v-for="slide in sliderItems" :key="slide.id">
-      <div class="cursor-pointer absolute bottom-2/3 right-0 bg-primary-900 p-5" @click="handleClick(slide.id)">
-        <p class="text-white">{{ slide.name_zh }}</p>
-      </div>
       <img class="w-full h-full" :src="getFinishImagePublicUrl(slide.finish_infos[0].gallery[0])" :alt="slide.name_zh">
+      <div class="w-[300px] cursor-pointer flex justify-center absolute top-1/2 translate-y-[-50%] right-1/2 translate-x-[50%] opacity-70 bg-primary-900 py-2 px-5 rounded-md hover:opacity-90" @click="handleClick(slide.id)">
+        <p class="text-white text-overflow-ellipsis">{{ slide.name_zh }}</p>
+      </div>
     </SwiperSlide>
   </Swiper>
 </template>
