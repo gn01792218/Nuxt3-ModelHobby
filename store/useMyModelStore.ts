@@ -35,7 +35,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const finishedModels = computed(() =>
     myModelList.value.filter((model) => {
       if(!model.finish_infos.length) return false
-      if(!model.finish_infos[0].finished_date) return false
+      if(!model.finish_infos.some(info=>info.finished_date)) return false  //任一個有完成日期，就給過；全部都沒有不給過
       return true
     } )
   );
