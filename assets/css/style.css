@@ -14,3 +14,8 @@ body {
 .my-input{
     @apply w-[100px] p-2 rounded-md
 }
+
+/* Swiper */
+.swiper-pagination{
+    bottom: 5% !important;
+}

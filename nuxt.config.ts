@@ -7,9 +7,10 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules:[
     '@nuxt/ui',
+    'nuxt-swiper',
     '@pinia/nuxt',
     '@nuxtjs/supabase',
     '@samk-dev/nuxt-vcalendar',
     'nuxt-time'
-  ]
+  ],
 })
