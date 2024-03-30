@@ -9,7 +9,7 @@
         clickable:true
     }" 
     :loop="true" :spaceBetween="10" :thumbs="{ swiper: thumbsSwiper }">
-        <SwiperSlide class="relative" v-for="slide in sliderItems" :key="slide">
+        <SwiperSlide class="relative" v-for="slide in sliderItems" :key="slide" @click="processOpenImgPanel(getFinishImagePublicUrl(slide))">
             <img class="w-full h-full object-contain" :src="getFinishImagePublicUrl(slide)"
                 :alt="slide">
         </SwiperSlide>
@@ -24,20 +24,29 @@
                 :alt="slide">
         </SwiperSlide>
     </Swiper>
-
+    <ImgModal :img="viewImg"/>
 </template>
 
 <script setup lang="ts">
+import { useMyModelStore } from "~/store/useMyModelStore";
+
 
 defineProps<{
     sliderItems: string[]
 }>()
 
 const { getFinishImagePublicUrl } = useSupabase()
+const { setOpenImgPanel } = useMyModelStore()
+
 const thumbsSwiper = ref(null);
+const viewImg = ref('')
 
 const setThumbsSwiper = (swiper:any) => {
     thumbsSwiper.value = swiper;
 };
+function processOpenImgPanel(img:string){
+    setOpenImgPanel(true)
+    viewImg.value = img
+}
 
 </script>

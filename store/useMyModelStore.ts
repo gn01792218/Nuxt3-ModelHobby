@@ -12,6 +12,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     currentModeStatusTab:1,
     openSearchPanel:false,
     openRouteGuardPanel:false,
+    openImgPanel:false,
     searchResult:[]
   };
 
@@ -22,6 +23,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const currentModeStatusTab = ref<number>(initState.currentModeStatusTab)
   const openSearchPanel = ref(initState.openSearchPanel)
   const openRouteGuardPanel = ref(initState.openRouteGuardPanel)
+  const openImgPanel = ref(initState.openImgPanel)
   const searchResult = ref<Model[]>(initState.searchResult)
 
   //gatters
@@ -99,6 +101,9 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   function setOpenRouteGuardPanel(payload:boolean){
     openRouteGuardPanel.value = payload
   }
+  function setOpenImgPanel(payload:boolean){
+    openImgPanel.value = payload
+  }
 
   return {
     //data
@@ -116,6 +121,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     currentModeStatusTab,
     openSearchPanel,
     openRouteGuardPanel,
+    openImgPanel,
     searchResult,
     //methods
     setmyModelList,
@@ -126,6 +132,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     setCurrentModelStatusTab,
     setOpenSearchPanel,
     setOpenRouteGuardPanel,
+    setOpenImgPanel,
     setSearchResult
   };
 });
