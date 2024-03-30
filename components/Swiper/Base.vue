@@ -1,7 +1,7 @@
 <template>
   <Swiper
     class="relative banner-clip-path w-full h-[500px]"
-    :modules="[SwiperAutoplay, SwiperPagination, SwiperNavigation]"
+    :modules="[ SwiperAutoplay, SwiperPagination, SwiperNavigation]"
     :navigation="useNavergation"
     :pagination="usePagination"
     :slides-per-view="sliderPreview"

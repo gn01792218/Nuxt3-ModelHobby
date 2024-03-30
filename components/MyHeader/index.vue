@@ -15,7 +15,7 @@
                 <NuxtLink v-else to="/login">Login</NuxtLink>
             </div>
         </header>
-        <div class="w-full h-[112px] xs:h-[72px]"></div>
+        <div class="w-full h-[140px] xs:h-[112px] sm:h-[72px]"></div>
         <SwiperBase v-if="route.path === '/'" :slider-items="bannerItems"/>
     </section>
     <SearchModal :search-result="searchResult" />

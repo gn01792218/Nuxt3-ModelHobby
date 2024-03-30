@@ -1,8 +1,7 @@
 <template>
     <div v-if="currentModel">
         {{ currentModel.name_zh }}
-        
-        
+        <SwiperThumbs :slider-items="currentModel.finish_infos[0].gallery"/>
     </div>
 </template>
 

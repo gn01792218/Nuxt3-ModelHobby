@@ -26,3 +26,11 @@ body {
 .swiper-grid.swiper-grid-column > .swiper-wrapper{
     @apply !flex-row
 }
+
+/* Swiper-thumbs */
+.swiper-thumbs > .swiper-button-prev{
+    @apply text-white
+}
+.swiper-thumbs > .swiper-button-next{
+    @apply text-white
+}

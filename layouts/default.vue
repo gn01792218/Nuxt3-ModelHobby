@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen">
         <MyHeader />
-        <NuxtPage class="p-5 sm:p-10"/>
+        <NuxtPage class="p-4 sm:p-10"/>
     </div>
 </template>
 
