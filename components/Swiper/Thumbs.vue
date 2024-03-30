@@ -16,7 +16,7 @@
     </Swiper>
     <Swiper
     class="border-2 w-full h-[100px] max-w-[1280px] sm:h-[150px] md:h-[200px] swiper-thumbs "
-     :modules="[SwiperFreeMode, SwiperThumbs, SwiperAutoplay, SwiperPagination, SwiperNavigation]"
+     :modules="[SwiperFreeMode, SwiperThumbs, SwiperPagination, SwiperNavigation]"
         @swiper="setThumbsSwiper" :loop="true" :navigation="true" :spaceBetween="10" :slidesPerView="4" :freeMode="true"
         :watchSlidesProgress="true">
         <SwiperSlide class="relative cursor-pointer" v-for="slide in sliderItems" :key="slide">
