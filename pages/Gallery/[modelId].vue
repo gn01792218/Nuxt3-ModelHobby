@@ -1,6 +1,8 @@
 <template>
     <div v-if="currentModel">
         {{ currentModel.name_zh }}
+        
+        
     </div>
 </template>
 

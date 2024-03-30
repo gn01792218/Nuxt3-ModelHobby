@@ -1,17 +1,21 @@
 <template>
   <Swiper
-    class="relative banner-clip-path w-full h-[500px]"
-    :modules="[SwiperAutoplay, SwiperPagination, SwiperNavigation]"
+    class="swiper-grid max-w-[1280px]"
+    :modules="[SwiperAutoplay, SwiperPagination, SwiperNavigation, SwiperGrid]"
     :navigation="useNavergation"
     :pagination="usePagination"
     :slides-per-view="sliderPreview"
+    :grid="{
+      rows:gridRow
+    }"
+    :space-between="spaceBetween"
     :loop="true"
     :autoplay="{
       delay: 5000,
       disableOnInteraction: true,
     }"
   >
-    <SwiperSlide class="relative cursor-pointer" v-for="slide in sliderItems" :key="slide.id" @click="handleClick(slide.id)">
+    <SwiperSlide class="h-full relative cursor-pointer" v-for="slide in sliderItems" :key="slide.id" @click="handleClick(slide.id)">
       <img class="w-full h-full" :src="getFinishImagePublicUrl(slide.finish_infos[0].gallery[0])" :alt="slide.name_zh">
       <div class="w-[300px] flex justify-center absolute top-1/2 translate-y-[-50%] right-1/2 translate-x-[50%] opacity-70 bg-primary-900 py-2 px-5 rounded-md hover:opacity-90">
         <p class="text-white text-overflow-ellipsis">{{ slide.name_zh }}</p>
@@ -33,10 +37,12 @@ const usePagination = {
   clickable: true
 }
 const useNavergation = true
-const sliderPreview = ref(1)
+const sliderPreview = ref(3)
+const gridRow = ref(2)
+const spaceBetween = ref(10)
 
 onMounted(()=>{
-  init()
+  // init()
 })
 
 function init(){
