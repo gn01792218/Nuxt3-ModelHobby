@@ -1,5 +1,9 @@
 <template>
-    <UModal class="w-full" v-model="openImgPanel">
+    <UModal class="w-full" v-model="openImgPanel"
+        :ui="{
+            container:'items-center'
+        }"
+    >
         <img class="w-full touch-manipulation" :src="img" alt="img">
     </UModal>
 </template>
