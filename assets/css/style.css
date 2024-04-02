@@ -19,8 +19,11 @@ body {
 }
 
 /* Swiper */
+.swiper-base .swiper-wrapper{
+    @apply flex justify-center
+}
 .swiper-pagination{
-    bottom: 5% !important;
+    @apply !bottom-[5%]
 }
 
 .swiper-grid.swiper-grid-column > .swiper-wrapper{

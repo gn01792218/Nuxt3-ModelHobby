@@ -1,6 +1,6 @@
 <template>
   <Swiper
-    class="relative banner-clip-path w-full h-[500px]"
+    class="swiper-base relative banner-clip-path w-full h-[500px] flex justify-center"
     :modules="[ SwiperAutoplay, SwiperPagination, SwiperNavigation]"
     :navigation="useNavergation"
     :pagination="usePagination"
