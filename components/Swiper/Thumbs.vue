@@ -2,7 +2,7 @@
     <Swiper class="w-full max-w-[1280px] h-[200px] xs:h-[400px] sm:h-[500px]"
         :modules="[SwiperFreeMode, SwiperThumbs, SwiperPagination, SwiperController]" 
         @swiper="setMainSwiper"
-        @activeIndexChange="setCurrentIndex"
+        @activeIndexChange="onMainSwiperActiveIndexChange"
         :thumbs="{ swiper: thumbsSwiper }"
         :style="{
             '--swiper-navigation-color': '#fff',
@@ -37,7 +37,7 @@
         }"
     >
         <Swiper class="w-full max-w-[1280px] h-[200px] xs:h-[400px] sm:h-[500px]"
-        :modules="[SwiperFreeMode, SwiperPagination, SwiperController]"
+        :modules="[SwiperFreeMode, SwiperPagination, SwiperController, SwiperZoom]"
         :initialSlide="currentIndex" 
         :controller="{ control: mainSwiper }"
         :style="{
