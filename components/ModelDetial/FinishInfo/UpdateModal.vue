@@ -89,24 +89,28 @@ async function fetchUploadImageToSupabaseStorage() {
     if (deleteProcessImgs.value.length) deleteProcessImgs.value.forEach(url => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, url))
     if (deleteGalleryImgs.value.length) deleteGalleryImgs.value.forEach(url => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, url))
     //再看看有沒有要新上傳  的圖片
+    const promises:Promise<string[]>[] = []
     if (process_imgs_file_list.value?.length) {
-        const newImgUrls = await uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value, {
+        promises.push(uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value, {
             bucketName: StorageBucket.model_finish_info_images,
             modelId: props.modelId!,
             fileNameTitle: 'model_process_img'
-        })
-        newImgUrls.forEach(imgUrl => props.finishInfo?.process_imgs?.push(imgUrl))
-        process_imgs_file_list.value.length = 0 //釋放圖片資源
-    }
+        }))
+    }else promises.push(new Promise((res)=>res([])))
+
     if (gallery_imgs_file_list.value?.length) {
-        const newImgUrls = await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value, {
+        promises.push(uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value, {
             bucketName: StorageBucket.model_finish_info_images,
             modelId: props.modelId!,
             fileNameTitle: 'model_gallery_img'
-        })
-        newImgUrls.forEach(imgUrl => props.finishInfo?.gallery?.push(imgUrl))
-        gallery_imgs_file_list.value.length = 0 //釋放圖片資源
-    }
+        }))
+    }else promises.push(new Promise((res)=>res([])))
+
+    const imageResArray = await Promise.all(promises)
+    imageResArray[0].forEach(imgUrl => props.finishInfo?.process_imgs?.push(imgUrl))
+    imageResArray[1].forEach(imgUrl => props.finishInfo?.gallery?.push(imgUrl))
+    if(imageResArray[0].length) process_imgs_file_list.value.length = 0 //釋放圖片資源
+    if(imageResArray[1].length) gallery_imgs_file_list.value.length = 0 //釋放圖片資源
 }
 
 function handleLoadProcessImgsFileList(e: Event, previewImgs: string[]) {

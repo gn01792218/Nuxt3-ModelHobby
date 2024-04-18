@@ -195,23 +195,7 @@ const gallery_imgs_file_list = ref<FileList | null>(null)
 async function fetchAddMyModel() {
    setLoadingState(true)
    //先處理圖片
-   // 這裡得改成非同步進行，才不會阻塞
-   const mainImgs = await uploadMultipleImagesToSupabaseStorage(main_img_file.value!, {
-      bucketName: StorageBucket.images,
-      modelId: -1,
-      fileNameTitle: 'model_main_img'
-   })
-   model.main_img = mainImgs[0]
-   modelFinishInfo.process_imgs = await uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value!, {
-      bucketName: StorageBucket.model_finish_info_images,
-      modelId: -1,
-      fileNameTitle: 'model_process_img'
-   })
-   modelFinishInfo.gallery = await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value!, {
-      bucketName: StorageBucket.model_finish_info_images,
-      modelId: -1,
-      fileNameTitle: 'model_gallery_img'
-   })
+   await processGetUploadImages()
    const myModel = await addMyModel(model)
    if (!myModel.id) return alert('出問題了')
    //添加尺寸
@@ -232,6 +216,30 @@ async function fetchAddMyModel() {
    //關閉loading
    setLoadingState(false)
 }
+async function processGetUploadImages() {
+  const mainImgs: Promise<string[]>=uploadMultipleImagesToSupabaseStorage(main_img_file.value!, {
+    bucketName: StorageBucket.images,
+    modelId: -1,
+    fileNameTitle: 'model_main_img'
+  })
+  const processImgs: Promise<string[]>=uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value!, {
+    bucketName: StorageBucket.model_finish_info_images,
+    modelId: -1,
+    fileNameTitle: 'model_process_img'
+  })
+  const gallery: Promise<string[]>=uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value!, {
+    bucketName: StorageBucket.model_finish_info_images,
+    modelId: -1,
+    fileNameTitle: 'model_gallery_img'
+  })
+  const imgsRes=await Promise.all([mainImgs, processImgs, gallery])
+
+  //獲取圖片路徑
+  model.main_img=imgsRes[0][0]
+  modelFinishInfo.process_imgs=imgsRes[1]
+  modelFinishInfo.gallery=imgsRes[2]
+}
+
 function resetAllUploadImageProcess() {
   preview_main_Img.value.length = 0
   main_img_file.value=null
