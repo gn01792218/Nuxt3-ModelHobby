@@ -44,14 +44,15 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     } )
   );
   const thisMonthFinishedModels = computed(() =>{
-    console.log(myModelList.value)
     return myModelList.value.filter((model) => model.finish_infos.some(info=>isThisMoth(info.finished_date!, targetDate.value)))
   });
   const thisMonthFinishedCount = computed(()=>{
     let count = 0
+    console.log('篩選出來的完成資料', thisMonthFinishedModels.value)
     thisMonthFinishedModels.value.forEach(model=>{
       model.finish_infos.forEach(info=>{
-        console.log(info.finished_date, info)
+        console.log('比對的來源為', info.finished_date,'要比對的目標時間為',targetDate.value)
+        console.log('是否是比對的這個月?',isThisMoth(info.finished_date!, targetDate.value))
         if(isThisMoth(info.finished_date!, targetDate.value)) count++
       })
     })
