@@ -20,10 +20,8 @@ export default () => {
 
   //各種判定
   function isThisMoth(sorceDate:string | Date, targetDate:string| Date){
-    console.log('傳進來的finishInfoDate', sorceDate)
     const formateSorce = formateDateYYYYMM(sorceDate,'-')
     const formatTargetDate = formateDateYYYYMM(targetDate,'-')
-    console.log(formateSorce, formatTargetDate)
     return getYear(formateSorce) === getYear(formatTargetDate) && getMonth(formateSorce) === getMonth(formatTargetDate)
   }
 
@@ -35,6 +33,7 @@ export default () => {
 
   //各種格式化
   function formateDateYYYYMM(date:Date | string, symbol:'-' | '/'){ //2024-3 || 2024/3
+    if(!date) return ''
     return `${getYear(date)}${symbol}${getMonth(date)}`
   }
 
