@@ -68,7 +68,9 @@ const totalCoast = computed(()=>{
     return total
 })
 
-init()
+onMounted(()=>{
+    init()
+})
 async function init(){
     alert(`初始化的時間${purchaseDate.value} targetDate為${targetDate.value}}}`)
     purchaseInfos.value = await getPurchaseInfos()
@@ -78,7 +80,7 @@ function openModelsDetailModal(models:Model[]){
     setSearchResult(models)
 }
 function onPurchaseDateChange(){
-    alert(`時間更新，設置時間${purchaseDate.value}`)
+    alert(`時間更新，設置時間${purchaseDate.value} targetDate為${targetDate.value}`)
     setTargetDate(purchaseDate.value)
 }
 
