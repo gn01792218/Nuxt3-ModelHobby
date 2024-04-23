@@ -20,7 +20,11 @@ export default () => {
 
   //各種判定
   function isThisMoth(sorceDate:string | Date, targetDate:string| Date){
-    return getYear(sorceDate) === getYear(targetDate) && getMonth(sorceDate) === getMonth(targetDate)
+    console.log('傳進來的finishInfoDate', sorceDate)
+    const formateSorce = formateDateYYYYMM(sorceDate,'-')
+    const formatTargetDate = formateDateYYYYMM(targetDate,'-')
+    console.log(formateSorce, formatTargetDate)
+    return getYear(formateSorce) === getYear(formatTargetDate) && getMonth(formateSorce) === getMonth(formatTargetDate)
   }
 
   //日期排序

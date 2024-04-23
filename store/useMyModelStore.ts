@@ -44,12 +44,14 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     } )
   );
   const thisMonthFinishedModels = computed(() =>{
+    console.log(myModelList.value)
     return myModelList.value.filter((model) => model.finish_infos.some(info=>isThisMoth(info.finished_date!, targetDate.value)))
   });
   const thisMonthFinishedCount = computed(()=>{
     let count = 0
     thisMonthFinishedModels.value.forEach(model=>{
       model.finish_infos.forEach(info=>{
+        console.log(info.finished_date, info)
         if(isThisMoth(info.finished_date!, targetDate.value)) count++
       })
     })
