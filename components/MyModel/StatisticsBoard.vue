@@ -68,8 +68,8 @@ const totalCoast = computed(()=>{
 })
 
 init()
-watch( targetDate,()=>{
-    alert(`更新 targetDate ${targetDate.value}`)
+watch( thisMonthFinishedCount,()=>{
+    alert(`${thisMonthFinishedCount.value}, 此時的時間是${purchaseDate.value}`)
 })
 async function init(){
     purchaseInfos.value = await getPurchaseInfos()
