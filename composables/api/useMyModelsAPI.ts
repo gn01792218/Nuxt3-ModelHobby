@@ -40,6 +40,10 @@ export default () => {
     return modelSize as ModelSize;
   }
   //PurchaseInfo API
+   async function getPurchaseInfos() {
+    const purchaseInfos = await fetchApiBase(`/api/myModels/PurchaseInfo`, "get");
+    return purchaseInfos as PurchaseInfo[];
+  }
   async function getModelPurchaseInfos(modelId: number) {
     const purchaseInfos = await fetchApiBase(`/api/myModels/PurchaseInfo/${modelId}`, "get");
     return purchaseInfos as PurchaseInfo[];
@@ -84,6 +88,7 @@ export default () => {
     getModelSize,
     addMyModelsSize,
     updateMyModelsSize,
+    getPurchaseInfos,
     getModelPurchaseInfos,
     addMyModelPurchaseInfo,
     updateMyModelPurchaseInfo,

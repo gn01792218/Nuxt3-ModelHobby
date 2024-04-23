@@ -6,7 +6,10 @@
         <p>未組裝:{{ unFinishedModels.length }}個</p>
         <p>已組裝:{{ finishedModels.length }}個</p>
     </div>
-    <Divider :title="`${thisMonth}月統計`" />
+    <UDivider>
+        <p class="text-white">{{ purchaseDate }} 統計資訊</p>
+        <USelect class="cursor-pointer" v-model="purchaseDate" :options="purchaseDateSelects" option-attribute="name" variant="none" @change="onPurchaseDateChange"/>
+    </UDivider>
     <div>
         <p>本月花費 <span class="text-acent-500">{{ thisMonthPurchaseCoast }}</span>元</p>
         <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthFinishedModels)">已完成<span
@@ -25,8 +28,10 @@
 <script setup lang="ts">
 import { type Model } from '~/types/model'
 import { useMyModelStore } from '~/store/useMyModelStore'
-
+import type { PurchaseInfo } from '@prisma/client';
+import useMyModelsAPI from '~/composables/api/useMyModelsAPI';
 const {
+    targetDate,
     myModelList,
     unStockInModels,
     unFinishedModels,
@@ -38,9 +43,19 @@ const {
     thisMonthPurchaseCoast
 } = storeToRefs(useMyModelStore())
 
-const { setOpenSearchPanel, setSearchResult } = useMyModelStore()
-const { thisMonth } = useDate()
+const { setOpenSearchPanel, setSearchResult, setTargetDate } = useMyModelStore()
+const { sortDateArray, formateDateYYYYMM } = useDate()
 const { toTWD } = useExchange()
+const { getPurchaseInfos } = useMyModelsAPI()
+
+const purchaseInfos = ref<PurchaseInfo[]>()
+const purchaseDate = ref<string | Date>(targetDate.value)
+const purchaseDateSelects = computed<string[] | Date[]>(()=>{
+    const set = new Set<string>(purchaseInfos.value?.map((info:PurchaseInfo)=>{
+        return `${formateDateYYYYMM(info.purchase_date!,'-')}`
+    }))
+    return sortDateArray(Array.from(set))
+})
 
 const totalCoast = computed(()=>{
     let total =0
@@ -52,9 +67,16 @@ const totalCoast = computed(()=>{
     return total
 })
 
+init()
+async function init(){
+    purchaseInfos.value = await getPurchaseInfos()
+}
 function openModelsDetailModal(models:Model[]){
     setOpenSearchPanel(true)
     setSearchResult(models)
+}
+function onPurchaseDateChange(){
+    setTargetDate(purchaseDate.value)
 }
 
 </script>
