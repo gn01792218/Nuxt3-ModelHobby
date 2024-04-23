@@ -6,10 +6,10 @@
         <p>未組裝:{{ unFinishedModels.length }}個</p>
         <p>已組裝:{{ finishedModels.length }}個</p>
     </div>
-    <!-- <UDivider>
+    <UDivider>
         <p class="text-white">{{ purchaseDate }} 統計資訊</p>
         <USelect class="cursor-pointer" v-model="purchaseDate" :options="purchaseDateSelects" option-attribute="name" variant="none" @change="onPurchaseDateChange"/>
-    </UDivider> -->
+    </UDivider>
     <div>
         <p>本月花費 <span class="text-acent-500">{{ thisMonthPurchaseCoast }}</span>元</p>
         <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthFinishedModels)">已完成<span
