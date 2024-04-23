@@ -22,7 +22,6 @@ export default () => {
   function isThisMoth(sorceDate:string | Date, targetDate:string| Date){
     const formateSorce = formateDateYYYYMM(sorceDate,'-')
     const formatTargetDate = formateDateYYYYMM(targetDate,'-')
-    console.log('轉換過後的來源', formateSorce, '轉換後的目標日期', formatTargetDate)
     return getYear(formateSorce) === getYear(formatTargetDate) && getMonth(formateSorce) === getMonth(formatTargetDate)
   }
 

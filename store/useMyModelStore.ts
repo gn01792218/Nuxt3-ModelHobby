@@ -44,33 +44,30 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     } )
   );
   const thisMonthFinishedModels = computed(() =>{
-    return myModelList.value.filter((model) => model.finish_infos.some(info=>isThisMoth(info.finished_date!, targetDate.value)))
+    return myModelList.value.filter((model) => model.finish_infos.some(info=>isThisMoth(info.finished_date!, new Date())))
   });
   const thisMonthFinishedCount = computed(()=>{
     let count = 0
-    console.log('篩選出來的完成資料', thisMonthFinishedModels.value)
     thisMonthFinishedModels.value.forEach(model=>{
       model.finish_infos.forEach(info=>{
-        console.log('比對的來源為', info.finished_date,'要比對的目標時間為',targetDate.value)
-        console.log('是否是比對的這個月?',isThisMoth(info.finished_date!, targetDate.value))
-        if(isThisMoth(info.finished_date!, targetDate.value)) count++
+        if(isThisMoth(info.finished_date!, new Date())) count++
       })
     })
     return count
   })
-  const thisMonthPurchaseModels = computed(() =>myModelList.value.filter((model) =>model.purchase_infos?.some(info=>isThisMoth(info.purchase_date!,targetDate.value)))
+  const thisMonthPurchaseModels = computed(() =>myModelList.value.filter((model) =>model.purchase_infos?.some(info=>isThisMoth(info.purchase_date!,new Date())))
   );
   const thisMonthPurchaseModelsCount = computed(()=> {
     let count = 0
     thisMonthPurchaseModels.value.forEach(model => model.purchase_infos?.forEach(info=>{
-      if(isThisMoth(info.purchase_date!, targetDate.value)) count += info.amount
+      if(isThisMoth(info.purchase_date!, new Date())) count += info.amount
     }))
     return count
   })
   const thisMonthPurchaseCoast = computed(()=> {
     let coast = 0
     thisMonthPurchaseModels.value.forEach(model => model.purchase_infos?.forEach(info=>{
-      if(isThisMoth(info.purchase_date!,targetDate.value)) coast += toTWD(info.currency, info.price, info.amount)
+      if(isThisMoth(info.purchase_date!,new Date())) coast += toTWD(info.currency, info.price, info.amount)
     }))
     return coast
   })
