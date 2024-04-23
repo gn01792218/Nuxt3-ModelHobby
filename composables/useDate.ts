@@ -15,7 +15,9 @@ export default () => {
     return new Date(date).getFullYear();
   }
   function getMonth(date: string | Date) {
-    return new Date(date).getMonth() + 1;
+    let month = (new Date(date).getMonth() + 1).toString()
+    if(month.length === 1) month = '0'+month 
+    return month;
   }
 
   //各種判定
