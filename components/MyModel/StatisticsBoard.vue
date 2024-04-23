@@ -10,6 +10,7 @@
         <p class="text-white">{{ purchaseDate }} 統計資訊</p>
         <USelect class="cursor-pointer" v-model="purchaseDate" :options="purchaseDateSelects" option-attribute="name" variant="none" @change="onPurchaseDateChange"/>
     </UDivider>
+    {{ purchaseDate }}
     <div>
         <p>本月花費 <span class="text-acent-500">{{ thisMonthPurchaseCoast }}</span>元</p>
         <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthFinishedModels)">已完成<span
@@ -69,6 +70,7 @@ const totalCoast = computed(()=>{
 
 init()
 async function init(){
+    alert(`初始化的時間${purchaseDate.value} targetDate為${targetDate.value}}}`)
     purchaseInfos.value = await getPurchaseInfos()
 }
 function openModelsDetailModal(models:Model[]){
@@ -76,6 +78,7 @@ function openModelsDetailModal(models:Model[]){
     setSearchResult(models)
 }
 function onPurchaseDateChange(){
+    alert(`時間更新，設置時間${purchaseDate.value}`)
     setTargetDate(purchaseDate.value)
 }
 

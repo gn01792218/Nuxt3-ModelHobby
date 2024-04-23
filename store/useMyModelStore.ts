@@ -55,8 +55,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     })
     return count
   })
-  const thisMonthPurchaseModels = computed(() =>
-    myModelList.value.filter((model) =>model.purchase_infos?.some(info=>isThisMoth(info.purchase_date!,targetDate.value)))
+  const thisMonthPurchaseModels = computed(() =>myModelList.value.filter((model) =>model.purchase_infos?.some(info=>isThisMoth(info.purchase_date!,targetDate.value)))
   );
   const thisMonthPurchaseModelsCount = computed(()=> {
     let count = 0
