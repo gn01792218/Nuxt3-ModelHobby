@@ -45,7 +45,7 @@ const {
 } = storeToRefs(useMyModelStore())
 
 const { setOpenSearchPanel, setSearchResult, setTargetDate } = useMyModelStore()
-const { sortDateArray, formateDateYYYYMM } = useDate()
+const { sortDateArray, formateDateYYYYMM, isThisMoth } = useDate()
 const { toTWD } = useExchange()
 const { getPurchaseInfos } = useMyModelsAPI()
 
@@ -69,6 +69,9 @@ const totalCoast = computed(()=>{
 })
 
 init()
+watch(myModelList,()=>{
+    alert(`更新了我的模型列表 ${myModelList.value}`)
+})
 
 async function init(){
     purchaseInfos.value = await getPurchaseInfos()

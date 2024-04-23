@@ -67,7 +67,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const thisMonthPurchaseCoast = computed(()=> {
     let coast = 0
     thisMonthPurchaseModels.value.forEach(model => model.purchase_infos?.forEach(info=>{
-      if(isThisMoth(formateDateYYYYMM(info.purchase_date!,'-'),targetDate.value)) coast += toTWD(info.currency, info.price, info.amount)
+      if(isThisMoth(info.purchase_date!,targetDate.value)) coast += toTWD(info.currency, info.price, info.amount)
     }))
     return coast
   })
