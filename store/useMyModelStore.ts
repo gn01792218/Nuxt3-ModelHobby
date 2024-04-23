@@ -44,30 +44,30 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     } )
   );
   const thisMonthFinishedModels = computed(() =>{
-    return myModelList.value.filter((model) => model.finish_infos.some(info=>isThisMoth(info.finished_date!, new Date())))
+    return myModelList.value.filter((model) => model.finish_infos.some(info=>isThisMoth(info.finished_date!, targetDate.value)))
   });
   const thisMonthFinishedCount = computed(()=>{
     let count = 0
     thisMonthFinishedModels.value.forEach(model=>{
       model.finish_infos.forEach(info=>{
-        if(isThisMoth(info.finished_date!, new Date())) count++
+        if(isThisMoth(info.finished_date!, targetDate.value)) count++
       })
     })
     return count
   })
-  const thisMonthPurchaseModels = computed(() =>myModelList.value.filter((model) =>model.purchase_infos?.some(info=>isThisMoth(info.purchase_date!,new Date())))
+  const thisMonthPurchaseModels = computed(() =>myModelList.value.filter((model) =>model.purchase_infos?.some(info=>isThisMoth(info.purchase_date!,targetDate.value)))
   );
   const thisMonthPurchaseModelsCount = computed(()=> {
     let count = 0
     thisMonthPurchaseModels.value.forEach(model => model.purchase_infos?.forEach(info=>{
-      if(isThisMoth(info.purchase_date!, new Date())) count += info.amount
+      if(isThisMoth(info.purchase_date!, targetDate.value)) count += info.amount
     }))
     return count
   })
   const thisMonthPurchaseCoast = computed(()=> {
     let coast = 0
     thisMonthPurchaseModels.value.forEach(model => model.purchase_infos?.forEach(info=>{
-      if(isThisMoth(info.purchase_date!,new Date())) coast += toTWD(info.currency, info.price, info.amount)
+      if(isThisMoth(info.purchase_date!,targetDate.value)) coast += toTWD(info.currency, info.price, info.amount)
     }))
     return coast
   })
