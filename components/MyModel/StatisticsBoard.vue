@@ -10,6 +10,7 @@
         <p class="text-white">{{ purchaseDate }} 統計資訊</p>
         <USelect class="cursor-pointer" v-model="purchaseDate" :options="purchaseDateSelects" option-attribute="name" variant="none" @change="onPurchaseDateChange"/>
     </UDivider>
+    {{ thisMonthPurchaseModels }}
     <div>
         <p>本月花費 <span class="text-acent-500">{{ thisMonthPurchaseCoast }}</span>元</p>
         <p class="cursor-pointer" @click="openModelsDetailModal(thisMonthFinishedModels)">已完成<span
