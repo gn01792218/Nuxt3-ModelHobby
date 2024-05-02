@@ -28,8 +28,7 @@
 <script setup lang="ts">
 import { type Model } from '~/types/model'
 import { useMyModelStore } from '~/store/useMyModelStore'
-import type { PurchaseInfo } from '@prisma/client';
-import useMyModelsAPI from '~/composables/api/useMyModelsAPI';
+import type { PurchaseInfo } from '~/types/purchaseInfo';
 const {
     targetDate,
     myModelList,
@@ -44,16 +43,22 @@ const {
 } = storeToRefs(useMyModelStore())
 
 const { setOpenSearchPanel, setSearchResult, setTargetDate } = useMyModelStore()
-const { sortDateArray, formateDateYYYYMM, isThisMoth } = useDate()
+const { sortDateArray, formateDateYYYYMM } = useDate()
 const { toTWD } = useExchange()
-const { getPurchaseInfos } = useMyModelsAPI()
 
-const purchaseInfos = ref<PurchaseInfo[]>()
+const purchaseInfos = computed<PurchaseInfo[]>(()=>{
+    const purchaseInfos:PurchaseInfo[] = []
+    myModelList.value.forEach((model:Model)=>{
+        model.purchase_infos?.forEach(info=>purchaseInfos.push(info))
+    })
+    return purchaseInfos
+})
 const purchaseDate = ref<string | Date>(targetDate.value)
 const purchaseDateSelects = computed<string[] | Date[]>(()=>{
     const set = new Set<string>(purchaseInfos.value?.map((info:PurchaseInfo)=>{
         return `${formateDateYYYYMM(info.purchase_date!,'-')}`
     }))
+    set.add(formateDateYYYYMM(new Date(),'-')) // 推入當月日期( 以免沒有當月購買資訊時，將無法選擇當月資訊 )
     return sortDateArray(Array.from(set))
 })
 
@@ -67,11 +72,6 @@ const totalCoast = computed(()=>{
     return total
 })
 
-init()
-
-async function init(){
-    purchaseInfos.value = await getPurchaseInfos()
-}
 function openModelsDetailModal(models:Model[]){
     setOpenSearchPanel(true)
     setSearchResult(models)

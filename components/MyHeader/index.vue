@@ -52,9 +52,6 @@ function search() {
 //banner相關
 const bannerItems = computed(()=>{
     return finishedModels.value
-    .sort((a:Model,b:Model)=>{
-        return new Date(b.finish_infos[0].finished_date).getTime() - new Date(a.finish_infos[0].finished_date).getTime()
-    })
     .slice(0,15)
 })
 
