@@ -7,29 +7,22 @@
     </template>
     <div>
       <div class="w-full md:h-[250px] cursor-pointer" @click="navergateToMyModelDetial(modelData.id)">
-        <img class="w-full md:h-full" v-if="modelData.main_img" :src="getModelImagePublicUrl(modelData.main_img)" :alt="modelData.name_zh">
-        <img v-else src="" alt="沒有上傳圖片">
+        <NuxtImg format="webp" v-if="modelData.main_img" class="w-full md:h-full" width="300" :src="getModelImagePublicUrl(modelData.main_img)" :placeholder="15"/>
+        <NuxtImg v-else src="/imagePlaceHolder.jpg" width="300" height="200" format="webp" alt="沒有上傳圖片"/>
       </div>
     </div>
     <template #footer>
       <div>
-          <UButton class="mr-5" icon="i-heroicons-pencil-square" size="sm" color="green" variant="soft"
-            :trailing="false" @click="navergateToMyModelDetial(modelData.id)"/>
-          <UButton
-                v-if="user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d' || 
-                user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || 
-                user?.id === '66a7e0cc-99e5-4cbf-8bc7-72021b26b362'"
-            icon="i-heroicons-trash-solid"
-            size="sm"
-            color="red"
-            variant="solid"
-            :trailing="false"
-            @click="fetchDeleteMyModel"
-          />
+        <UButton class="mr-5" icon="i-heroicons-pencil-square" size="sm" color="green" variant="soft" :trailing="false"
+          @click="navergateToMyModelDetial(modelData.id)" />
+        <UButton v-if="user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d' ||
+          user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' ||
+          user?.id === '66a7e0cc-99e5-4cbf-8bc7-72021b26b362'" icon="i-heroicons-trash-solid" size="sm"
+          color="red" variant="solid" :trailing="false" @click="fetchDeleteMyModel" />
       </div>
     </template>
   </UCard>
-  <MyModelCardSkeleton v-else/>
+  <MyModelCardSkeleton v-else />
 </template>
 
 <script setup lang="ts">
@@ -55,7 +48,7 @@ function fetchDeleteImg() {
   //刪除mainimg
   if (modelData.main_img) removeImageFromSupabaseStorage(StorageBucket.images, modelData.main_img)
   //刪除完成資訊的兩種img
-  modelData.finish_infos.forEach(info=>{
+  modelData.finish_infos.forEach(info => {
     if (info?.process_imgs?.length) {
       info.process_imgs.forEach(img => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, img))
     }

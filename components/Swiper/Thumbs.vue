@@ -8,14 +8,14 @@
             clickable: true
         }" :spaceBetween="10">
         <SwiperSlide class="relative" v-for="slide in sliderItems" :key="slide" @click="processOpenImgPanel()">
-            <img class="w-full h-full object-contain" :src="getFinishImagePublicUrl(slide)" :alt="slide">
+            <NuxtImg class="w-full h-full object-contain" format="webp" width="600" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
         </SwiperSlide>
     </Swiper>
     <Swiper class="border-2 w-full h-[100px] max-w-[1280px] sm:h-[150px] md:h-[200px] swiper-thumbs "
         :modules="[SwiperFreeMode, SwiperThumbs, SwiperPagination, SwiperNavigation]" @swiper="setThumbsSwiper"
         :navigation="true" :spaceBetween="10" :slidesPerView="4" :freeMode="true" :watchSlidesProgress="true">
         <SwiperSlide class="relative cursor-pointer" v-for="slide in sliderItems" :key="slide">
-            <img class="w-full h-full opacity-50 hover:opacity-100" :src="getFinishImagePublicUrl(slide)" :alt="slide">
+            <NuxtImg class="w-full h-full opacity-50 hover:opacity-100" format="webp" width="300" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
         </SwiperSlide>
     </Swiper>
     <UModal class="w-full flex items-center" v-model="openImgPanel" :ui="{
@@ -42,7 +42,7 @@
             :autoHeight="true"
             >
             <SwiperSlide class="w-full" v-for="slide in sliderItems" :key="slide">
-                <img class="w-full object-contain" :src="getFinishImagePublicUrl(slide)" :alt="slide">
+                <NuxtImg class="w-full h-full object-contain" format="webp" width="600" :quality="100" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
             </SwiperSlide>
         </Swiper>
     </UModal>

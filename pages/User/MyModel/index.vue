@@ -42,7 +42,7 @@
                   <div>
                      <label for="model_main_img">封面圖片</label>
                      <input type="file" id="model_main_img" @change="(e)=> main_img_file = handleUploadMutipleImgs(e, toRef(preview_main_Img))">
-                     <img v-show="preview_main_Img[0]" :src="preview_main_Img[0]" alt="預覽圖">
+                     <NuxtImg v-show="preview_main_Img[0]" format="webp" width="200" :src="preview_main_Img[0]" alt="預覽圖"/>
                   </div>
                   <div>
                      --------------模型尺寸資訊------------
@@ -111,7 +111,7 @@
                            previewProcessImgs.length = 0
                            }" multiple>
                         <div v-for="img in previewProcessImgs" :key="img">
-                           <img :src="img" alt="預覽圖">
+                           <NuxtImg format="webp" width="200" :src="img" alt="預覽圖"/>
                         </div>
                      </div>
                      <div>
@@ -121,7 +121,7 @@
                            previewGalleryImgs.length = 0
                            }" multiple>
                         <div v-for="img in previewGalleryImgs" :key="img">
-                           <img :src="img" alt="預覽圖">
+                           <NuxtImg format="webp" width="200" :src="img" alt="預覽圖"/>
                         </div>
                      </div>
                   </div>

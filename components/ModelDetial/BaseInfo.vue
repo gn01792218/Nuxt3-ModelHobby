@@ -2,7 +2,7 @@
 <template>
     <section>
         <section>
-            <img :src="getModelImagePublicUrl(currentModel.main_img ? currentModel.main_img : '')" alt="">
+            <NuxtImg format="webp" width="300" :src="getModelImagePublicUrl(currentModel.main_img || '')"/>
             <p>品牌 : {{ currentModel.brand }} ({{ currentModel.article_number }})</p>
             <p class="text-3xl font-extrabold">{{ currentModel?.name_zh }}</p>
             <p class="text-2xl">{{ currentModel?.name_en }}</p>
@@ -38,7 +38,7 @@
                 <div>
                     <label for="model_main_img">封面圖片</label>
                     <input type="file" id="model_main_img" @change="(e)=> main_img_file = handleUploadMutipleImgs(e, ref(previewImg))">
-                    <img v-show="previewImg[0]" :src="previewImg[0]" alt="預覽圖">
+                    <NuxtImg v-show="previewImg[0]" format="webp" width="200" :src="previewImg[0]" alt="預覽圖"/>
                 </div>
                 <button v-show="currentModel" class="mr-5" @click="fetchUpdateModel">確認修改</button>
                 <button v-show="currentModel" @click="resetData">重置資料</button>

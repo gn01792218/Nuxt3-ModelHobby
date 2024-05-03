@@ -17,7 +17,7 @@
                 <input type="file" id="model_process_imgs"
                     @change="(e) => handleLoadProcessImgsFileList(e, previewProcessImgs)" multiple>
                 <div v-for="img, index in previewProcessImgs" :key="img">
-                    <img :src="img" alt="預覽圖">
+                    <NuxtImg format="webp" width="200" :src="img" alt="預覽圖"/>
                     <UButton icon="i-heroicons-trash-solid" size="sm" color="red" variant="solid" :trailing="false"
                         @click="deleteProcessUploadImg(index)" />
                 </div>
@@ -27,7 +27,7 @@
                 <input type="file" id="model_finished_imgs"
                     @change="(e) => handleLoadGallaryImgsFileList(e, previewGalleryImgs)" multiple>
                 <div v-for="img, index in previewGalleryImgs" :key="img">
-                    <img :src="img" alt="預覽圖">
+                    <NuxtImg format="webp" width="200" :src="img" alt="預覽圖"/>
                     <UButton icon="i-heroicons-trash-solid" size="sm" color="red" variant="solid" :trailing="false"
                         @click="deleteGalleryUploadImg(index)" />
                 </div>

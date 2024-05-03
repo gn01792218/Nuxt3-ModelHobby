@@ -11,7 +11,7 @@
                 製作過程圖片
                 <ul v-for="img in finish_info?.process_imgs" :key="img">
                     <li>
-                        <img :src="getFinishImagePublicUrl(img)" alt="">
+                        <NuxtImg format="webp" width="300" :src="getFinishImagePublicUrl(img)"/>
                     </li>
                 </ul>
             </div>
@@ -19,7 +19,7 @@
                 完成圖片
                 <ul v-for="img in finish_info?.gallery" :key="img">
                     <li>
-                        <img :src="getFinishImagePublicUrl(img)" alt="">
+                        <NuxtImg format="webp" width="300" :src="getFinishImagePublicUrl(img)"/>
                     </li>
                 </ul>
             </div>
