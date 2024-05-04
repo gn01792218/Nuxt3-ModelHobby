@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
   ],
   image: {
+    provider: process.env.NUXT_IMAGE_PROVIDER, //部署在netlify中，需要透過他來轉換圖片
     dir: "assets/images", //設置靜態圖片資源的資料夾；使用時直接src="/cat.png"即可
     quality: 90, // 设置預設压缩质量为 ?%
     domains: [process.env.SUPABASE_URL || ""], //外部網址的圖片，都需要設置這個
