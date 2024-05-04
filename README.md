@@ -76,3 +76,18 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 
 # Search icons
 https://icones.js.org/collection/heroicons
+
+# 使用Netilfy進行本地開發
+## 先安裝Netilfy Cli
+```
+npm install netlify-cli -g
+
+```
+## 運行的指令
+```
+netlify dev
+```
+## 用netlify開發的指令
+```
+npm run netlify
+```
