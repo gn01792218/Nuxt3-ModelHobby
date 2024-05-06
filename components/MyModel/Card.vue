@@ -7,8 +7,8 @@
     </template>
     <div>
       <div class="w-full md:h-[250px] cursor-pointer" @click="navergateToMyModelDetial(modelData.id)">
-        <NuxtImg format="webp" v-if="modelData.main_img" class="w-full md:h-full" width="300" :src="getModelImagePublicUrl(modelData.main_img)" :placeholder="15"/>
-        <NuxtImg v-else src="/imagePlaceHolder.jpg" width="300" height="200" format="webp" alt="沒有上傳圖片"/>
+        <NuxtImg format="webp" sizes="266px md:300px" v-if="modelData.main_img" class="w-full md:h-full" :src="getModelImagePublicUrl(modelData.main_img)"/>
+        <NuxtImg v-else src="/imagePlaceHolder.jpg" sizes="266px md:300px" format="webp" alt="沒有上傳圖片"/>
       </div>
     </div>
     <template #footer>
