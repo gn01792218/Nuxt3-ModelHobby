@@ -15,7 +15,7 @@
         :modules="[SwiperFreeMode, SwiperThumbs, SwiperPagination, SwiperNavigation]" @swiper="setThumbsSwiper"
         :navigation="true" :spaceBetween="10" :slidesPerView="4" :freeMode="true" :watchSlidesProgress="true">
         <SwiperSlide class="relative cursor-pointer" v-for="slide in sliderItems" :key="slide">
-            <NuxtImg loading="lazy" class="w-full h-full opacity-50 hover:opacity-100" format="webp" sizes="87px md:300px" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
+            <NuxtImg preload class="w-full h-full opacity-50 hover:opacity-100" format="webp" sizes="87px md:300px" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
         </SwiperSlide>
     </Swiper>
     <UModal class="w-full flex items-center" v-model="openImgPanel" :ui="{
