@@ -52,7 +52,7 @@ function search() {
 //banner相關
 const bannerItems = computed(()=>{
     return finishedModels.value
-    .slice(0,15)
+    .slice(0,9)
 })
 
 </script>
