@@ -1,5 +1,5 @@
 <template>
-  <UCard v-if="!loadSkeleton" class="bg-main-200">
+  <UCard v-if="!loadSkeleton" class="bg-main-200 h-full">
     <template #header>
       <p>{{ modelData.name_zh }}</p>
       <p>{{ modelData.name_en }}</p>
@@ -7,7 +7,7 @@
     </template>
     <div>
       <div class="w-full md:h-[250px] cursor-pointer" @click="navergateToMyModelDetial(modelData.id)">
-        <NuxtImg format="webp" sizes="266px md:300px" v-if="modelData.main_img" class="w-full md:h-full" :src="getModelImagePublicUrl(modelData.main_img)"/>
+        <NuxtImg format="webp" sizes="266px md:300px" v-if="modelData.main_img" :src="getModelImagePublicUrl(modelData.main_img)"/>
         <NuxtImg v-else src="/imagePlaceHolder.jpg" sizes="266px md:300px" format="webp" alt="沒有上傳圖片"/>
       </div>
     </div>

@@ -5,6 +5,7 @@
     :navigation="useNavergation"
     :pagination="usePagination"
     :slides-per-view="sliderPreview"
+    :centeredSlides="true"
     :loop="true"
     :autoplay="{
       delay: 7000,
