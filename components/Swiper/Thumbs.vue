@@ -13,7 +13,7 @@
         }" 
         :spaceBetween="10">
         <SwiperSlide class="relative" v-for="slide in sliderItems" :key="slide" @click="processOpenImgPanel()">
-            <NuxtImg preload class="w-full h-full object-cover md:object-contain" format="webp" sizes="250px md:400px" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
+            <NuxtImg preload :modifiers="{rotate: null}" class="w-full h-full object-contain" format="webp" sizes="250px md:400px" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
         </SwiperSlide>
     </Swiper>
     <Swiper class="border-2 w-full h-[87px] max-w-[1280px] sm:h-[150px] md:h-[200px] swiper-thumbs "
@@ -55,7 +55,7 @@
             :autoHeight="true"
             >
             <SwiperSlide class="w-full h-full" v-for="slide in sliderItems" :key="slide">
-                <NuxtImg preload :placeholder= "15" class="w-full h-full object-contain" format="webp" sizes="400px md:672px" :quality="100" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
+                <NuxtImg preload :modifiers="{rotate: null}" :placeholder= "15" class="w-full h-full object-contain" format="webp" sizes="400px md:672px" :quality="100" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
             </SwiperSlide>
         </Swiper>
     </UModal>

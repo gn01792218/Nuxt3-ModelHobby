@@ -1,8 +1,8 @@
 <template>
     <UCard class="cursor-pointer"  @click="gottoItem(model.id)">
         <p>{{ model.name_zh }}</p>
-        <NuxtImg preload format="webp" v-if="model.main_img" class="w-full md:h-full" width="300" :src="getModelImagePublicUrl(model.main_img)"/>
-        <NuxtImg v-else src="/imagePlaceHolder.jpg" format="webp" alt="沒有上傳圖片"/>
+        <NuxtImg preload format="webp"  :modifiers="{rotate: null}" v-if="model.main_img" class="w-full md:h-full" width="300" :src="getModelImagePublicUrl(model.main_img)"/>
+        <NuxtImg v-else :modifiers="{rotate: null}" src="/imagePlaceHolder.jpg" format="webp" alt="沒有上傳圖片"/>
         <p v-show="model.status === ModelStatus.已組裝">已組裝</p>
         <p v-show="model.status === ModelStatus.未入庫">未入庫</p>
         <p v-show="model.status === ModelStatus.未組裝">未組裝</p>

@@ -2,7 +2,7 @@
 <template>
     <section>
         <section>
-            <NuxtImg format="webp" width="300" :src="getModelImagePublicUrl(currentModel.main_img || '')"/>
+            <NuxtImg :modifiers="{rotate: null}" format="webp" width="300" :src="getModelImagePublicUrl(currentModel.main_img || '')"/>
             <p>品牌 : {{ currentModel.brand }} ({{ currentModel.article_number }})</p>
             <p class="text-3xl font-extrabold">{{ currentModel?.name_zh }}</p>
             <p class="text-2xl">{{ currentModel?.name_en }}</p>
