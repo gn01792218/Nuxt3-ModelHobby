@@ -20,7 +20,7 @@ body {
 
 /* Swiper */
 .swiper-base .swiper-wrapper{
-    @apply flex justify-center
+    @apply flex
 }
 .swiper-pagination{
     @apply !bottom-[5%]

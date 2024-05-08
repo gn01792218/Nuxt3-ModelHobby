@@ -53,8 +53,8 @@ function search() {
 
 //banner相關
 const bannerItems = computed(()=>{
-    return finishedModels.value
+    return finishedModels.value.filter((model:Model)=>model.finish_infos.length && model.finish_infos[0].gallery.length)
+    .sort((a:Model,b:Model)=>new Date(b.finish_infos[0].finished_date).getTime() - new Date(a.finish_infos[0].finished_date).getTime() )
     .slice(0,9)
 })
-
 </script>
