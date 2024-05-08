@@ -55,7 +55,7 @@ const purchaseInfos = computed<PurchaseInfo[]>(()=>{
 })
 const purchaseDate = ref<string | Date>(targetDate.value)
 const purchaseDateSelects = computed<string[] | Date[]>(()=>{
-    const set = new Set<string>(purchaseInfos.value?.map((info:PurchaseInfo)=>{
+    const set = new Set<string>(purchaseInfos.value?.filter((info:PurchaseInfo)=>info.purchase_date).map((info:PurchaseInfo)=>{
         return `${formateDateYYYYMM(info.purchase_date!,'-')}`
     }))
     set.add(formateDateYYYYMM(new Date(),'-')) // 推入當月日期( 以免沒有當月購買資訊時，將無法選擇當月資訊 )
