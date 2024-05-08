@@ -1,8 +1,8 @@
 <template>
     <section>
-        <header class="p-5 w-full bg-main flex flex-col items-center xs:flex-row xs:justify-between fixed z-[10]">
+        <header class="p-5 w-full bg-main flex flex-col flex-wrap items-center sm:flex-row sm:justify-between fixed z-[10]">
             <NavBar />
-            <div class="flex">
+            <div class="flex mt-2 sm:mt-0">
                 <div class="flex items-center mr-2">
                     <input type="text" class="my-input mr-1" v-model="keyword" placeholder="search">
                     <UButton color="pink" icon="i-heroicons-magnifying-glass" size="sm" variant="solid" :trailing="false"
@@ -10,9 +10,11 @@
                 </div>
                 <div v-if="user">
                     <p>歡迎 {{ user.user_metadata.full_name }}</p>
-                    <button @click="logout">Logout</button>
+                    <UButton class="flex items-center" label="Logout" icon="i-heroicons-user-16-solid" size="sm" color="gray" variant="outline" :trailing="false" @click="logout"/>
                 </div>
-                <NuxtLink v-else to="/login">Login</NuxtLink>
+                <UButton v-else class="flex items-center" icon="i-heroicons-user" size="sm" color="primary" variant="solid" :trailing="false">
+                    <NuxtLink to="/login">Login</NuxtLink>
+                </UButton>
             </div>
         </header>
         <div class="w-full h-[140px] xs:h-[112px] sm:h-[72px]"></div>
