@@ -1,13 +1,38 @@
 <template>
-    <div>
-        <input class="block" type="email" placeholder="帳號" v-model="email">
-        <input class="block" type="password" placeholder="密碼" v-model="password" autocomplete="true">
-        <button class="block border-2" @click="signUp">註冊</button>
-        <section>
-            已經有帳號了?
-            <button class="block border-2" @click="login">Login</button>
-            <button class="block border-2" @click="loginWithGoogle">Login with Google</button>
-            <NuxtLink to="/">回首頁</NuxtLink>
+    <div class="w-full h-screen flex justify-center items-center">
+        <section class="w-[400px] bg-primary-200 p-5 rounded-lg shadow-lg shadow-primary-500">
+            <h1 class="text-2xl font-bold mb-5">User SignUp</h1>
+            <input class="w-full mb-2" type="email" placeholder="帳號" v-model="email">
+            <input class="w-full mb-2" type="password" placeholder="密碼" v-model="password" autocomplete="true">
+            <button class="w-full flex items-center justify-center rounded-sm bg-primary-500 mb-5" @click="signUp">註冊</button>
+            <p class="text-gray-500 mt-1 mb-5">
+                已經有帳號了?
+            </p>
+            <button class="w-full flex items-center justify-center rounded-sm border-2 mb-2" @click="login">Login</button>
+             <div class="w-full flex flex-col justify-around items-center mb-5">
+                <button class="w-full flex items-center justify-center" @click="loginWithGoogle">
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
+                        viewBox="0 0 48 48">
+                        <path fill="#fbc02d"
+                            d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12	s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20	s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z">
+                        </path>
+                        <path fill="#e53935"
+                            d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039	l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z">
+                        </path>
+                        <path fill="#4caf50"
+                            d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36	c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z">
+                        </path>
+                        <path fill="#1565c0"
+                            d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <UButton class="block ml-auto" icon="i-heroicons-home-solid" size="sm" color="primary" variant="outline" :trailing="false">
+                <NuxtLink to="/">
+                    回首頁
+                </NuxtLink>
+            </UButton>
         </section>
     </div>
 </template>

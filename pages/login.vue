@@ -1,11 +1,11 @@
 <template>
     <div class="w-full h-screen flex justify-center items-center">
-        <section class="bg-primary-200 p-5 rounded-lg shadow-lg shadow-primary-500">
+        <section class="w-[400px] bg-primary-200 p-5 rounded-lg shadow-lg shadow-primary-500">
             <h1 class="text-2xl font-bold mb-5">User Login</h1>
-            <input class="block" type="email" placeholder="帳號" v-model="email">
-            <input class="block" type="password" placeholder="密碼" v-model="password" autocomplete="true">
+            <input class="w-full mb-2" type="email" placeholder="帳號" v-model="email">
+            <input class="w-full mb-2" type="password" placeholder="密碼" v-model="password" autocomplete="true">
             <div class="w-full h-[100px] flex flex-col justify-around items-center">
-                <button class="w-full flex items-center justify-center bg-primary-800 rounded-sm" @click="login">Login</button>
+                <button class="w-full flex items-center justify-center bg-primary-500 rounded-sm" @click="login">Login</button>
                 <button class="w-full flex items-center justify-center" @click="loginWithGoogle">
                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
                         viewBox="0 0 48 48">
