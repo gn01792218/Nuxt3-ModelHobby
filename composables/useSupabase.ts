@@ -1,31 +1,44 @@
-interface UploadImageToSupabaseOption{
-  bucketName: string
-  fileNameTitle: string
-  modelId: number
+interface UploadImageToSupabaseOption {
+  bucketName: string;
+  fileNameTitle: string;
+  modelId: number;
 }
 export default () => {
   const supabase = useSupabaseClient();
   const supabaseBaseUrl = useRuntimeConfig().public.supabase.url;
+  const RequestCacheControlTime = 1; //請求圖片時要求的快取時間，1表示一年，以此類推
+  const uploadImageOption = { 
+    cacheControl: "31536000", //上傳圖片時，指定快取時間1年
+  };
 
   function getModelImagePublicUrl(imgDbPaath: string) {
-    return `${supabaseBaseUrl}/storage/v1/object/public/images/${imgDbPaath}`;
-  } 
-  function getFinishImagePublicUrl(imgDbPaath: string) {
-    return `${supabaseBaseUrl}/storage/v1/object/public/model_finish_info_images/${imgDbPaath}`;
+    return `${supabaseBaseUrl}/storage/v1/object/public/images/${imgDbPaath}?version=${RequestCacheControlTime}`;
   }
-  async function uploadImageToSpabaseStorage(img:File, option:UploadImageToSupabaseOption): Promise<string> {
-    const { modelId, fileNameTitle, bucketName } = option
-   if (!img) return ''
+  function getFinishImagePublicUrl(imgDbPaath: string) {
+    return `${supabaseBaseUrl}/storage/v1/object/public/model_finish_info_images/${imgDbPaath}?version=${RequestCacheControlTime}`;
+  }
+  async function uploadImageToSpabaseStorage(
+    img: File,
+    option: UploadImageToSupabaseOption
+  ): Promise<string> {
+    const { modelId, fileNameTitle, bucketName } = option;
+    if (!img) return "";
 
-   const fileName = `${fileNameTitle}_modelId_${modelId}_${crypto.randomUUID()}`
-   const { data, error } = await supabase.storage.from(bucketName).upload(`public/${fileName}`, img)
-   if (error) throw createError({
-      ...error,
-      message: '無法上傳圖片',
-   })
-   return data.path
-}
-  async function uploadMultipleImagesToSupabaseStorage(imgs: File[], option: UploadImageToSupabaseOption): Promise<any[]> {
+    const fileName = `${fileNameTitle}_modelId_${modelId}_${crypto.randomUUID()}`;
+    const { data, error } = await supabase.storage
+      .from(bucketName)
+      .upload(`public/${fileName}`, img, uploadImageOption);
+    if (error)
+      throw createError({
+        ...error,
+        message: "無法上傳圖片",
+      });
+    return data.path;
+  }
+  async function uploadMultipleImagesToSupabaseStorage(
+    imgs: File[],
+    option: UploadImageToSupabaseOption
+  ): Promise<any[]> {
     const { modelId, bucketName, fileNameTitle } = option;
     if (!imgs?.length) return [];
 
@@ -35,7 +48,7 @@ export default () => {
       const fileName = `${fileNameTitle}_modelId_${modelId}_${crypto.randomUUID()}`;
       const imgRes = supabase.storage
         .from(bucketName)
-        .upload(`public/${fileName}`, imgs[i]);
+        .upload(`public/${fileName}`, imgs[i], uploadImageOption);
       promises.push(imgRes);
     }
     const reses = await Promise.allSettled(promises);
@@ -45,8 +58,8 @@ export default () => {
 
     return paths;
   }
-  function removeImageFromSupabaseStorage(bucketName:string, img:string){
-    return supabase.storage.from(bucketName).remove([img])
+  function removeImageFromSupabaseStorage(bucketName: string, img: string) {
+    return supabase.storage.from(bucketName).remove([img]);
   }
   return {
     //data
@@ -56,6 +69,6 @@ export default () => {
     getFinishImagePublicUrl,
     uploadImageToSpabaseStorage,
     uploadMultipleImagesToSupabaseStorage,
-    removeImageFromSupabaseStorage
+    removeImageFromSupabaseStorage,
   };
 };
