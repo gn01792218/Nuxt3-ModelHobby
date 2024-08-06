@@ -26,6 +26,7 @@ model MyModel {
   PD             DateTime?
   purchase_infos PurchaseInfo[]
   finish_infos    ModelFinishInfo[]
+  userId String?  @db.Uuid
 }
 
 model ModelSize {
@@ -60,3 +61,10 @@ model ModelFinishInfo {
   modelId       Int 
   model         MyModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
 }
+// 定義 Profiles 表
+model Profile {
+  id        String @id @default(uuid()) @map("id") @db.Uuid
+  name String
+  userId String @unique@default(uuid()) @db.Uuid
+}
+
