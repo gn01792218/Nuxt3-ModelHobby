@@ -4,9 +4,9 @@
             <NavBar />
             <div class="flex mt-2 sm:mt-0">
                 <div class="flex items-center mr-2">
-                    <input type="text" class="my-input mr-1" v-model="keyword" placeholder="search">
+                    <input type="text" class="my-input mr-1" v-model="keyword" placeholder="search" @keypress.enter="search">
                     <UButton color="pink" icon="i-heroicons-magnifying-glass" size="sm" variant="solid" :trailing="false"
-                        @click="search" />
+                        @click="search"/>
                 </div>
                 <div v-if="user">
                     <p>歡迎 {{ user.user_metadata.full_name }}</p>
@@ -40,6 +40,7 @@ const { setOpenSearchPanel, setSearchResult } = useMyModelStore()
 const { converTradictionalToSimple } = useChinessConverter()
 const keyword = ref('')
 function search() {
+    console.log('按下Enter')
     setOpenSearchPanel(true)
     setSearchResult(
         myModelList.value.filter((model:Model) => {
@@ -49,6 +50,7 @@ function search() {
             return keywordArray.some(keyword => modelString.includes(keyword))
         })
     )
+    console.log('搜尋完畢')
 }
 
 //banner相關

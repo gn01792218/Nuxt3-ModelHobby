@@ -7,10 +7,10 @@
                         搜尋結果
                     </h3>
                     <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-                        @click="setOpenSearchPanel(false)" />
+                        @click="setOpenSearchPanel(false)"/>
                 </div>
             </template>
-            <section v-if="searchResult.length">
+            <section v-if="searchResult.length" class="grid gap-2 grid-cols-3">
                <MyModelSmallCard
                 v-for="model in searchResult" :key="model.id"
                 :model="model"

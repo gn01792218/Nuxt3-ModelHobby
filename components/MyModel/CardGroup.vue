@@ -1,7 +1,7 @@
 <template>
-    <section class="p-10">
+    <section class="p-0">
         <p>{{ groupTitle }} {{ cardList.length }}</p>
-        <ul class="flex flex-wrap flex-col md:flex-row justify-evenly">
+        <ul class="grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
             <li class="border-2 mb-5" v-for="model in cardList" :key="model.id">
                 <MyModelCard :model-data="model" />
             </li>
