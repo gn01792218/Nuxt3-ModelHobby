@@ -4,12 +4,12 @@
             <NavBar />
             <div class="flex mt-2 sm:mt-0">
                 <div class="flex items-center mr-2">
-                    <input type="text" class="my-input mr-1" v-model="keyword" placeholder="search" @keypress.enter="search">
+                    <input type="text" class="my-input mr-1" v-model="keyword" placeholder="全站模型搜尋" @keypress.enter="search">
                     <UButton color="pink" icon="i-heroicons-magnifying-glass" size="sm" variant="solid" :trailing="false"
                         @click="search"/>
                 </div>
                 <div v-if="user">
-                    <p>歡迎 {{ user.user_metadata.full_name }}</p>
+                    <p>歡迎 {{ user.user_metadata.full_name || user.user_metadata.display_name }}</p>
                     <UButton class="flex items-center" label="Logout" icon="i-heroicons-user-16-solid" size="sm" color="gray" variant="outline" :trailing="false" @click="logout"/>
                 </div>
                 <UButton v-else class="flex items-center" icon="i-heroicons-user" size="sm" color="primary" variant="solid" :trailing="false">
@@ -29,11 +29,11 @@ import { type Model } from "~/types/model"
 
 const route = useRoute()
 //user相關
-const user = useSupabaseUser()
+const { user } = useUser()
 const { logout } = useAuth()
 
 //pinan資料取用
-const { myModelList, searchResult, finishedModels } = storeToRefs(useMyModelStore())
+const { allModelList, searchResult, allfinishedModels } = storeToRefs(useMyModelStore())
 
 //搜尋相關
 const { setOpenSearchPanel, setSearchResult } = useMyModelStore()
@@ -43,7 +43,7 @@ function search() {
     console.log('按下Enter')
     setOpenSearchPanel(true)
     setSearchResult(
-        myModelList.value.filter((model:Model) => {
+        allModelList.value.filter((model:Model) => {
             if (!keyword.value) return false
             const modelString = converTradictionalToSimple(JSON.stringify(model).toLocaleLowerCase())
             const keywordArray = converTradictionalToSimple(keyword.value.trim().toLowerCase()).split(" ") as string[]
@@ -55,7 +55,7 @@ function search() {
 
 //banner相關
 const bannerItems = computed(()=>{
-    return finishedModels.value.filter((model:Model)=>model.finish_infos.length && model.finish_infos[0].gallery.length)
+    return allfinishedModels.value.filter((model:Model)=>model.finish_infos.length && model.finish_infos[0].gallery.length)
     .sort((a:Model,b:Model)=>new Date(b.finish_infos[0].finished_date).getTime() - new Date(a.finish_infos[0].finished_date).getTime() )
     .slice(0,9)
 })

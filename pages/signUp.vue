@@ -2,8 +2,9 @@
     <div class="w-full h-screen flex justify-center items-center">
         <section class="w-[400px] bg-primary-200 p-5 rounded-lg shadow-lg shadow-primary-500">
             <h1 class="text-2xl font-bold mb-5">User SignUp</h1>
-            <input class="w-full mb-2" type="email" placeholder="帳號" v-model="email">
-            <input class="w-full mb-2" type="password" placeholder="密碼" v-model="password" autocomplete="true">
+            <input class="w-full mb-2" type="email" placeholder="帳號" v-model="email" required>
+            <input class="w-full mb-2" type="password" placeholder="密碼" v-model="password" autocomplete="true" required>
+            <input class="w-full mb-2" type="text" placeholder="名稱(非必填)" v-model="name">
             <button class="w-full flex items-center justify-center rounded-sm bg-primary-500 mb-5" @click="signUp">註冊</button>
             <p class="text-gray-500 mt-1 mb-5">
                 已經有帳號了?
@@ -41,5 +42,5 @@
 definePageMeta({
     layout: "login"
 })
-const { signUp, login, loginWithGoogle, email, password } = useAuth()
+const { signUp, login, loginWithGoogle, email, password, name } = useAuth()
 </script>

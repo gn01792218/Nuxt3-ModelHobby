@@ -27,6 +27,7 @@ model MyModel {
   purchase_infos PurchaseInfo[]
   finish_infos    ModelFinishInfo[]
   userId String?  @db.Uuid
+
 }
 
 model ModelSize {
@@ -63,7 +64,7 @@ model ModelFinishInfo {
 }
 // 定義 Profiles 表
 model Profile {
-  id        String @id @default(uuid()) @map("id") @db.Uuid
+  id   String @id @default(uuid()) @map("id") @db.Uuid
   name String
   userId String @unique@default(uuid()) @db.Uuid
 }

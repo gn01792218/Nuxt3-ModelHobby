@@ -40,7 +40,8 @@ export enum ModelType{
     兵人 = "兵人",
     科幻 = "科幻",
     工具 = "工具",
-    顏料 = "顏料"
+    顏料 = "顏料",
+    成品模型 = "成品模型"
 }
 export enum ModelStatus{
     未入庫,
@@ -50,7 +51,8 @@ export enum ModelStatus{
 export enum Ecommerce{
     淘寶 = "淘寶",
     蝦皮 = "蝦皮",
-    露天 = "露天"
+    露天 = "露天",
+    實體店面 = "實體店面"
 }
 export declare interface ModelSize{
     unit:SizeUnit,
@@ -65,6 +67,7 @@ export declare interface ModelName{
 
 export declare interface Model{
     id:number,
+    userId:string,
     name_zh:string,
     name_en:string,
     status:ModelStatus,

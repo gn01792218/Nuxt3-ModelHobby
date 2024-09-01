@@ -4,13 +4,18 @@ import useApiBase from "./useApiBase";
 
 export default () => {
   const { fetchApiBase } = useApiBase()
+  const { user } = useUser()
   //MyModel API
+  async function getAllModels() {
+    const models = await fetchApiBase(`/api/myModels`,"get");
+    return models as Model[];
+  }
   async function getMyModels() {
-    const models = await fetchApiBase("/api/myModels","get");
+    const models = await fetchApiBase(`/api/myModels/${user.value?.id}`,"get");
     return models as Model[];
   }
   async function getMyModel(id:number) {
-    const model = await fetchApiBase(`/api/myModels/${id}`,"get");
+    const model = await fetchApiBase(`/api/myModels/MyModel/${id}`,"get");
     return model as Model;
   }
   async function addMyModel(payload: Model) {
@@ -18,11 +23,15 @@ export default () => {
     return model as Model;
   }
   async function updateMyModel(modelId:number ,payload: Model) {
+    const model = await fetchApiBase(`/api/myModels/MyModel/${modelId}`,"put",payload);
+    return model as Model;
+  }
+  async function updateMyModelUserId(modelId:number ,payload: {userId:string}) {
     const model = await fetchApiBase(`/api/myModels/${modelId}`,"put",payload);
     return model as Model;
   }
   async function deleteMyModel(modelId: number) {
-    const model = await fetchApiBase(`/api/myModels/${modelId}}`, "delete");
+    const model = await fetchApiBase(`/api/myModels/MyModel/${modelId}}`, "delete");
     return model as Model;
   }
   //Model Size API
@@ -80,6 +89,7 @@ export default () => {
   return {
     //data
     //methods
+    getAllModels,
     getMyModels,
     getMyModel,
     addMyModel,
@@ -92,6 +102,7 @@ export default () => {
     getModelPurchaseInfos,
     addMyModelPurchaseInfo,
     updateMyModelPurchaseInfo,
+    updateMyModelUserId,
     deleteMyModelPurchaseInfo,
     getModelFinishInfo,
     addMyModelFinishInfo,

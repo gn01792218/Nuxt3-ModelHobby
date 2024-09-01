@@ -24,7 +24,6 @@
 
 <script setup lang="ts">
 import { Authority } from '~/types/Auth';
-
 interface NavItem {
     label: string
     to: string
@@ -32,7 +31,7 @@ interface NavItem {
     authority: Authority
     childs?: NavItem[]
 }
-const user = useSupabaseUser()
+const { user } = useUser()
 const navs: NavItem[] = [
     {
         label: '首頁',

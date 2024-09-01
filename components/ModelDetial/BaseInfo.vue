@@ -55,6 +55,7 @@ import { StorageBucket } from "~/types/supabase";
 const props = defineProps<{
     modelId: number
 }>()
+const { user } = useUser()
 const { handleUploadMutipleImgs } = useUploadImage()
 const { getModelImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
 const { myModelList } = storeToRefs(useMyModelStore())
@@ -67,7 +68,7 @@ const currentModel = computed<Model>(() => {
 const showEditPanel = ref(false)
 
 const editModel = ref<Model>({
-    ...currentModel.value
+    ...currentModel.value,
 })
 const previewImg = ref<string[]>([getModelImagePublicUrl(currentModel.value.main_img!)])
 const main_img_file = ref<FileList | null>(null)

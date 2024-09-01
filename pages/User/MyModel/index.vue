@@ -1,13 +1,9 @@
 <template>
    <main>
-      <MyModelStatisticsBoard/>
+      <MyModelStatisticsBoard />
       <section class="w-full h-[100px] bg-acent-500 flex justify-start">
          <div class="">
-            <UButton
-               v-if="user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' || 
-               user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d' || 
-               user?.id === '66a7e0cc-99e5-4cbf-8bc7-72021b26b362'"
-               color="amber" variant="solid" @click="showAddModelPanel = !showAddModelPanel">
+            <UButton color="amber" variant="solid" @click="showAddModelPanel = !showAddModelPanel">
                <UIcon name="i-heroicons-plus-circle-16-solid" />
                添加模型
             </UButton>
@@ -30,19 +26,21 @@
                      </select>
                   </div>
                   <div>
-                       <label for="model_name_en">品牌</label>
-                       <select name="" id="" v-model="model.brand">
-                           <option v-for="brand in ModelBrand" :key="brand" :value="brand">{{ brand }}</option>
-                       </select>
-                   </div>
-                   <div>
-                       <label for="model_name_en">產品編號</label>
-                       <input id="model_name_en" type="text" v-model="model.article_number">
-                   </div>
+                     <label for="model_name_en">品牌</label>
+                     <select name="" id="" v-model="model.brand">
+                        <option v-for="brand in ModelBrand" :key="brand" :value="brand">{{ brand }}</option>
+                     </select>
+                  </div>
+                  <div>
+                     <label for="model_name_en">產品編號</label>
+                     <input id="model_name_en" type="text" v-model="model.article_number">
+                  </div>
                   <div>
                      <label for="model_main_img">封面圖片</label>
-                     <input type="file" id="model_main_img" @change="(e)=> main_img_file = handleUploadMutipleImgs(e, toRef(preview_main_Img))">
-                     <NuxtImg v-show="preview_main_Img[0]" format="webp" width="200" :src="preview_main_Img[0]" alt="預覽圖"/>
+                     <input type="file" id="model_main_img"
+                        @change="(e) => main_img_file = handleUploadMutipleImgs(e, toRef(preview_main_Img))">
+                     <NuxtImg v-show="preview_main_Img[0]" format="webp" width="200" :src="preview_main_Img[0]"
+                        alt="預覽圖" />
                   </div>
                   <div>
                      --------------模型尺寸資訊------------
@@ -71,7 +69,8 @@
                      <div>
                         <label for="model_purchase_info_ecommerce">購買平台</label>
                         <select name="" id="" v-model="modelPurchaseInfo.e_commerce_name">
-                           <option v-for="ecommerce in Ecommerce" :key="ecommerce" :value="ecommerce">{{ ecommerce }}</option>
+                           <option v-for="ecommerce in Ecommerce" :key="ecommerce" :value="ecommerce">{{ ecommerce }}
+                           </option>
                         </select>
                      </div>
                      <div>
@@ -83,7 +82,8 @@
                      </div>
                      <div>
                         <label for="model_purchase_info_price">價格</label>
-                        <input id="model_purchase_info_price" type="number" step="0.0001" v-model="(modelPurchaseInfo.price)">
+                        <input id="model_purchase_info_price" type="number" step="0.0001"
+                           v-model="(modelPurchaseInfo.price)">
                      </div>
                      <div>
                         <label for="model_purchase_info_amount">數量</label>
@@ -106,22 +106,22 @@
                      </div>
                      <div>
                         <label for="model_process_imgs">製作圖片</label>
-                        <input type="file" id="model_process_imgs" @change="(e)=>{
+                        <input type="file" id="model_process_imgs" @change="(e) => {
                            process_imgs_file_list = handleUploadMutipleImgs(e, ref(previewProcessImgs))
                            previewProcessImgs.length = 0
-                           }" multiple>
+                        }" multiple>
                         <div v-for="img in previewProcessImgs" :key="img">
-                           <NuxtImg format="webp" width="200" :src="img" alt="預覽圖"/>
+                           <NuxtImg format="webp" width="200" :src="img" alt="預覽圖" />
                         </div>
                      </div>
                      <div>
                         <label for="model_finished_imgs">完成圖片</label>
-                        <input type="file" id="model_finished_imgs" @change="(e)=>{
+                        <input type="file" id="model_finished_imgs" @change="(e) => {
                            gallery_imgs_file_list = handleUploadMutipleImgs(e, ref(previewGalleryImgs))
                            previewGalleryImgs.length = 0
-                           }" multiple>
+                        }" multiple>
                         <div v-for="img in previewGalleryImgs" :key="img">
-                           <NuxtImg format="webp" width="200" :src="img" alt="預覽圖"/>
+                           <NuxtImg format="webp" width="200" :src="img" alt="預覽圖" />
                         </div>
                      </div>
                   </div>
@@ -146,7 +146,7 @@ import {
    Currency,
    ModelBrand
 } from "~/types/model"
-import {  
+import {
    type CreatePurchaseInfoRequest
 } from "~/types/purchaseInfo"
 import { type ModelFinishInfo } from "~/types/finishInfo"
@@ -161,10 +161,11 @@ const {
    unFinishedModels,
    finishedModels,
 } = storeToRefs(useMyModelStore())
+
 const { setLoadingState } = useMyModelStore()
 const { fetchMyModels } = useFetchMyModels()
 const { uploadMultipleImagesToSupabaseStorage } = useSupabase()
-const user = useSupabaseUser()
+const { user } = useUser()
 
 const showAddModelPanel = ref(false)
 const modelSize = ref<ModelSize>({
@@ -177,13 +178,14 @@ const modelPurchaseInfo = ref<CreatePurchaseInfoRequest>({
    e_commerce_name: Ecommerce.淘寶,
    currency: Currency.RMB,
    price: 0,
-   amount:1
+   amount: 1
 })
 const modelFinishInfo: ModelFinishInfo = ({})
 const model: Model = {
    status: ModelStatus.未入庫,
    name_zh: '',
    name_en: '',
+   userId: ''
 }
 const preview_main_Img = ref<string[]>([])
 const previewProcessImgs = ref<string[]>([])
@@ -192,10 +194,17 @@ const main_img_file = ref<FileList | null>(null)
 const process_imgs_file_list = ref<FileList | null>(null)
 const gallery_imgs_file_list = ref<FileList | null>(null)
 
+onMounted(() => {
+   fetchMyModels()
+})
+
+
 async function fetchAddMyModel() {
    setLoadingState(true)
+   if (!user.value) return alert('請先登入會員')
    //先處理圖片
    await processGetUploadImages()
+   model.userId = user.value?.id //紀錄userId
    const myModel = await addMyModel(model)
    if (!myModel.id) return alert('出問題了')
    //添加尺寸
@@ -217,35 +226,35 @@ async function fetchAddMyModel() {
    setLoadingState(false)
 }
 async function processGetUploadImages() {
-  const mainImgs: Promise<string[]>=uploadMultipleImagesToSupabaseStorage(main_img_file.value!, {
-    bucketName: StorageBucket.images,
-    modelId: -1,
-    fileNameTitle: 'model_main_img'
-  })
-  const processImgs: Promise<string[]>=uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value!, {
-    bucketName: StorageBucket.model_finish_info_images,
-    modelId: -1,
-    fileNameTitle: 'model_process_img'
-  })
-  const gallery: Promise<string[]>=uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value!, {
-    bucketName: StorageBucket.model_finish_info_images,
-    modelId: -1,
-    fileNameTitle: 'model_gallery_img'
-  })
-  const imgsRes=await Promise.all([mainImgs, processImgs, gallery])
+   const mainImgs: Promise<string[]> = uploadMultipleImagesToSupabaseStorage(main_img_file.value!, {
+      bucketName: StorageBucket.images,
+      modelId: -1,
+      fileNameTitle: 'model_main_img'
+   })
+   const processImgs: Promise<string[]> = uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value!, {
+      bucketName: StorageBucket.model_finish_info_images,
+      modelId: -1,
+      fileNameTitle: 'model_process_img'
+   })
+   const gallery: Promise<string[]> = uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value!, {
+      bucketName: StorageBucket.model_finish_info_images,
+      modelId: -1,
+      fileNameTitle: 'model_gallery_img'
+   })
+   const imgsRes = await Promise.all([mainImgs, processImgs, gallery])
 
-  //獲取圖片路徑
-  model.main_img=imgsRes[0][0]
-  modelFinishInfo.process_imgs=imgsRes[1]
-  modelFinishInfo.gallery=imgsRes[2]
+   //獲取圖片路徑
+   model.main_img = imgsRes[0][0]
+   modelFinishInfo.process_imgs = imgsRes[1]
+   modelFinishInfo.gallery = imgsRes[2]
 }
 
 function resetAllUploadImageProcess() {
-  preview_main_Img.value.length = 0
-  main_img_file.value=null
-  process_imgs_file_list.value=null
-  gallery_imgs_file_list.value=null
-  previewProcessImgs.value.length = 0
-  previewGalleryImgs.value.length = 0
+   preview_main_Img.value.length = 0
+   main_img_file.value = null
+   process_imgs_file_list.value = null
+   gallery_imgs_file_list.value = null
+   previewProcessImgs.value.length = 0
+   previewGalleryImgs.value.length = 0
 }
 </script>

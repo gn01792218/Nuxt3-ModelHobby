@@ -15,9 +15,8 @@
       <div>
         <UButton class="mr-5" icon="i-heroicons-pencil-square" size="sm" color="green" variant="soft" :trailing="false"
           @click="navergateToMyModelDetial(modelData.id)" />
-        <UButton v-if="user?.id === 'ba5171d3-299b-4f64-983b-7faf1621944d' ||
-          user?.id === 'a161fb29-6948-4f8c-94c9-1ac707f5dac1' ||
-          user?.id === '66a7e0cc-99e5-4cbf-8bc7-72021b26b362'" icon="i-heroicons-trash-solid" size="sm"
+        <UButton 
+        icon="i-heroicons-trash-solid" size="sm"
           color="red" variant="solid" :trailing="false" @click="fetchDeleteMyModel" />
       </div>
     </template>
@@ -42,7 +41,7 @@ const { getModelImagePublicUrl, removeImageFromSupabaseStorage } = useSupabase()
 const { deleteMyModel } = useFetchMyModels()
 const { setmyModelList, setLoadingState } = useMyModelStore()
 const { myModelList } = storeToRefs(useMyModelStore())
-const user = useSupabaseUser()
+const { user } = useUser()
 function fetchDeleteImg() {
   const { modelData } = props
   //刪除mainimg
