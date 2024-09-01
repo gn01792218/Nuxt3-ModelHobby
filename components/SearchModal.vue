@@ -25,11 +25,7 @@
 
 <script setup lang="ts">
 import { useMyModelStore } from "~/store/useMyModelStore"
-import { type Model } from "~/types/model"
-defineProps<{
-    searchResult: Model[]
-}>()
 
 const { setOpenSearchPanel } = useMyModelStore()
-const { openSearchPanel } = storeToRefs(useMyModelStore())
+const { openSearchPanel, searchResult } = storeToRefs(useMyModelStore())
 </script>

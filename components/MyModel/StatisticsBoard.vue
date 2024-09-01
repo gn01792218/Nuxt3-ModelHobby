@@ -5,13 +5,7 @@
         <p>未入庫:{{ unStockInModels.length }}個</p>
         <p>未組裝:{{ unFinishedModels.length }}個</p>
         <p>已組裝:{{ finishedModels.length }}個</p>
-        <div class="mt-3">
-            <div class="flex items-center mr-2">
-            <input type="text" class="my-input mr-1" v-model="keyword" placeholder="個人模型庫存搜尋" @keypress.enter="search">
-             <UButton color="pink" icon="i-heroicons-magnifying-glass" size="sm" variant="solid" :trailing="false"
-                @click="search" />
-        </div>
-      </div>
+        <SearchBar class="mt-3" :search-sorce="myModelList" place-holder="個人模型搜尋"/>
     </div>
     <UDivider>
         <p class="text-white">{{ purchaseDate }} 統計資訊</p>
@@ -52,9 +46,6 @@ const {
 const { setOpenSearchPanel, setSearchResult, setTargetDate } = useMyModelStore()
 const { sortDateArray, formateDateYYYYMM } = useDate()
 const { toTWD } = useExchange()
-const { converTradictionalToSimple } = useChinessConverter()
-
-const keyword = ref('')
 
 const purchaseInfos = computed<PurchaseInfo[]>(()=>{
     const purchaseInfos:PurchaseInfo[] = []
@@ -81,17 +72,6 @@ const totalCoast = computed(()=>{
     })
     return total
 })
-function search() {
-   setOpenSearchPanel(true)
-   setSearchResult(
-      myModelList.value.filter((model: Model) => {
-         if (!keyword.value) return false
-         const modelString = converTradictionalToSimple(JSON.stringify(model).toLocaleLowerCase())
-         const keywordArray = converTradictionalToSimple(keyword.value.trim().toLowerCase()).split(" ") as string[]
-         return keywordArray.some(keyword => modelString.includes(keyword))
-      })
-   )
-}
 function openModelsDetailModal(models:Model[]){
     setOpenSearchPanel(true)
     setSearchResult(models)
