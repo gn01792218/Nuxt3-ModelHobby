@@ -34,7 +34,7 @@ export enum ModelScale{
     S35="1:35",
 }
 export enum ModelType{
-    戰車 = "戰車",
+    戰車與車輛 = "戰車與車輛",
     飛機 = "飛機",
     船艦 = "船艦",
     火炮 = "火炮",
@@ -42,6 +42,7 @@ export enum ModelType{
     科幻 = "科幻",
     工具 = "工具",
     顏料 = "顏料",
+    場景 = "場景",
     成品模型 = "成品模型"
 }
 export enum ModelStatus{
