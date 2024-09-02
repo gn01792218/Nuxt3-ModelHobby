@@ -26,9 +26,15 @@
                      </select>
                   </div>
                   <div>
-                     <label for="model_name_en">品牌</label>
+                     <label for="model_brand">品牌</label>
                      <select name="" id="" v-model="model.brand">
                         <option v-for="brand in ModelBrand" :key="brand" :value="brand">{{ brand }}</option>
+                     </select>
+                  </div>
+                  <div>
+                     <label for="model_type">類型</label>
+                     <select name="" id="" v-model="model.type">
+                        <option v-for="modelType in ModelType" :key="modelType" :value="modelType">{{ modelType }}</option>
                      </select>
                   </div>
                   <div>
@@ -144,7 +150,8 @@ import {
    SizeUnit,
    Ecommerce,
    Currency,
-   ModelBrand
+   ModelBrand,
+   ModelType
 } from "~/types/model"
 import {
    type CreatePurchaseInfoRequest

@@ -36,6 +36,7 @@ export enum ModelScale{
 export enum ModelType{
     戰車 = "戰車",
     飛機 = "飛機",
+    船艦 = "船艦",
     火炮 = "火炮",
     兵人 = "兵人",
     科幻 = "科幻",
