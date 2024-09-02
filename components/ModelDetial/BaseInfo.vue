@@ -32,6 +32,12 @@
                     </select>
                 </div>
                 <div>
+                     <label for="model_type">類型</label>
+                     <select name="" id="" v-model="editModel.type">
+                        <option v-for="modelType in ModelType" :key="modelType" :value="modelType">{{ modelType }}</option>
+                     </select>
+                  </div>
+                <div>
                     <label for="model_name_en">產品編號</label>
                     <input id="model_name_en" type="text" v-model="editModel.article_number">
                 </div>
@@ -49,7 +55,7 @@
 
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
-import { type Model, ModelStatus, ModelBrand } from "~/types/model"
+import { type Model, ModelStatus, ModelBrand, ModelType } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
 import { StorageBucket } from "~/types/supabase";
 const props = defineProps<{
