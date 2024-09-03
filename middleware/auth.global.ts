@@ -7,8 +7,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
   if (to.path.includes("MyModel") || to.path.includes("WishList")) {
     if (!user.value) {
       setOpenRouteGuardPanel(true)
-      return navigateTo('/')
+      return navigateTo('/login')
     }
   }
-  return navigateTo(from.fullPath)
+  return true
 });
