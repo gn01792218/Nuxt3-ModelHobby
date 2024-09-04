@@ -201,8 +201,8 @@ const main_img_file = ref<FileList | null>(null)
 const process_imgs_file_list = ref<FileList | null>(null)
 const gallery_imgs_file_list = ref<FileList | null>(null)
 
-onMounted(() => {
-   fetchMyModels()
+onMounted(async () => {
+   await fetchMyModels()
 })
 
 

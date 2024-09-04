@@ -65,6 +65,7 @@ const purchaseDateSelects = computed<string[] | Date[]>(()=>{
 
 const totalCoast = computed(()=>{
     let total =0
+    if(!myModelList.value) return
     myModelList.value.forEach((model:Model)=>{
         model.purchase_infos?.forEach(info=>{
             total += toTWD(info.currency, info.price, info.amount)
