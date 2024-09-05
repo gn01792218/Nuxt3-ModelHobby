@@ -1,6 +1,6 @@
 <template>
    <main>
-      <MyModelStatisticsBoard/>
+      <MyModelStatisticsBoard v-if="myModelList"/>
       <section class="w-full bg-acent-500 flex justify-end rounded-t-md p-1">
          <div>
             <UButton color="amber" variant="solid" @click="showAddModelPanel = !showAddModelPanel">
@@ -159,8 +159,8 @@ import {
 import { type ModelFinishInfo } from "~/types/finishInfo"
 import { StorageBucket } from "~/types/supabase"
 import { useMyModelStore } from '~/store/useMyModelStore'
-const { handleUploadMutipleImgs } = useUploadImage()
 
+const { handleUploadMutipleImgs } = useUploadImage()
 const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo, addMyModelFinishInfo } = useMyModelsAPI()
 const {
    myModelList,
@@ -202,7 +202,6 @@ const process_imgs_file_list = ref<FileList | null>(null)
 const gallery_imgs_file_list = ref<FileList | null>(null)
 
 await fetchMyModels()
-
 
 async function fetchAddMyModel() {
    setLoadingState(true)
