@@ -1,13 +1,13 @@
 <template>
    <main>
-      <MyModelStatisticsBoard />
-      <section class="w-full h-[100px] bg-acent-500 flex justify-start">
-         <div class="">
+      <MyModelStatisticsBoard/>
+      <section class="w-full bg-acent-500 flex justify-end rounded-t-md p-1">
+         <div>
             <UButton color="amber" variant="solid" @click="showAddModelPanel = !showAddModelPanel">
                <UIcon name="i-heroicons-plus-circle-16-solid" />
                添加模型
             </UButton>
-            <div class="bg-yellow-600 absolute p-5 z-[2]" v-show="showAddModelPanel">
+            <div class="bg-yellow-600 p-5 absolute z-[1] left-0" v-show="showAddModelPanel">
                <div>
                   <div>
                      <label for="model_name_zh">中文名稱</label>
@@ -201,9 +201,7 @@ const main_img_file = ref<FileList | null>(null)
 const process_imgs_file_list = ref<FileList | null>(null)
 const gallery_imgs_file_list = ref<FileList | null>(null)
 
-onMounted(async () => {
-   await fetchMyModels()
-})
+await fetchMyModels()
 
 
 async function fetchAddMyModel() {
