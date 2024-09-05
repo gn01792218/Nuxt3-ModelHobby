@@ -1,20 +1,22 @@
 <template>
     <section>
-        <header class="p-5 w-full bg-main flex flex-col flex-wrap items-center sm:flex-row sm:justify-between fixed z-[10]">
+        <header :class="[isScrolling? 'bg-main-500/50 transition-all ease-in duration-1000 text-main-200': 'bg-main']" class="p-5 w-full flex flex-col flex-wrap items-center sm:flex-row sm:justify-between fixed z-[10]">
             <NavBar />
             <div class="flex mt-2 sm:mt-0">
-                <SearchBar :search-sorce="allModelList" place-holder="全站模型搜尋"/>
+                <SearchBar :search-sorce="allModelList" place-holder="全站模型搜尋" />
                 <div v-if="user">
                     <p>歡迎 {{ user.user_metadata.full_name || user.user_metadata.display_name }}</p>
-                    <UButton class="flex items-center" label="Logout" icon="i-heroicons-user-16-solid" size="sm" color="gray" variant="outline" :trailing="false" @click="logout"/>
+                    <UButton class="flex items-center" label="Logout" icon="i-heroicons-user-16-solid" size="sm"
+                        color="gray" variant="outline" :trailing="false" @click="logout" />
                 </div>
-                <UButton v-else class="flex items-center" icon="i-heroicons-user" size="sm" color="primary" variant="solid" :trailing="false">
+                <UButton v-else class="flex items-center" icon="i-heroicons-user" size="sm" color="primary"
+                    variant="solid" :trailing="false">
                     <NuxtLink to="/login">Login</NuxtLink>
                 </UButton>
             </div>
         </header>
         <div class="w-full h-[140px] xs:h-[112px] sm:h-[72px]"></div>
-        <SwiperBase v-if="route.path === '/'" :slider-items="bannerItems"/>
+        <SwiperBase v-if="route.path === '/'" :slider-items="bannerItems" />
     </section>
 </template>
 
@@ -29,6 +31,21 @@ const { logout } = useAuth()
 
 //pinan資料取用
 const { allModelList, allfinishedModels } = storeToRefs(useMyModelStore())
+//基本資料
+const isScrolling = ref(false)
+
+onMounted(() => {
+    window.addEventListener('scroll', handleScrolling)
+})
+onBeforeUnmount(() => {
+    window.removeEventListener('scroll', handleScrolling)
+})
+
+//背景顏色
+function handleScrolling (){
+    if(window.scrollY > 10) isScrolling.value = true
+    else isScrolling.value = false
+} 
 
 //banner相關
 const bannerItems = computed(()=>{
