@@ -20,10 +20,7 @@
                   <div>
                      <label for="model_status">選擇狀態</label>
                      <select name="" id="" v-model="model.status">
-                        <option :value="ModelStatus.未入庫">未入庫</option>
-                        <option :value="ModelStatus.未組裝">未組裝</option>
-                        <option :value="ModelStatus.已組裝">已組裝</option>
-                        <option :value="ModelStatus.完成品">完成品</option>
+                        <option v-for="status, index in Object.keys(ModelStatus).filter(key => isNaN(Number(key)))" :key="status" :value="ModelStatus[status]">{{ ModelStatus[index] }}</option>
                      </select>
                   </div>
                   <div>
