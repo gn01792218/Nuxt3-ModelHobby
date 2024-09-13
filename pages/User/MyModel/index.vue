@@ -23,6 +23,7 @@
                         <option :value="ModelStatus.未入庫">未入庫</option>
                         <option :value="ModelStatus.未組裝">未組裝</option>
                         <option :value="ModelStatus.已組裝">已組裝</option>
+                        <option :value="ModelStatus.完成品">完成品</option>
                      </select>
                   </div>
                   <div>

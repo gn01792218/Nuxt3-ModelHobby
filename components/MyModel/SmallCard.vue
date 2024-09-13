@@ -6,6 +6,7 @@
         <p v-show="model.status === ModelStatus.已組裝">已組裝</p>
         <p v-show="model.status === ModelStatus.未入庫">未入庫</p>
         <p v-show="model.status === ModelStatus.未組裝">未組裝</p>
+        <p v-show="model.status === ModelStatus.完成品">完成品</p>
     </UCard>
 </template>
 

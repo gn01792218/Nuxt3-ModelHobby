@@ -53,7 +53,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     })
   );
   const thisMonthFinishedModels = computed(() => {
-    return myModelList.value?.filter((model) =>
+    return myModelList.value?.filter(model=> model.status !== ModelStatus.完成品).filter((model) =>
       model.finish_infos.some((info) =>
         isThisMoth(info.finished_date!, targetDate.value)
       )

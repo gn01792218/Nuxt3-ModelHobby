@@ -43,7 +43,7 @@ const {
     thisMonthPurchaseCoast
 } = storeToRefs(useMyModelStore())
 
-const { setOpenSearchPanel, setSearchResult, setTargetDate } = useMyModelStore()
+const { setOpenSearchPanel, setSearchResult, setTargetDate, setSearchModelType } = useMyModelStore()
 const { sortDateArray, formateDateYYYYMM } = useDate()
 const { toTWD } = useExchange()
 
@@ -75,6 +75,7 @@ const totalCoast = computed(()=>{
 })
 function openModelsDetailModal(models:Model[]){
     setOpenSearchPanel(true)
+    setSearchModelType(SearchModelType.MyModel)
     setSearchResult(models)
 }
 function onPurchaseDateChange(){
