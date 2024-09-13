@@ -11,10 +11,14 @@
                 </div>
             </template>
             <section v-if="searchResult.length" class="grid gap-2 grid-cols-3">
-               <MyModelSmallCard
+               <MyModelSmallCard v-show="searchModelType === SearchModelType.MyModel"
                 v-for="model in searchResult" :key="model.id"
                 :model="model"
                /> 
+               <MyModelGalleryCard v-show="searchModelType === SearchModelType.Gallery"
+               v-for="model in searchResult" :key="model.id"
+                :model="model"
+               />
             </section>
             <section class="h-[200px] flex justify-center items-center" v-else>
                 <p>沒有尋找到東西...</p>
@@ -25,7 +29,9 @@
 
 <script setup lang="ts">
 import { useMyModelStore } from "~/store/useMyModelStore"
+import { SearchModelType } from "~/types/model";
 
 const { setOpenSearchPanel } = useMyModelStore()
+const { searchModelType } = storeToRefs(useMyModelStore())
 const { openSearchPanel, searchResult } = storeToRefs(useMyModelStore())
 </script>

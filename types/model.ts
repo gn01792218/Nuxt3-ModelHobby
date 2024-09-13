@@ -57,6 +57,10 @@ export enum Ecommerce{
     露天 = "露天",
     實體店面 = "實體店面"
 }
+export enum SearchModelType{
+    Gallery,
+    MyModel
+}
 export declare interface ModelSize{
     unit:SizeUnit,
     width:number,

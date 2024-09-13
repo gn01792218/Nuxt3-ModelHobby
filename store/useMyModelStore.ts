@@ -1,4 +1,4 @@
-import { type Model, ModelStatus } from "../types/model";
+import { type Model, ModelStatus, SearchModelType } from "../types/model";
 
 // 使用composition API模式定义store
 export const useMyModelStore = defineStore("MyMOdelsStore", () => {
@@ -16,6 +16,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     openImgPanel: false,
     searchResult: [],
     targetDate: formateDateYYYYMM(new Date(), "-"),
+    searchModelType: SearchModelType.Gallery,
   };
 
   //state
@@ -29,6 +30,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const openImgPanel = ref(initState.openImgPanel);
   const searchResult = ref<Model[]>(initState.searchResult);
   const targetDate = ref<Date | string>(initState.targetDate);
+  const searchModelType = ref<SearchModelType>(initState.searchModelType);
 
   //gatters
   const currentModel = computed(() =>
@@ -100,6 +102,9 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   function setmyModelList(payload: Model[]) {
     myModelList.value = payload;
   }
+  function setSearchModelType(payload: SearchModelType) {
+    searchModelType.value = payload;
+  }
   function addModel(payload: Model) {
     myModelList.value.push(payload);
   }
@@ -154,6 +159,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     openRouteGuardPanel,
     openImgPanel,
     searchResult,
+    searchModelType,
     targetDate,
     //methods
     setAllModelList,
@@ -168,5 +174,6 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     setOpenImgPanel,
     setSearchResult,
     setTargetDate,
+    setSearchModelType
   };
 });

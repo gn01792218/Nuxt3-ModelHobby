@@ -8,18 +8,20 @@
 
 <script setup lang="ts">
 import { useMyModelStore } from "~/store/useMyModelStore"
-import { type Model } from "~/types/model"
+import { SearchModelType, type Model } from "~/types/model"
 const props = defineProps<{
     searchSorce: Model[],
-    placeHolder:string
+    placeHolder:string,
+    searchType:SearchModelType
 }>()
 
 //搜尋相關
-const { setOpenSearchPanel, setSearchResult } = useMyModelStore()
+const { setOpenSearchPanel, setSearchResult, setSearchModelType } = useMyModelStore()
 const { converTradictionalToSimple } = useChinessConverter()
 const keyword = ref('')
 function search() {
     setOpenSearchPanel(true)
+    setSearchModelType(props.searchType)
     setSearchResult(
         props.searchSorce.filter((model:Model) => {
             if (!keyword.value) return false

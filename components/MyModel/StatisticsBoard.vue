@@ -5,7 +5,7 @@
         <p>未入庫:{{ unStockInModels.length }}個</p>
         <p>未組裝:{{ unFinishedModels.length }}個</p>
         <p>已組裝:{{ finishedModels.length }}個</p>
-        <SearchBar class="mt-3" :search-sorce="myModelList" place-holder="個人模型搜尋"/>
+        <SearchBar class="mt-3" :search-sorce="myModelList" :search-type="SearchModelType.MyModel" place-holder="個人模型搜尋"/>
     </div>
     <UDivider>
         <p class="text-white">{{ purchaseDate }} 統計資訊</p>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { type Model } from '~/types/model'
+import { SearchModelType, type Model } from '~/types/model'
 import { useMyModelStore } from '~/store/useMyModelStore'
 import type { PurchaseInfo } from '~/types/purchaseInfo';
 const {

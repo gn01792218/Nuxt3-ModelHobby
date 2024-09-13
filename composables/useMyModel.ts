@@ -1,6 +1,6 @@
 import { useMyModelStore } from "~/store/useMyModelStore"
 export default () => {
-  const { setCurrentModelId } = useMyModelStore()
+  const { setCurrentModelId, setOpenSearchPanel } = useMyModelStore()
 
   //導航
   function navergateToMyModelDetial(id:number) {
@@ -9,6 +9,7 @@ export default () => {
   }
   function navergateToGallery(id:number) {
     setCurrentModelId(id)
+    setOpenSearchPanel(false)
     navigateTo(`/Gallery/${id}`)
   }
 
