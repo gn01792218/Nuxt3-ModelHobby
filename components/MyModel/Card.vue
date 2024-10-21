@@ -7,8 +7,8 @@
     </template>
     <div>
       <div class="w-full h-200px md:h-[250px] cursor-pointer object-contain flex justify-center" @click="navergateToMyModelDetial(modelData.id)">
-        <NuxtImg :modifiers="{rotate: null}" format="webp" sizes="266px md:300px" v-if="modelData.main_img" :src="getModelImagePublicUrl(modelData.main_img)"/>
-        <NuxtImg v-else :modifiers="{rotate: null}" src="/imagePlaceHolder.jpg" sizes="266px md:300px" format="webp" alt="沒有上傳圖片"/>
+        <NuxtImg v-if="modelData.main_img" loading="lazy" :modifiers="{rotate: null}" format="webp" sizes="266px md:300px"  :src="getModelImagePublicUrl(modelData.main_img)"/>
+        <NuxtImg v-else loading="lazy" :modifiers="{rotate: null}" src="/imagePlaceHolder.jpg" sizes="266px md:300px" format="webp" alt="沒有上傳圖片"/>
       </div>
       <p class="text-sm text-gray-500 text-right">類型 : {{ modelData.type }}</p>
     </div>

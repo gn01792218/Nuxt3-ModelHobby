@@ -19,5 +19,8 @@ export default defineNuxtConfig({
     dir: "assets/images", //設置靜態圖片資源的資料夾；使用時直接src="/cat.png"即可
     quality: 90, // 设置預設压缩质量为 ?%
     domains: [process.env.SUPABASE_URL || ""], //外部網址的圖片，都需要設置這個
+    defaults:{
+      loading:'lazy' //全部圖片都懶加載
+    }
   },
 });
