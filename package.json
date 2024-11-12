@@ -26,6 +26,7 @@
     "@nuxt/ui": "^2.14.2",
     "@pinia/nuxt": "^0.5.1",
     "@prisma/client": "^5.15.0",
+    "browser-image-compression": "^2.0.2",
     "nuxt-swiper": "^1.2.2",
     "opencc-js": "^1.0.5",
     "pinia": "^2.1.7"

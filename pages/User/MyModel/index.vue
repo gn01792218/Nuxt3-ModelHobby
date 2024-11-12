@@ -42,7 +42,7 @@
                   <div>
                      <label for="model_main_img">封面圖片</label>
                      <input type="file" id="model_main_img"
-                        @change="(e) => main_img_file = handleUploadMutipleImgs(e, toRef(preview_main_Img))">
+                        @change="async (e) => main_img_file =await handleUploadMutipleImgs(e, toRef(preview_main_Img))">
                      <NuxtImg v-show="preview_main_Img[0]" format="webp" width="200" :src="preview_main_Img[0]"
                         alt="預覽圖" />
                   </div>
@@ -110,8 +110,8 @@
                      </div>
                      <div>
                         <label for="model_process_imgs">製作圖片</label>
-                        <input type="file" id="model_process_imgs" @change="(e) => {
-                           process_imgs_file_list = handleUploadMutipleImgs(e, ref(previewProcessImgs))
+                        <input type="file" id="model_process_imgs" @change="async (e) => {
+                           process_imgs_file_list =await handleUploadMutipleImgs(e, ref(previewProcessImgs))
                            previewProcessImgs.length = 0
                         }" multiple>
                         <div v-for="img in previewProcessImgs" :key="img">
@@ -120,8 +120,8 @@
                      </div>
                      <div>
                         <label for="model_finished_imgs">完成圖片</label>
-                        <input type="file" id="model_finished_imgs" @change="(e) => {
-                           gallery_imgs_file_list = handleUploadMutipleImgs(e, ref(previewGalleryImgs))
+                        <input type="file" id="model_finished_imgs" @change="async (e) => {
+                           gallery_imgs_file_list =await handleUploadMutipleImgs(e, ref(previewGalleryImgs))
                            previewGalleryImgs.length = 0
                         }" multiple>
                         <div v-for="img in previewGalleryImgs" :key="img">

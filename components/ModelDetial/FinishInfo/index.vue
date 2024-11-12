@@ -28,11 +28,11 @@
             <button class="mr-2" @click="processUpdateFinishInfo(finish_info)">修改</button>
             <button @click="fetchDeleteFinishInfo(finish_info.id)">刪除</button>
         </div>
+        <ModelDetialFinishInfoUpdate :is-open="openUpdatePanel" :model-id="modelId" :finish-info="finish_info"
+            @close="openUpdatePanel = false"  @success="onUpdateFinishInfoSuccess" />
     </section>
-    <ModelDetialFinishInfoCreateModal :is-open="openCreatePanel" :model-id="modelId"
+    <ModelDetialFinishInfoCreate :is-open="openCreatePanel" :model-id="modelId"
         @close="openCreatePanel = false" @success="onCreateFinishInfoSuccess" />
-    <ModelDetialFinishInfoUpdateModal :is-open="openUpdatePanel" :model-id="modelId" :finish-info="updateFinishInfo"
-        @close="openUpdatePanel = false"  @success="onUpdateFinishInfoSuccess" />
 </template>
 
 <script setup lang="ts">

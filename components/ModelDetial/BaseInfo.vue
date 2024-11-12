@@ -2,8 +2,8 @@
 <template>
     <section>
         <section>
-            <NuxtImg :modifiers="{rotate: null}" format="webp" width="300" :src="getModelImagePublicUrl(currentModel.main_img || '')"/>
-            <p>品牌 : {{ currentModel.brand }} ({{ currentModel.article_number }})</p>
+            <NuxtImg :modifiers="{rotate: null}" format="webp" width="300" :src="getModelImagePublicUrl(currentModel?.main_img || '')"/>
+            <p>品牌 : {{ currentModel?.brand }} ({{ currentModel?.article_number }})</p>
             <p class="text-3xl font-extrabold">{{ currentModel?.name_zh }}</p>
             <p class="text-2xl">{{ currentModel?.name_en }}</p>
         </section>
@@ -41,7 +41,7 @@
                 </div>
                 <div>
                     <label for="model_main_img">封面圖片</label>
-                    <input type="file" id="model_main_img" @change="(e)=> main_img_file = handleUploadMutipleImgs(e, ref(previewImg))">
+                    <input type="file" id="model_main_img" @change="async (e)=> main_img_file =await handleUploadMutipleImgs(e, ref(previewImg))">
                     <NuxtImg v-show="previewImg[0]" format="webp" width="200" :src="previewImg[0]" alt="預覽圖"/>
                 </div>
                 <button v-show="currentModel" class="mr-5" @click="fetchUpdateModel">確認修改</button>
@@ -74,7 +74,7 @@ const showEditPanel = ref(false)
 const editModel = ref<Model>({
     ...currentModel.value,
 })
-const previewImg = ref<string[]>([getModelImagePublicUrl(currentModel.value.main_img!)])
+const previewImg = ref<string[]>([getModelImagePublicUrl(currentModel.value?.main_img!)])
 const main_img_file = ref<FileList | null>(null)
 
 async function fetchUpdateModel() {
@@ -82,7 +82,7 @@ async function fetchUpdateModel() {
     //上傳圖片到supabase storage中, 並獲取要存於DB的路徑string
     if(main_img_file.value){ //假如有上傳圖片的話
         //假如原本有圖片，先刪除
-        if (currentModel.value?.main_img) removeImageFromSupabaseStorage(StorageBucket.images, currentModel.value.main_img)
+        if (currentModel.value?.main_img) removeImageFromSupabaseStorage(StorageBucket.images, currentModel.value?.main_img)
 
         const imgs = await uploadMultipleImagesToSupabaseStorage(main_img_file.value, {
             bucketName: StorageBucket.images,

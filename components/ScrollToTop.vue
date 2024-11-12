@@ -13,7 +13,6 @@ const isVisible = ref(false);
 
 const handleScroll = () => {  
   isVisible.value = window.scrollY > 250; // 阈值，可以根据需要调整  
-  console.log(isVisible.value)
 };  
 
 const scrollToTop = () => {  

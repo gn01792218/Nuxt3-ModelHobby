@@ -17,25 +17,7 @@ export default () => {
   function getFinishImagePublicUrl(imgDbPaath: string) {
     return `${supabaseBaseUrl}/storage/v1/object/public/model_finish_info_images/${imgDbPaath}?version=${RequestCacheControlTime}`;
   }
-  async function uploadImageToSpabaseStorage(
-    img: File,
-    option: UploadImageToSupabaseOption
-  ): Promise<string> {
-    const { modelId, fileNameTitle, bucketName } = option;
-    if (!img) return "";
-
-    const fileName = `${fileNameTitle}_modelId_${modelId}_${crypto.randomUUID()}`;
-    const { data, error } = await supabase.storage
-      .from(bucketName)
-      .upload(`public/${fileName}`, img, uploadImageOption);
-    if (error)
-      throw createError({
-        ...error,
-        message: "無法上傳圖片",
-      });
-    return data.path;
-  }
-  async function uploadMultipleImagesToSupabaseStorage(
+  async function uploadMultipleImagesToSupabaseStorage( //傳一張的也用這個就好了
     imgs: File[],
     option: UploadImageToSupabaseOption
   ): Promise<any[]> {
@@ -67,7 +49,6 @@ export default () => {
     //methods
     getModelImagePublicUrl,
     getFinishImagePublicUrl,
-    uploadImageToSpabaseStorage,
     uploadMultipleImagesToSupabaseStorage,
     removeImageFromSupabaseStorage,
   };

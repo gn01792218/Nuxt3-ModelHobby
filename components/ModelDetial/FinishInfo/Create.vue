@@ -15,7 +15,7 @@
             <div>
                 <label for="model_process_imgs">製作圖片</label>
                 <input type="file" id="model_process_imgs"
-                    @change="(e) => handleLoadProcessImgsFileList(e, previewProcessImgs)" multiple>
+                    @change="async (e) =>await handleLoadProcessImgsFileList(e, previewProcessImgs)" multiple>
                 <div v-for="img, index in previewProcessImgs" :key="img">
                     <NuxtImg :modifiers="{rotate: null}" format="webp" width="200" :src="img" alt="預覽圖"/>
                     <UButton icon="i-heroicons-trash-solid" size="sm" color="red" variant="solid" :trailing="false"
@@ -25,7 +25,7 @@
             <div>
                 <label for="model_finished_imgs">完成圖片</label>
                 <input type="file" id="model_finished_imgs"
-                    @change="(e) => handleLoadGallaryImgsFileList(e, previewGalleryImgs)" multiple>
+                    @change="async (e) =>await handleLoadGallaryImgsFileList(e, previewGalleryImgs)" multiple>
                 <div v-for="img, index in previewGalleryImgs" :key="img">
                     <NuxtImg :modifiers="{rotate: null}" format="webp" width="200" :src="img" alt="預覽圖"/>
                     <UButton icon="i-heroicons-trash-solid" size="sm" color="red" variant="solid" :trailing="false"
@@ -44,7 +44,6 @@
 import { useMyModelStore } from '~/store/useMyModelStore';
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { StorageBucket } from "~/types/supabase";
-import type { CreateFinishInfoRequest } from '~/types/finishInfo';
 
 const emit = defineEmits(['success', 'close'])
 const props = defineProps<{
@@ -53,25 +52,23 @@ const props = defineProps<{
 }>()
 
 const { setLoadingState } = useMyModelStore()
-const { handleUploadMutipleImgs } = useUploadImage()
+const { 
+    finishInfo,
+    previewProcessImgs,
+    previewGalleryImgs,
+    deleteProcessImgs,
+    deleteGalleryImgs,
+    process_imgs_file_list, 
+    gallery_imgs_file_list ,
+    handleLoadProcessImgsFileList, 
+    handleLoadGallaryImgsFileList,
+    deleteProcessUploadImg,
+    deleteGalleryUploadImg
+} = useMyModelImg()
 const { addMyModelFinishInfo } = useMyModelsAPI()
 const { getFinishImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
 
 const isOpen = computed(() => props.isOpen)
-
-const finishInfo = ref<CreateFinishInfoRequest>({
-    process_imgs:[],
-    gallery:[]
-})
-
-const previewProcessImgs = ref<string[]>([])
-const previewGalleryImgs = ref<string[]>([])
-
-const process_imgs_file_list = ref<File[]>([])
-const gallery_imgs_file_list = ref<File[]>([])
-
-const deleteProcessImgs = ref<string[]>([])
-const deleteGalleryImgs = ref<string[]>([])
 
 function resetData(){
     finishInfo.value = {
@@ -112,32 +109,5 @@ async function fetchUploadImageToSupabaseStorage() {
         newImgUrls.forEach(imgUrl => finishInfo.value.gallery?.push(imgUrl))
         gallery_imgs_file_list.value.length = 0 //釋放圖片資源
     } 
-}
-
-function handleLoadProcessImgsFileList(e: Event, previewImgs: string[]) {
-    const newUploadFiles = Array.from(handleUploadMutipleImgs(e, ref(previewImgs))!)
-    newUploadFiles.forEach(file => process_imgs_file_list.value.push(file))
-}
-function handleLoadGallaryImgsFileList(e: Event, previewImgs: string[]) {
-    const newUploadFiles = Array.from(handleUploadMutipleImgs(e, ref(previewImgs))!)
-    newUploadFiles.forEach(file => gallery_imgs_file_list.value.push(file))
-}
-function deleteProcessUploadImg(index: number) {
-    process_imgs_file_list.value.splice(index, 1) //splice會直接改變原本數組
-    previewProcessImgs.value.splice(index, 1)
-    //假設要刪除的存在於原本的圖檔內，也要記得要刪除
-    if (!finishInfo.value?.process_imgs?.length) return //原本沒圖片直接離開
-    if (!finishInfo.value.process_imgs[index]) return  //原本的沒有這張圖片，也離開
-    deleteProcessImgs.value?.push(finishInfo.value.process_imgs[index]) //把要刪除的圖片儲存起來，按下確定後，再刪除
-    finishInfo.value.process_imgs.splice(index, 1) //將圖片剃除於原本的陣列
-}
-function deleteGalleryUploadImg(index: number) {
-    gallery_imgs_file_list.value.splice(index, 1) //splice會直接改變原本數組
-    previewGalleryImgs.value.splice(index, 1)
-    //假設要刪除的存在於原本的圖檔內，也要記得要刪除
-    if (!finishInfo.value?.gallery?.length) return //原本沒圖片直接離開
-    if (!finishInfo.value.gallery[index]) return  //原本的沒有這張圖片，也離開
-    deleteGalleryImgs.value?.push(finishInfo.value.gallery[index]) //把要刪除的圖片儲存起來，按下確定後，再刪除
-    finishInfo.value.gallery.splice(index, 1) //將圖片剃除於原本的陣列
 }
 </script>
