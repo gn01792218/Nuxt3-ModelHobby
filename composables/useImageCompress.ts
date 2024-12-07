@@ -4,7 +4,8 @@ export default () => {
     console.log("originalFile instanceof Blob", imgFile instanceof Blob); // true
     console.log(`originalFile size ${imgFile.size / 1024 / 1024} MB`);
     const options = {
-      maxSizeMB: 0.5,
+      maxSizeMB: 1,
+      initialQuality:1, //品質參數
       maxWidthOrHeight: 1920,
       useWebWorker: true,
     };
