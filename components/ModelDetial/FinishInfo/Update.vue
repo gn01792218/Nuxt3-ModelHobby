@@ -28,6 +28,7 @@
                     @change="async (e) =>await handleLoadGallaryImgsFileList(e, previewGalleryImgs)" multiple>
                 <div v-for="img, index in previewGalleryImgs" :key="img">
                     <NuxtImg :modifiers="{rotate: null}" format="webp" width="200" :src="img" alt="預覽圖"/>
+                    
                     <UButton icon="i-heroicons-trash-solid" size="sm" color="red" variant="solid" :trailing="false"
                         @click="deleteGalleryUploadImg(index)" />
                 </div>
@@ -65,9 +66,8 @@ const {
     handleLoadProcessImgsFileList, 
     handleLoadGallaryImgsFileList,
     deleteProcessUploadImg,
-    deleteGalleryUploadImg
+    deleteGalleryUploadImg,
  } = useMyModelImg()
-
 const { handleUploadMutipleImgs } = useUploadImage()
 const { updateMyModelFinishInfo } = useMyModelsAPI()
 const { getFinishImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
@@ -75,8 +75,6 @@ const { getFinishImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeIm
 const isOpen = computed(() => props.isOpen)
 onMounted(()=>{
     finishInfo.value = props.finishInfo!
-    console.log('外傳',props.finishInfo)
-    console.log('設置finishInfo', finishInfo.value)
 })
 
 watch(() => props.finishInfo, () => {  //更新previewImg
