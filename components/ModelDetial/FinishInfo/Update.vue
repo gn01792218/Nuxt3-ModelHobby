@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { useMyModelStore } from '~/store/useMyModelStore';
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
-import { StorageBucket } from "~/types/supabase";
+import { StorageBucket } from "~/types/storage";
 import type { UpdateFinishInfoRequest, ModelFinishInfo } from '~/types/finishInfo';
 
 const emit = defineEmits(['success', 'close'])
@@ -67,10 +67,11 @@ const {
     handleLoadGallaryImgsFileList,
     deleteProcessUploadImg,
     deleteGalleryUploadImg,
+    getModelFinishImagePublicUrl
  } = useMyModelImg()
-const { handleUploadMutipleImgs } = useUploadImage()
+
 const { updateMyModelFinishInfo } = useMyModelsAPI()
-const { getFinishImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
+const { uploadMultipleImagesToS3, removeImageFromS3Storage } = useS3()
 
 const isOpen = computed(() => props.isOpen)
 onMounted(()=>{
@@ -79,8 +80,8 @@ onMounted(()=>{
 
 watch(() => props.finishInfo, () => {  //更新previewImg
     if(!props.finishInfo) return alert('注意:沒有更新資料')
-    if(props.finishInfo.process_imgs?.length) previewProcessImgs.value = props.finishInfo.process_imgs.map(img=> getFinishImagePublicUrl(img))
-    if(props.finishInfo.gallery?.length) previewGalleryImgs.value = props.finishInfo.gallery.map(img=>getFinishImagePublicUrl(img))
+    if(props.finishInfo.process_imgs?.length) previewProcessImgs.value = props.finishInfo.process_imgs.map(img=> getModelFinishImagePublicUrl(img))
+    if(props.finishInfo.gallery?.length) previewGalleryImgs.value = props.finishInfo.gallery.map(img=>getModelFinishImagePublicUrl(img))
 },{immediate:true})
 
 async function fetchUpdateFinishInfo() {
@@ -94,12 +95,12 @@ async function fetchUpdateFinishInfo() {
 async function fetchUploadImageToSupabaseStorage() {
     if(!props.finishInfo) return 
     //先處理要被刪除的圖片
-    if (deleteProcessImgs.value.length) deleteProcessImgs.value.forEach(url => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, url))
-    if (deleteGalleryImgs.value.length) deleteGalleryImgs.value.forEach(url => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, url))
+    if (deleteProcessImgs.value.length) deleteProcessImgs.value.forEach(url => removeImageFromS3Storage({ bucketName: StorageBucket.model_finish_info_images, url}))
+    if (deleteGalleryImgs.value.length) deleteGalleryImgs.value.forEach(url => removeImageFromS3Storage({ bucketName: StorageBucket.model_finish_info_images, url}))
     //再看看有沒有要新上傳  的圖片
     const promises:Promise<string[]>[] = []
     if (process_imgs_file_list.value?.length) {
-        promises.push(uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value, {
+        promises.push(uploadMultipleImagesToS3(process_imgs_file_list.value, {
             bucketName: StorageBucket.model_finish_info_images,
             modelId: props.modelId!,
             fileNameTitle: 'model_process_img'
@@ -107,7 +108,7 @@ async function fetchUploadImageToSupabaseStorage() {
     }else promises.push(new Promise((res)=>res([])))
 
     if (gallery_imgs_file_list.value?.length) {
-        promises.push(uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value, {
+        promises.push(uploadMultipleImagesToS3(gallery_imgs_file_list.value, {
             bucketName: StorageBucket.model_finish_info_images,
             modelId: props.modelId!,
             fileNameTitle: 'model_gallery_img'

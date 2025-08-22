@@ -76,6 +76,15 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 
 # Search icons
 https://icones.js.org/collection/heroicons
+# 專案初始化
+## 環境變數設置
+請添加一個.env檔案</br>
+1.資料庫相關</br>
+DATABASE_URL、SUPABASE_URL、SUPABASE_KEY</br>
+2.S3圖片相關</br>
+R2_ENDPOINT、R2_ACCESS_KEY_ID、R2_SECRET_ACCESS_KEY</br>
+3.圖片插件需要
+NUXT_IMAGE_PROVIDER=ipx 即可
 
 # 使用Netilfy進行本地開發
 ## 先安裝Netilfy Cli

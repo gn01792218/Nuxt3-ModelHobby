@@ -1,7 +1,7 @@
 <template>
     <UCard class="cursor-pointer bg-main-400"  @click="gottoItem(model.id)">
         <p>{{ model.name_zh }}</p>
-        <NuxtImg v-if="model.main_img" loading="lazy" format="webp"  :modifiers="{rotate: null}"  class="w-full md:h-full" width="300" :src="getModelImagePublicUrl(model.main_img)"/>
+        <NuxtImg v-if="model.main_img" loading="lazy" format="webp"  :modifiers="{rotate: null}"  class="w-full md:h-full" width="300" :src="getModelMainImagePublicUrl(model.main_img)"/>
         <NuxtImg v-else loading="lazy" :modifiers="{rotate: null}" src="/imagePlaceHolder.jpg" format="webp" alt="沒有上傳圖片"/>
         <p v-show="model.status === ModelStatus[status]" v-for="status in Object.keys(ModelStatus)" :key="status">{{ status }}</p>
     </UCard>
@@ -15,7 +15,7 @@ defineProps<{
     model:Model,
 }>()
 
-const { getModelImagePublicUrl } = useSupabase()
+const { getModelMainImagePublicUrl } = useMyModelImg()
 const { setOpenSearchPanel } = useMyModelStore()
 const { navergateToMyModelDetial } = useMyModel()
 

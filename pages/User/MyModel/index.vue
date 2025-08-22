@@ -155,7 +155,7 @@ import {
    type CreatePurchaseInfoRequest
 } from "~/types/purchaseInfo"
 import { type ModelFinishInfo } from "~/types/finishInfo"
-import { StorageBucket } from "~/types/supabase"
+import { StorageBucket } from "~/types/storage"
 import { useMyModelStore } from '~/store/useMyModelStore'
 
 const { handleUploadMutipleImgs } = useUploadImage()
@@ -169,8 +169,9 @@ const {
 
 const { setLoadingState } = useMyModelStore()
 const { fetchMyModels } = useFetchMyModels()
-const { uploadMultipleImagesToSupabaseStorage } = useSupabase()
+const { uploadMultipleImagesToS3, removeImageFromS3Storage } = useS3()
 const { user } = useUser()
+const { sendToast } = useMyToast()
 
 const showAddModelPanel = ref(false)
 const modelSize = ref<ModelSize>({
@@ -185,7 +186,10 @@ const modelPurchaseInfo = ref<CreatePurchaseInfoRequest>({
    price: 0,
    amount: 1
 })
-const modelFinishInfo: ModelFinishInfo = ({})
+const modelFinishInfo = ref<Partial<ModelFinishInfo>>({
+   process_imgs: [],
+   gallery: []
+})
 const model: Model = {
    status: ModelStatus.未入庫,
    name_zh: '',
@@ -205,18 +209,39 @@ async function fetchAddMyModel() {
    setLoadingState(true)
    if (!user.value) return alert('請先登入會員')
    //先處理圖片
-   await processGetUploadImages()
+   const {main_img, process_imgs, gallery} = await processGetUploadImages()
    model.userId = user.value?.id //紀錄userId
-   const myModel = await addMyModel(model)
-   if (!myModel.id) return alert('出問題了')
+   let myModel:Model | null = null
+   try{
+      myModel = await addMyModel(model)
+   }catch{
+      sendToast({
+      title: 'error',
+      description: '添加模型失敗，請稍後再試'
+      })
+      removeImageFromS3Storage({bucketName: StorageBucket.images, url:main_img})
+      process_imgs.forEach((img:string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url:img}))
+      gallery.forEach((img:string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url:img}))
+   }
+   if(!myModel) return 
    //添加尺寸
    const size = addMyModelsSize(myModel.id, modelSize.value)
    //添加購買明細
    const purchaseInfo = addMyModelPurchaseInfo(myModel.id, modelPurchaseInfo.value)
+   await Promise.allSettled([size, purchaseInfo])
    //添加完成資訊
-   const finishedInfo = addMyModelFinishInfo(myModel.id, modelFinishInfo)
+   try{
+      await addMyModelFinishInfo(myModel.id, modelFinishInfo.value)
+   }catch{
+      //沒能成功添加finishInfo時刪除圖片
+      sendToast({
+      title: 'error',
+      description: '添加完成資訊失敗，請稍後再試'
+      })
+      process_imgs.forEach((img:string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url:img}))
+      gallery.forEach((img:string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url:img}))
+   }
    //等待全部完成
-   await Promise.allSettled([size, purchaseInfo, finishedInfo])
    //重新拉取資料
    await fetchMyModels()
    //reset
@@ -228,27 +253,28 @@ async function fetchAddMyModel() {
    setLoadingState(false)
 }
 async function processGetUploadImages() {
-   const mainImgs: Promise<string[]> = uploadMultipleImagesToSupabaseStorage(main_img_file.value!, {
+   const mainImgs =await  uploadMultipleImagesToS3(main_img_file.value!, {
       bucketName: StorageBucket.images,
       modelId: -1,
       fileNameTitle: 'model_main_img'
    })
-   const processImgs: Promise<string[]> = uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value!, {
+   const processImgs =await uploadMultipleImagesToS3(process_imgs_file_list.value!, {
       bucketName: StorageBucket.model_finish_info_images,
       modelId: -1,
       fileNameTitle: 'model_process_img'
    })
-   const gallery: Promise<string[]> = uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value!, {
+   const gallery =await uploadMultipleImagesToS3(gallery_imgs_file_list.value!, {
       bucketName: StorageBucket.model_finish_info_images,
       modelId: -1,
       fileNameTitle: 'model_gallery_img'
    })
-   const imgsRes = await Promise.all([mainImgs, processImgs, gallery])
 
    //獲取圖片路徑
-   model.main_img = imgsRes[0][0]
-   modelFinishInfo.process_imgs = imgsRes[1]
-   modelFinishInfo.gallery = imgsRes[2]
+   model.main_img = mainImgs[0]
+   modelFinishInfo.value.process_imgs = processImgs
+   modelFinishInfo.value.gallery = gallery
+
+   return {main_img: model.main_img as string, process_imgs: modelFinishInfo.value.process_imgs as string[], gallery: modelFinishInfo.value.gallery as string[]}
 }
 
 function resetAllUploadImageProcess() {

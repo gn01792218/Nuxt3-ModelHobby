@@ -7,10 +7,11 @@ export default () => {
   const { sendToast } = useMyToast()
 
   async function fetchApiBase(url:string, method:'post' | 'get' | 'delete' | 'patch' | 'put',body?: any): Promise<any> {
+    const isFormData = body instanceof FormData;
     const { data, error } = await useFetch(url, {
       baseURL:apiBaseUrl,
       method,
-      body:JSON.stringify(body)
+      body:isFormData ? body : JSON.stringify(body)
     });
     if (error.value) {
       sendToast({ 

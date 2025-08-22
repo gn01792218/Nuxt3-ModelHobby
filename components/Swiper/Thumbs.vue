@@ -13,7 +13,7 @@
         }" 
         :spaceBetween="10">
         <SwiperSlide class="relative" v-for="slide in sliderItems" :key="slide" @click="processOpenImgPanel()">
-            <NuxtImg :modifiers="{rotate: null}" class="w-full h-full object-contain" format="webp" sizes="250px md:400px" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
+            <NuxtImg :modifiers="{rotate: null}" class="w-full h-full object-contain" format="webp" sizes="250px md:400px" :src="getModelFinishImagePublicUrl(slide)" :alt="slide"/>
         </SwiperSlide>
     </Swiper>
     <Swiper class="border-2 w-full h-[87px] max-w-[1280px] sm:h-[150px] md:h-[200px] swiper-thumbs "
@@ -25,7 +25,7 @@
         :freeMode="true" 
         :watchSlidesProgress="true">
         <SwiperSlide class="relative cursor-pointer" v-for="slide in sliderItems" :key="slide">
-            <NuxtImg class="w-full h-full opacity-50 hover:opacity-100" format="webp" sizes="87px sm:150px md:200px" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
+            <NuxtImg class="w-full h-full opacity-50 hover:opacity-100" format="webp" sizes="87px sm:150px md:200px" :src="getModelFinishImagePublicUrl(slide)" :alt="slide"/>
         </SwiperSlide>
     </Swiper>
     <UModal class="w-full flex items-center" v-model="openImgPanel" 
@@ -55,7 +55,7 @@
             :autoHeight="true"
             >
             <SwiperSlide class="w-full h-full" v-for="slide in sliderItems" :key="slide">
-                <NuxtImg :modifiers="{rotate: null}" :placeholder= "15" class="w-full h-full object-contain" format="webp" sizes="400px md:672px" :quality="100" :src="getFinishImagePublicUrl(slide)" :alt="slide"/>
+                <NuxtImg :modifiers="{rotate: null}" :placeholder= "15" class="w-full h-full object-contain" format="webp" sizes="400px md:672px" :quality="100" :src="getModelFinishImagePublicUrl(slide)" :alt="slide"/>
             </SwiperSlide>
         </Swiper>
     </UModal>
@@ -66,7 +66,7 @@ defineProps<{
     sliderItems: string[]
 }>()
 
-const { getFinishImagePublicUrl } = useSupabase()
+const { getModelFinishImagePublicUrl } = useMyModelImg()
 const { 
     openImgPanel, 
     thumbsSwiper, 

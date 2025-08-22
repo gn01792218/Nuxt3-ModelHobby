@@ -16,7 +16,7 @@
     }"
   >
     <SwiperSlide class="h-full relative cursor-pointer" v-for="slide in sliderItems" :key="slide.id" @click="handleClick(slide.id)">
-      <NuxtImg class="w-full" format="webp" width="300" :src="getFinishImagePublicUrl(slide.finish_infos[0].gallery[0])" :alt="slide.name_zh"/>
+      <NuxtImg class="w-full" format="webp" width="300" :src="getModelFinishImagePublicUrl(slide.finish_infos[0].gallery[0])" :alt="slide.name_zh"/>
       <div class="w-[300px] flex justify-center absolute top-1/2 translate-y-[-50%] right-1/2 translate-x-[50%] opacity-70 bg-primary-900 py-2 px-5 rounded-md hover:opacity-90">
         <p class="text-white text-overflow-ellipsis">{{ slide.name_zh }}</p>
       </div>
@@ -30,7 +30,7 @@ defineProps<{
   sliderItems:Model[]
 }>()
 
-const { getFinishImagePublicUrl } = useSupabase()
+const { getModelFinishImagePublicUrl } = useMyModelImg()
 const { navergateToGallery } = useMyModel()
 
 const usePagination = {

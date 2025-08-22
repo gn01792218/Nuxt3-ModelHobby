@@ -17,19 +17,11 @@ import { useMyModelStore } from '~/store/useMyModelStore';
 const modelId = Number(useRoute().params.modelId)
 const { currentModel } = storeToRefs(useMyModelStore())
 const { setCurrentModelId } = useMyModelStore()
-// const { overrideSupabaseStorageImg, getFinishImagePublicUrl, getModelImagePublicUrl } = useSupabase()
 
 initModelDetial()
 async function initModelDetial() {
     if (!currentModel.value) setCurrentModelId(modelId)
+    console.log(currentModel.value)
 }
-// function allImageToWebp(){
-//     //1.處理主照片
-//     if(currentModel.value?.main_img) overrideSupabaseStorageImg(currentModel.value?.main_img, getModelImagePublicUrl(currentModel.value?.main_img))
-//     //2.處理完成照片
-//     currentModel.value?.finish_infos.forEach(f=>{
-//         f.gallery.forEach(g=>overrideSupabaseStorageImg(g, getFinishImagePublicUrl(g)))
-//         f.process_imgs.forEach(p=>overrideSupabaseStorageImg(p, getFinishImagePublicUrl(p)))
-//     })
-// }
+
 </script>

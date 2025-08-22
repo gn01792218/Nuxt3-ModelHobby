@@ -10,7 +10,7 @@
 </template>
 <script lang="ts" setup>
 import { type Model } from "../../types/model"
-const props = defineProps<{
+defineProps<{
     groupTitle:string,
     cardList: Model[],
 }>()

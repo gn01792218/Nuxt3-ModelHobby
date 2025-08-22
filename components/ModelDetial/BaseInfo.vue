@@ -2,7 +2,7 @@
 <template>
     <section>
         <section>
-            <NuxtImg :modifiers="{rotate: null}" format="webp" width="300" :src="getModelImagePublicUrl(currentModel?.main_img || '')"/>
+            <NuxtImg :modifiers="{rotate: null}" format="webp" width="300" :src="getModelMainImagePublicUrl(currentModel?.main_img || '')"/>
             <p>品牌 : {{ currentModel?.brand }} ({{ currentModel?.article_number }})</p>
             <p class="text-3xl font-extrabold">{{ currentModel?.name_zh }}</p>
             <p class="text-2xl">{{ currentModel?.name_en }}</p>
@@ -55,13 +55,14 @@
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { type Model, ModelStatus, ModelBrand, ModelType } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
-import { StorageBucket } from "~/types/supabase";
+import { StorageBucket } from "~/types/storage";
 const props = defineProps<{
     modelId: number
 }>()
 const { user } = useUser()
 const { handleUploadMutipleImgs } = useUploadImage()
-const { getModelImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
+const { getModelMainImagePublicUrl } = useMyModelImg()
+const { uploadMultipleImagesToS3, removeImageFromS3Storage } = useS3()
 const { myModelList } = storeToRefs(useMyModelStore())
 const { setLoadingState } = useMyModelStore()
 const { updateMyModelData } = useMyModelStore()
@@ -74,7 +75,7 @@ const showEditPanel = ref(false)
 const editModel = ref<Model>({
     ...currentModel.value,
 })
-const previewImg = ref<string[]>([getModelImagePublicUrl(currentModel.value?.main_img!)])
+const previewImg = ref<string[]>([getModelMainImagePublicUrl(currentModel.value?.main_img!)])
 const main_img_file = ref<FileList | null>(null)
 
 async function fetchUpdateModel() {
@@ -82,9 +83,9 @@ async function fetchUpdateModel() {
     //上傳圖片到supabase storage中, 並獲取要存於DB的路徑string
     if(main_img_file.value){ //假如有上傳圖片的話
         //假如原本有圖片，先刪除
-        if (currentModel.value?.main_img) removeImageFromSupabaseStorage(StorageBucket.images, currentModel.value?.main_img)
+        if (currentModel.value?.main_img) removeImageFromS3Storage({bucketName:StorageBucket.images, url:currentModel.value?.main_img})
 
-        const imgs = await uploadMultipleImagesToSupabaseStorage(main_img_file.value, {
+        const imgs = await uploadMultipleImagesToS3(main_img_file.value, {
             bucketName: StorageBucket.images,
             modelId: props.modelId!,
             fileNameTitle: 'model_main_img'

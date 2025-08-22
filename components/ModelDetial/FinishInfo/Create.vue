@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import { useMyModelStore } from '~/store/useMyModelStore';
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
-import { StorageBucket } from "~/types/supabase";
+import { StorageBucket } from "~/types/storage";
 
 const emit = defineEmits(['success', 'close'])
 const props = defineProps<{
@@ -66,7 +66,7 @@ const {
     deleteGalleryUploadImg
 } = useMyModelImg()
 const { addMyModelFinishInfo } = useMyModelsAPI()
-const { getFinishImagePublicUrl, uploadMultipleImagesToSupabaseStorage, removeImageFromSupabaseStorage } = useSupabase()
+const { uploadMultipleImagesToS3, removeImageFromS3Storage } = useS3()
 
 const isOpen = computed(() => props.isOpen)
 
@@ -88,11 +88,11 @@ async function fetchCreateFinishInfo() {
 
 async function fetchUploadImageToSupabaseStorage() {
     //先處理要被刪除的圖片
-    if (deleteProcessImgs.value.length) deleteProcessImgs.value.forEach(url => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, url))
-    if (deleteGalleryImgs.value.length) deleteGalleryImgs.value.forEach(url => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, url))
+    if (deleteProcessImgs.value.length) deleteProcessImgs.value.forEach(url => removeImageFromS3Storage({bucketName:StorageBucket.model_finish_info_images, url}))
+    if (deleteGalleryImgs.value.length) deleteGalleryImgs.value.forEach(url => removeImageFromS3Storage({bucketName:StorageBucket.model_finish_info_images, url}))
     //再看看有沒有要新上傳  的圖片
     if (process_imgs_file_list.value?.length) {
-        const newImgUrls = await uploadMultipleImagesToSupabaseStorage(process_imgs_file_list.value, {
+        const newImgUrls = await uploadMultipleImagesToS3(process_imgs_file_list.value, {
             bucketName: StorageBucket.model_finish_info_images,
             modelId: props.modelId!,
             fileNameTitle: 'model_process_img'
@@ -101,7 +101,7 @@ async function fetchUploadImageToSupabaseStorage() {
         process_imgs_file_list.value.length = 0 //釋放圖片資源
     } 
     if (gallery_imgs_file_list.value?.length) {
-        const newImgUrls = await uploadMultipleImagesToSupabaseStorage(gallery_imgs_file_list.value, {
+        const newImgUrls = await uploadMultipleImagesToS3(gallery_imgs_file_list.value, {
             bucketName: StorageBucket.model_finish_info_images,
             modelId: props.modelId!,
             fileNameTitle: 'model_gallery_img'

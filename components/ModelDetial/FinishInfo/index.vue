@@ -1,6 +1,6 @@
 <template>
     <button @click="processAddFinishInfo">新增完成資料</button>
-    <section v-for="finish_info in currentModel.finish_infos" :key="finish_info.id">
+    <section v-for="finish_info in currentModel?.finish_infos" :key="finish_info.id">
         <div>
             <p>{{ finish_info.title }}</p>
             <p>{{ finish_info.description }}</p>
@@ -11,7 +11,7 @@
                 製作過程圖片
                 <ul v-for="img in finish_info?.process_imgs" :key="img">
                     <li>
-                        <NuxtImg loading="lazy" :modifiers="{rotate: null}" class="object-cover" format="webp" width="300" :src="getFinishImagePublicUrl(img)"/>
+                        <NuxtImg loading="lazy" :modifiers="{rotate: null}" class="object-cover" format="webp" width="300" :src="getModelFinishImagePublicUrl(img)"/>
                     </li>
                 </ul>
             </div>
@@ -19,7 +19,7 @@
                 完成圖片
                 <ul v-for="img in finish_info?.gallery" :key="img">
                     <li>
-                        <NuxtImg loading="lazy" :modifiers="{rotate: null}" class="object-cover" format="webp" width="300" :src="getFinishImagePublicUrl(img)"/>
+                        <NuxtImg loading="lazy" :modifiers="{rotate: null}" class="object-cover" format="webp" width="300" :src="getModelFinishImagePublicUrl(img)"/>
                     </li>
                 </ul>
             </div>
@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { type Model } from "~/types/model"
-import { StorageBucket } from "~/types/supabase"
+import { StorageBucket } from "~/types/storage"
 import { type ModelFinishInfo, type UpdateFinishInfoRequest } from "~/types/finishInfo"
 import { useMyModelStore } from '~/store/useMyModelStore';
 
@@ -49,7 +49,8 @@ const props = defineProps<{
 
 const { setLoadingState } = useMyModelStore()
 const { deleteMyModelFinishInfo } = useMyModelsAPI()
-const { getFinishImagePublicUrl, removeImageFromSupabaseStorage } = useSupabase()
+const { getModelFinishImagePublicUrl } = useMyModelImg()
+const { removeImageFromS3Storage } = useS3()
 
 // 以下是修改面板的資訊
 const openCreatePanel = ref(false)
@@ -72,8 +73,8 @@ async function fetchDeleteFinishInfo(id: number) {
     setLoadingState(false)
 }
 function processRemoveSupabaseImgs(deleteFinishInfo: ModelFinishInfo) {
-  deleteFinishInfo.process_imgs.forEach((img: string) => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, img));
-  deleteFinishInfo.gallery.forEach((img: string) => removeImageFromSupabaseStorage(StorageBucket.model_finish_info_images, img));
+  deleteFinishInfo.process_imgs.forEach((url: string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url}));
+  deleteFinishInfo.gallery.forEach((url: string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url}));
 }
 
 async function onCreateFinishInfoSuccess(finish_info: ModelFinishInfo) {
