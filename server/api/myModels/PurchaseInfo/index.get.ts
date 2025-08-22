@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client"
+import { prisma } from '@/server/utils/prisma'
 
-const prisma = new PrismaClient()
 export default defineEventHandler(async(event)=>{
     return await prisma.purchaseInfo.findMany()
 })
