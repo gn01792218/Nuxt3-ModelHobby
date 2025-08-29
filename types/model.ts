@@ -56,6 +56,7 @@ export enum Ecommerce{
     淘寶 = "淘寶",
     蝦皮 = "蝦皮",
     露天 = "露天",
+    拚多多 = "拚多多",
     實體店面 = "實體店面"
 }
 export enum SearchModelType{
