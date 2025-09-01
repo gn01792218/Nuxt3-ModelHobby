@@ -71,7 +71,7 @@ const {
  } = useMyModelImg()
 
 const { updateMyModelFinishInfo } = useMyModelsAPI()
-const { uploadMultipleImagesToS3, removeImageFromS3Storage } = useS3()
+const { uploadMultipleImagesToS3, processRemoveFinishInfoImgs } = useS3()
 
 const isOpen = computed(() => props.isOpen)
 onMounted(()=>{
@@ -95,8 +95,7 @@ async function fetchUpdateFinishInfo() {
 async function fetchUploadImageToSupabaseStorage() {
     if(!props.finishInfo) return 
     //先處理要被刪除的圖片
-    if (deleteProcessImgs.value.length) deleteProcessImgs.value.forEach(url => removeImageFromS3Storage({ bucketName: StorageBucket.model_finish_info_images, url}))
-    if (deleteGalleryImgs.value.length) deleteGalleryImgs.value.forEach(url => removeImageFromS3Storage({ bucketName: StorageBucket.model_finish_info_images, url}))
+    processRemoveFinishInfoImgs(deleteProcessImgs.value, deleteGalleryImgs.value)
     //再看看有沒有要新上傳  的圖片
     const promises:Promise<string[]>[] = []
     if (process_imgs_file_list.value?.length) {

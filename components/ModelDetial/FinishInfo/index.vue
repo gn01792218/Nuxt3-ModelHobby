@@ -50,7 +50,7 @@ const props = defineProps<{
 const { setLoadingState } = useMyModelStore()
 const { deleteMyModelFinishInfo } = useMyModelsAPI()
 const { getModelFinishImagePublicUrl } = useMyModelImg()
-const { removeImageFromS3Storage } = useS3()
+const { processRemoveFinishInfoImgs } = useS3()
 
 // 以下是修改面板的資訊
 const openCreatePanel = ref(false)
@@ -67,14 +67,10 @@ async function processUpdateFinishInfo(updateTarget:ModelFinishInfo) {
 async function fetchDeleteFinishInfo(id: number) {
     setLoadingState(true)
     const deleteFinishInfo = await deleteMyModelFinishInfo(id)
-    processRemoveSupabaseImgs(deleteFinishInfo);
+    processRemoveFinishInfoImgs(deleteFinishInfo.process_imgs, deleteFinishInfo.gallery);
     const deleteIndex = props.currentModel?.finish_infos?.findIndex((info: ModelFinishInfo) => info.id === deleteFinishInfo.id)
     if (deleteIndex! >= 0) props.currentModel?.finish_infos?.splice(deleteIndex!, 1)
     setLoadingState(false)
-}
-function processRemoveSupabaseImgs(deleteFinishInfo: ModelFinishInfo) {
-  deleteFinishInfo.process_imgs.forEach((url: string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url}));
-  deleteFinishInfo.gallery.forEach((url: string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url}));
 }
 
 async function onCreateFinishInfoSuccess(finish_info: ModelFinishInfo) {

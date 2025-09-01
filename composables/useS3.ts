@@ -1,5 +1,7 @@
 import useS3API from "./api/useS3API";
 import { type DeleteS3ImageRequest } from "@/types/S3";
+import { type ModelFinishInfo } from "@/types/finishInfo"
+import { StorageBucket } from "@/types/storage"
 interface UploadImageToS3Option {
   bucketName: string;
   fileNameTitle: string;
@@ -17,24 +19,27 @@ export default () => {
     if (!imgs?.length) return [];
 
     const paths: string[] = [];
-    const promises: Promise<string>[] = [];
     for (let i = 0; i < imgs.length; i++) {
       const fileName = `${fileNameTitle}_modelId_${modelId}_${crypto.randomUUID()}`;
       const file = new File([imgs[i]], fileName, { type: imgs[i].type });
       const formData = new FormData();
       formData.append("file", file);
       formData.append("bucketName", bucketName);
-      const imgRes = uploadImageToS3(formData)
-      promises.push(imgRes);
+      const imgRes = await uploadImageToS3(formData); // 等待一個完成再下一個，因為cloudfare不能一次處理太多併發!
+      paths.push(imgRes);
     }
-    const reses = await Promise.allSettled(promises);
-    reses.forEach((res: any) => {
-      paths.push(res.value);
-    });
     return paths;
   }
   async function removeImageFromS3Storage(payload: DeleteS3ImageRequest) {
     return await deleteImageToS3(payload);
+  }
+  async function processRemoveFinishInfoImgs(process_imgs: string[], gallery:string[]) {
+    for (const url of process_imgs) {
+      await removeImageFromS3Storage({ bucketName: StorageBucket.model_finish_info_images, url });
+    }
+    for (const url of gallery) {
+      await removeImageFromS3Storage({ bucketName: StorageBucket.model_finish_info_images, url });
+    }
   }
   function getModelImagePublicUrl(imgDbPaath: string) {
     const parts = imgDbPaath.split("/");
@@ -53,6 +58,7 @@ export default () => {
     //methods
     uploadMultipleImagesToS3,
     removeImageFromS3Storage,
+    processRemoveFinishInfoImgs,
     getModelImagePublicUrl,
     getFinishImagePublicUrl
   };

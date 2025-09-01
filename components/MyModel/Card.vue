@@ -39,7 +39,7 @@ const props = defineProps<{
   modelData: Model
 }>()
 const { getModelMainImagePublicUrl } = useMyModelImg()
-const { removeImageFromS3Storage } = useS3()
+const { removeImageFromS3Storage, processRemoveFinishInfoImgs } = useS3()
 const { deleteMyModel } = useFetchMyModels()
 const { setmyModelList, setLoadingState } = useMyModelStore()
 const { myModelList } = storeToRefs(useMyModelStore())
@@ -50,18 +50,13 @@ function fetchDeleteImg() {
   if (modelData.main_img) removeImageFromS3Storage({bucketName: StorageBucket.images, url: modelData.main_img})
   //刪除完成資訊的兩種img
   modelData.finish_infos.forEach(info => {
-    if (info?.process_imgs?.length) {
-      info.process_imgs.forEach(url => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url}))
-    }
-    if (info?.gallery?.length) {
-      info.gallery.forEach(url => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url}))
-    }
+    processRemoveFinishInfoImgs(info.process_imgs || [], info.gallery || [])
   })
 }
 async function fetchDeleteMyModel() {
   setLoadingState(true)
-  await deleteMyModel(props.modelData.id!)
   fetchDeleteImg()
+  await deleteMyModel(props.modelData.id!)
   setmyModelList(myModelList.value.filter(model => model.id !== props.modelData.id))
   setLoadingState(false)
 }

@@ -85,6 +85,12 @@ DATABASE_URL、SUPABASE_URL、SUPABASE_KEY</br>
 R2_ENDPOINT、R2_ACCESS_KEY_ID、R2_SECRET_ACCESS_KEY</br>
 3.圖片插件需要
 NUXT_IMAGE_PROVIDER=ipx 即可
+## 資料庫的初始化
+請使用以下指令將DB schema 推上新的資料庫中，</br>
+**請使用port 5432的資料庫進行推送哦!(不要使用pool的)
+```
+npx prisma db push
+```
 
 # 使用Netilfy進行本地開發
 ## 先安裝Netilfy Cli

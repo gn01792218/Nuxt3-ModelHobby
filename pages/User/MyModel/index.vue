@@ -169,7 +169,7 @@ const {
 
 const { setLoadingState } = useMyModelStore()
 const { fetchMyModels } = useFetchMyModels()
-const { uploadMultipleImagesToS3, removeImageFromS3Storage } = useS3()
+const { uploadMultipleImagesToS3, removeImageFromS3Storage, processRemoveFinishInfoImgs } = useS3()
 const { user } = useUser()
 const { sendToast } = useMyToast()
 
@@ -219,9 +219,8 @@ async function fetchAddMyModel() {
       title: 'error',
       description: '添加模型失敗，請稍後再試'
       })
-      removeImageFromS3Storage({bucketName: StorageBucket.images, url:main_img})
-      process_imgs.forEach((img:string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url:img}))
-      gallery.forEach((img:string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url:img}))
+      await removeImageFromS3Storage({bucketName: StorageBucket.images, url:main_img})
+      processRemoveFinishInfoImgs(process_imgs, gallery)
    }
    if(!myModel) return 
    //添加尺寸
@@ -238,8 +237,7 @@ async function fetchAddMyModel() {
       title: 'error',
       description: '添加完成資訊失敗，請稍後再試'
       })
-      process_imgs.forEach((img:string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url:img}))
-      gallery.forEach((img:string) => removeImageFromS3Storage({bucketName: StorageBucket.model_finish_info_images, url:img}))
+      processRemoveFinishInfoImgs(process_imgs, gallery)
    }
    //等待全部完成
    //重新拉取資料
@@ -253,28 +251,34 @@ async function fetchAddMyModel() {
    setLoadingState(false)
 }
 async function processGetUploadImages() {
-   const mainImgs =await  uploadMultipleImagesToS3(main_img_file.value!, {
+  const [mainImgs, processImgs, gallery] = await Promise.all([
+    uploadMultipleImagesToS3(main_img_file.value!, {
       bucketName: StorageBucket.images,
       modelId: -1,
       fileNameTitle: 'model_main_img'
-   })
-   const processImgs =await uploadMultipleImagesToS3(process_imgs_file_list.value!, {
+    }),
+    uploadMultipleImagesToS3(process_imgs_file_list.value!, {
       bucketName: StorageBucket.model_finish_info_images,
       modelId: -1,
       fileNameTitle: 'model_process_img'
-   })
-   const gallery =await uploadMultipleImagesToS3(gallery_imgs_file_list.value!, {
+    }),
+    uploadMultipleImagesToS3(gallery_imgs_file_list.value!, {
       bucketName: StorageBucket.model_finish_info_images,
       modelId: -1,
       fileNameTitle: 'model_gallery_img'
-   })
+    })
+  ]);
 
-   //獲取圖片路徑
-   model.main_img = mainImgs[0]
-   modelFinishInfo.value.process_imgs = processImgs
-   modelFinishInfo.value.gallery = gallery
+  //獲取圖片路徑
+  model.main_img = mainImgs[0];
+  modelFinishInfo.value.process_imgs = processImgs;
+  modelFinishInfo.value.gallery = gallery;
 
-   return {main_img: model.main_img as string, process_imgs: modelFinishInfo.value.process_imgs as string[], gallery: modelFinishInfo.value.gallery as string[]}
+  return {
+    main_img: model.main_img as string,
+    process_imgs: modelFinishInfo.value.process_imgs as string[],
+    gallery: modelFinishInfo.value.gallery as string[]
+  };
 }
 
 function resetAllUploadImageProcess() {
