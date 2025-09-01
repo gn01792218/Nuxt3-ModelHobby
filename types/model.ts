@@ -29,6 +29,7 @@ export enum ModelBrand{
 }
 export enum ModelScale{
     S144="1:144",
+    S100="1:100",
     S72="1:72",
     S48="1:48",
     S35="1:35",
