@@ -7,7 +7,6 @@ export default () => {
   const password = ref("");
   const name = ref("");
   const { sendToast } = useMyToast();
-  const { setmyModelList } = useMyModelStore();
   const { setLogin } = useAuthStore();
 
   async function signUp() {
@@ -49,7 +48,6 @@ export default () => {
   async function logout() {
     const { error } = await supabase.auth.signOut();
     if (error) return console.log(error);
-    setmyModelList([]); // 清空store中的資料，否則有時候網路太慢會看到別人的資料
     setUserLoginStatus(false);
     navigateTo("/");
   }

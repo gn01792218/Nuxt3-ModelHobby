@@ -1,13 +1,14 @@
 import { useMyModelStore } from "~/store/useMyModelStore"
-import useMyModelsAPI from "./api/useMyModelsAPI";
-import type { Model } from '~/types/model'
+import type { Model } from "~/types/model";
 
 export default () => {
-  const { getMyModel } = useMyModelsAPI()
-  const { setOpenSearchPanel } = useMyModelStore()
-  const { allfinishedModels } = storeToRefs(useMyModelStore())
+  const { setOpenSearchPanel, setAllModelList, setLoadingState } = useMyModelStore()
+  const { allfinishedModels, allModelList } = storeToRefs(useMyModelStore())
   const modelId = Number(useRoute().params.modelId)
-  const currentModel = ref<Model |null>(null)
+
+  const currentModel = computed(()=>{
+    return allModelList.value.find((m:Model) => m.id === modelId)
+  })
 
   //導航
   function navergateToMyModelDetial(id:number) {
@@ -17,19 +18,17 @@ export default () => {
     setOpenSearchPanel(false)
     navigateTo(`/Gallery/${id}`)
   }
-  //取得單一模型資料
-  async function initModel(){
-    currentModel.value = await getMyModel(modelId)
-  }
 
   return {
     //data
     modelId,
     currentModel,
+    allModelList,
     allfinishedModels,
     //methods
     navergateToMyModelDetial,
     navergateToGallery,
-    initModel
+    setAllModelList,
+    setLoadingState
   };
 };

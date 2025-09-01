@@ -7,7 +7,7 @@
     "dev": "nuxt dev --open",
     "netlify": "netlify dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
+    "preview": "nuxt build && nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {

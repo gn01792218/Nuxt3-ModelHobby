@@ -12,7 +12,5 @@
 </template>
 
 <script setup lang="ts">
-const { initModel, currentModel, modelId } = useMyModel()
-
-initModel()
+const { currentModel, modelId } = useMyModel()
 </script>

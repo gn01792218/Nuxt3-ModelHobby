@@ -29,10 +29,9 @@
 import { type Model } from "~/types/model"
 import { StorageBucket } from "~/types/storage"
 import useFetchMyModels from "~/composables/api/useMyModelsAPI"
-import { useMyModelStore } from "~/store/useMyModelStore"
 
 const { loadSkeleton } = useSkeleton()
-const { navergateToMyModelDetial } = useMyModel()
+const { navergateToMyModelDetial, setLoadingState, setAllModelList, allModelList } = useMyModel()
 
 const props = defineProps<{
   modelData: Model
@@ -40,8 +39,6 @@ const props = defineProps<{
 const { getModelMainImagePublicUrl } = useMyModelImg()
 const { removeImageFromS3Storage, processRemoveFinishInfoImgs } = useS3()
 const { deleteMyModel } = useFetchMyModels()
-const { setmyModelList, setLoadingState } = useMyModelStore()
-const { myModelList } = storeToRefs(useMyModelStore())
 
 function fetchDeleteImg() {
   const { modelData } = props
@@ -56,7 +53,7 @@ async function fetchDeleteMyModel() {
   setLoadingState(true)
   fetchDeleteImg()
   await deleteMyModel(props.modelData.id!)
-  setmyModelList(myModelList.value.filter(model => model.id !== props.modelData.id))
+  setAllModelList(allModelList.value.filter(model => model.id !== props.modelData.id))
   setLoadingState(false)
 }
 </script>

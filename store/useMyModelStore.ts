@@ -5,10 +5,10 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const { isThisMoth, formateDateYYYYMM } = useDate();
   const { toTWD } = useExchange();
   const { user } = useUser()
+
   // 初始状态
   const initState = {
     allModelList: [],
-    // myModelList: [],
     loading: false,
     currentModeStatusTab: 1,
     openSearchPanel: false,

@@ -26,8 +26,6 @@
 import GallerySkeketon from '~/components/MyModel/GallerySkeketon.vue'
 
 const { formateDateYYYYMM } = useDate()
-const {currentModel, initModel} = useMyModel()
+const {currentModel} = useMyModel()
 const { loadSkeleton } = useSkeleton()
-
-initModel()
 </script>
