@@ -12,16 +12,15 @@
 </template>
 
 <script setup lang="ts">
-import { useMyModelStore } from '~/store/useMyModelStore';
+import type { Model } from '~/types/model'
 
 const modelId = Number(useRoute().params.modelId)
-const { currentModel } = storeToRefs(useMyModelStore())
-const { setCurrentModelId } = useMyModelStore()
+const { getMyModel } = useMyModel()
+const currentModel = ref<Model |null>(null)
 
 initModelDetial()
 async function initModelDetial() {
-    if (!currentModel.value) setCurrentModelId(modelId)
-    console.log(currentModel.value)
+    currentModel.value = await getMyModel(modelId)
 }
 
 </script>

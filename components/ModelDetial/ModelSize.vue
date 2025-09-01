@@ -1,4 +1,3 @@
-
 <template>
     <section>
         <div>
@@ -48,7 +47,7 @@ import { useMyModelStore } from '~/store/useMyModelStore';
 
 const props = defineProps<{
     modelId: number,
-    currentModel:Model
+    currentModel: Model
 }>()
 const { setLoadingState } = useMyModelStore()
 const { updateMyModelsSize, addMyModelsSize } = useMyModelsAPI()

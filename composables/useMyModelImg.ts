@@ -56,10 +56,12 @@ export default () => {
   }
   //獲取圖片公開網址
   function getModelMainImagePublicUrl(imgDbPaath: string) {
+    if(!imgDbPaath) return ''
     if (imgDbPaath.includes('cloudflare')) return getS3ModelMainImagePublicUrl(imgDbPaath)
     return getSupabaseModelMainImagePublicUrl(imgDbPaath)
   }
   function getModelFinishImagePublicUrl(imgDbPaath: string) {
+    if(!imgDbPaath) return ''
     if (imgDbPaath.includes('cloudflare')) return getS3ModelFinishImagePublicUrl(imgDbPaath)
     return getSupabaseModelFinishImagePublicUrl(imgDbPaath)
   }

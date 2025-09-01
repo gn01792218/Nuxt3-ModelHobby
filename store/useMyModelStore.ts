@@ -33,9 +33,9 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const searchModelType = ref<SearchModelType>(initState.searchModelType);
 
   //gatters
-  const currentModel = computed(() =>
-    allModelList.value.find((model) => model.id === currentModelId.value)
-  );
+  const currentModel = computed(() => {
+    return allModelList.value.find((model) => model.id === currentModelId.value)
+  });
   const unStockInModels = computed(() =>
     myModelList.value?.filter((model) => model.status === ModelStatus.未入庫)
   );
