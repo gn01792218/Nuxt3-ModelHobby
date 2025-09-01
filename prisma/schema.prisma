@@ -27,7 +27,6 @@ model MyModel {
   purchase_infos PurchaseInfo[]
   finish_infos    ModelFinishInfo[]
   userId String?  @db.Uuid
-
 }
 
 model ModelSize {

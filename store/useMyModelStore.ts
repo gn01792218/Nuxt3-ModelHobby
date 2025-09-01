@@ -4,10 +4,11 @@ import { type Model, ModelStatus, SearchModelType } from "../types/model";
 export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const { isThisMoth, formateDateYYYYMM } = useDate();
   const { toTWD } = useExchange();
+  const { user } = useUser()
   // 初始状态
   const initState = {
     allModelList: [],
-    myModelList: [],
+    // myModelList: [],
     loading: false,
     currentModeStatusTab: 1,
     openSearchPanel: false,
@@ -20,7 +21,6 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
 
   //state
   const allModelList = ref<Model[]>(initState.allModelList);
-  const myModelList = ref<Model[]>(initState.myModelList);
   const loading = ref<boolean>(initState.loading);
   const currentModeStatusTab = ref<number>(initState.currentModeStatusTab);
   const openSearchPanel = ref(initState.openSearchPanel);
@@ -31,6 +31,9 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const searchModelType = ref<SearchModelType>(initState.searchModelType);
 
   //gatters
+  const myModelList = computed(() =>
+    allModelList.value.filter((model) => model.userId === user.value?.id)
+  )
   const unStockInModels = computed(() =>
     myModelList.value?.filter((model) => model.status === ModelStatus.未入庫)
   );
@@ -94,9 +97,6 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   function setAllModelList(payload: Model[]) {
     allModelList.value = payload;
   }
-  function setmyModelList(payload: Model[]) {
-    myModelList.value = payload;
-  }
   function setSearchModelType(payload: SearchModelType) {
     searchModelType.value = payload;
   }
@@ -154,7 +154,6 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     targetDate,
     //methods
     setAllModelList,
-    setmyModelList,
     addModel,
     updateMyModelData,
     setLoadingState,

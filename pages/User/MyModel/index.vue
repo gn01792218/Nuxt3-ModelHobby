@@ -165,6 +165,7 @@ import { type ModelFinishInfo } from "~/types/finishInfo"
 import { StorageBucket } from "~/types/storage"
 import { useMyModelStore } from '~/store/useMyModelStore'
 
+const { fetchALlModels } = useFetchMyModels()
 const { handleUploadMutipleImgs } = useUploadImage()
 const { addMyModel, addMyModelsSize, addMyModelPurchaseInfo, addMyModelFinishInfo } = useMyModelsAPI()
 const {
@@ -175,7 +176,6 @@ const {
 } = storeToRefs(useMyModelStore())
 
 const { setLoadingState } = useMyModelStore()
-const { fetchMyModels } = useFetchMyModels()
 const { uploadMultipleImagesToS3, removeImageFromS3Storage, processRemoveFinishInfoImgs } = useS3()
 const { user } = useUser()
 const { sendToast } = useMyToast()
@@ -210,8 +210,6 @@ const previewGalleryImgs = ref<string[]>([])
 const main_img_file = ref<FileList | null>(null)
 const process_imgs_file_list = ref<FileList | null>(null)
 const gallery_imgs_file_list = ref<FileList | null>(null)
-
-await fetchMyModels()
 
 async function fetchAddMyModel() {
    setLoadingState(true)
@@ -249,7 +247,7 @@ async function fetchAddMyModel() {
    }
    //等待全部完成
    //重新拉取資料
-   await fetchMyModels()
+   await fetchALlModels()
    //reset
    model.name_zh = ''
    model.name_en = ''
