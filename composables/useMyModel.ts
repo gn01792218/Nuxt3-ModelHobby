@@ -5,6 +5,7 @@ import type { Model } from '~/types/model'
 export default () => {
   const { getMyModel } = useMyModelsAPI()
   const { setOpenSearchPanel } = useMyModelStore()
+  const { allfinishedModels } = storeToRefs(useMyModelStore())
   const modelId = Number(useRoute().params.modelId)
   const currentModel = ref<Model |null>(null)
 
@@ -25,6 +26,7 @@ export default () => {
     //data
     modelId,
     currentModel,
+    allfinishedModels,
     //methods
     navergateToMyModelDetial,
     navergateToGallery,

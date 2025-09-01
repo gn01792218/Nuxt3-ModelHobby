@@ -3,6 +3,7 @@
         <section>
             <NuxtImg :modifiers="{rotate: null}" format="webp" width="300" :src="getModelMainImagePublicUrl(currentModel?.main_img || '')"/>
             <p>品牌 : {{ currentModel?.brand }} ({{ currentModel?.article_number }})</p>
+            <p>比例 : {{ currentModel?.scale }}</p>
             <p class="text-3xl font-extrabold">{{ currentModel?.name_zh }}</p>
             <p class="text-2xl">{{ currentModel?.name_en }}</p>
         </section>
@@ -34,6 +35,12 @@
                         <option v-for="modelType in ModelType" :key="modelType" :value="modelType">{{ modelType }}</option>
                      </select>
                   </div>
+                  <div>
+                     <label for="model_type">比例</label>
+                     <select name="" id="" v-model="editModel.scale">
+                        <option v-for="modelScale in ModelScale" :key="modelScale" :value="modelScale">{{ modelScale }}</option>
+                     </select>
+                  </div>
                 <div>
                     <label for="model_name_en">產品編號</label>
                     <input id="model_name_en" type="text" v-model="editModel.article_number">
@@ -52,7 +59,7 @@
 
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
-import { type Model, ModelStatus, ModelBrand, ModelType } from "~/types/model"
+import { type Model, ModelStatus, ModelBrand, ModelType, ModelScale } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
 import { StorageBucket } from "~/types/storage";
 const props = defineProps<{

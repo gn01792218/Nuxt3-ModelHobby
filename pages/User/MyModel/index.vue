@@ -36,6 +36,12 @@
                      </select>
                   </div>
                   <div>
+                     <label for="model_type">比例</label>
+                     <select name="" id="" v-model="model.scale">
+                        <option v-for="modelScale in ModelScale" :key="modelScale" :value="modelScale">{{ modelScale }}</option>
+                     </select>
+                  </div>
+                  <div>
                      <label for="model_name_en">產品編號</label>
                      <input id="model_name_en" type="text" v-model="model.article_number">
                   </div>
@@ -149,7 +155,8 @@ import {
    Ecommerce,
    Currency,
    ModelBrand,
-   ModelType
+   ModelType,
+   ModelScale
 } from "~/types/model"
 import {
    type CreatePurchaseInfoRequest
@@ -194,7 +201,8 @@ const model: Model = {
    status: ModelStatus.未入庫,
    name_zh: '',
    name_en: '',
-   userId: ''
+   userId: '',
+   scale: ModelScale.S72
 }
 const preview_main_Img = ref<string[]>([])
 const previewProcessImgs = ref<string[]>([])
