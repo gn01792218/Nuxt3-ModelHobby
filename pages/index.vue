@@ -2,24 +2,22 @@
     <main>
         <!-- 選項Filter區 -->
          <section class="space-y-6 p-6">
-             <USelect
-                 v-model="selectedBrand"
-                 :options="brandOptions"
-                 placeholder="選擇品牌"
-                 label="品牌"
-                 class="max-w-sm"
-             />
-             <div>
-                <p class="font-bold mb-2">類型</p>
-                <UButtonGroup class="flex-wrap">
-                    <UButton
-                    v-for="type in typeOptions"
-                    :key="type"
-                    :label="type"
-                    :color="selectedType === type ? 'primary' : 'gray'"
-                    @click="selectedType = type"
-                    />
-                </UButtonGroup>
+             <p class="font-bold">選項</p>
+            <div class="flex">
+                <USelect
+                    v-model="selectedBrand"
+                    :options="brandOptions"
+                    placeholder="選擇品牌"
+                    label="品牌"
+                    class="max-w-sm"
+                />
+                <USelect
+                    v-model="selectedType"
+                    :options="typeOptions"
+                    placeholder="選擇類型"
+                    label="類型"
+                    class="max-w-sm"
+                />
             </div>
             <div>
                 <p class="font-bold mb-2">比例</p>
@@ -39,8 +37,8 @@
             />
          </section>
         <!-- 展示區，從allfinishedModels列表中根據上面的Filter顯示項目 -->
-         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-            <MyModelSmallCard
+         <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6 gap-1">
+            <MyModelGalleryCard
                 v-for="model in filteredModels"
                 :key="model.id"
                 :model="model"

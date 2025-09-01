@@ -14,7 +14,6 @@
     </div>
     <template #footer>
       <div>
-        {{ modelData.id }}
         <UButton class="mr-5" icon="i-heroicons-pencil-square" size="sm" color="green" variant="soft" :trailing="false"
           @click="navergateToMyModelDetial(modelData.id)" />
         <UButton 
