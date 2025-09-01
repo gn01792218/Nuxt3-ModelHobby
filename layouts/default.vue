@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen">
         <MyHeader />
-        <NuxtPage class="p-4 sm:p-10 sm:mt-0"/>
+        <NuxtPage class="p-4 mt-12 sm:p-10 sm:mt-0"/>
         <SearchModal/>
         <ScrollToTop/>
     </div>

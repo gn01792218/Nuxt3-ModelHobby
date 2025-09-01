@@ -1,7 +1,7 @@
 <template>
-    <main>
+    <main class="pt-0 !mt-0">
         <!-- 選項Filter區 -->
-         <section class="space-y-6 p-6">
+         <section class="space-y-6 pb-5">
              <p class="font-bold">選項</p>
             <div class="flex">
                 <USelect
