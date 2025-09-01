@@ -19,11 +19,15 @@
             </p>
         </section>
     </div>
+    <GallerySkeketon v-else />
 </template>
 
 <script setup lang="ts">
+import GallerySkeketon from '~/components/MyModel/GallerySkeketon.vue'
+
 const { formateDateYYYYMM } = useDate()
 const {currentModel, initModel} = useMyModel()
+const { loadSkeleton } = useSkeleton()
 
 initModel()
 </script>
