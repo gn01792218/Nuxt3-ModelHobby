@@ -38,7 +38,6 @@
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
 import { type Model } from "~/types/model"
-import { StorageBucket } from "~/types/storage"
 import { type ModelFinishInfo, type UpdateFinishInfoRequest } from "~/types/finishInfo"
 import { useMyModelStore } from '~/store/useMyModelStore';
 

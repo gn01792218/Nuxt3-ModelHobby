@@ -9,7 +9,6 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     allModelList: [],
     myModelList: [],
     loading: false,
-    currentModelId: 0,
     currentModeStatusTab: 1,
     openSearchPanel: false,
     openRouteGuardPanel: false,
@@ -23,7 +22,6 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const allModelList = ref<Model[]>(initState.allModelList);
   const myModelList = ref<Model[]>(initState.myModelList);
   const loading = ref<boolean>(initState.loading);
-  const currentModelId = ref<number>(initState.currentModelId);
   const currentModeStatusTab = ref<number>(initState.currentModeStatusTab);
   const openSearchPanel = ref(initState.openSearchPanel);
   const openRouteGuardPanel = ref(initState.openRouteGuardPanel);
@@ -33,9 +31,6 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const searchModelType = ref<SearchModelType>(initState.searchModelType);
 
   //gatters
-  const currentModel = computed(() => {
-    return allModelList.value.find((model) => model.id === currentModelId.value)
-  });
   const unStockInModels = computed(() =>
     myModelList.value?.filter((model) => model.status === ModelStatus.未入庫)
   );
@@ -120,9 +115,6 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   function setLoadingState(payload: boolean) {
     loading.value = payload;
   }
-  function setCurrentModelId(payload: number) {
-    currentModelId.value = payload;
-  }
   function setCurrentModelStatusTab(payload: number) {
     currentModeStatusTab.value = payload;
   }
@@ -153,7 +145,6 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     thisMonthPurchaseModels,
     thisMonthPurchaseModelsCount,
     thisMonthPurchaseCoast,
-    currentModel,
     currentModeStatusTab,
     openSearchPanel,
     openRouteGuardPanel,
@@ -167,7 +158,6 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     addModel,
     updateMyModelData,
     setLoadingState,
-    setCurrentModelId,
     setCurrentModelStatusTab,
     setOpenSearchPanel,
     setOpenRouteGuardPanel,

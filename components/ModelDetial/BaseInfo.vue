@@ -7,7 +7,7 @@
             <p class="text-2xl">{{ currentModel?.name_en }}</p>
         </section>
         <div>
-            <button @click="showEditPanelHandel">修改</button>
+            <button @click="showEditPanelHandel()">修改</button>
             <div v-show="showEditPanel" class="bg-red-200">
                 <div>
                     <select name="" id="" v-model="editModel.status">
@@ -56,25 +56,22 @@ import { type Model, ModelStatus, ModelBrand, ModelType } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
 import { StorageBucket } from "~/types/storage";
 const props = defineProps<{
-    modelId: number
+    currentModel: Model
 }>()
-const { user } = useUser()
+
 const { handleUploadMutipleImgs } = useUploadImage()
 const { getModelMainImagePublicUrl } = useMyModelImg()
 const { uploadMultipleImagesToS3, removeImageFromS3Storage } = useS3()
-const { myModelList } = storeToRefs(useMyModelStore())
 const { setLoadingState } = useMyModelStore()
 const { updateMyModelData } = useMyModelStore()
 const { updateMyModel } = useMyModelsAPI()
-const currentModel = computed<Model>(() => {
-    return myModelList.value.find(model => model.id === props.modelId) as Model
-})
+
 const showEditPanel = ref(false)
 
 const editModel = ref<Model>({
-    ...currentModel.value,
+    ...props.currentModel
 })
-const previewImg = ref<string[]>([getModelMainImagePublicUrl(currentModel.value?.main_img!)])
+const previewImg = ref<string[]>([])
 const main_img_file = ref<FileList | null>(null)
 
 async function fetchUpdateModel() {
@@ -82,27 +79,29 @@ async function fetchUpdateModel() {
     //上傳圖片到supabase storage中, 並獲取要存於DB的路徑string
     if(main_img_file.value){ //假如有上傳圖片的話
         //假如原本有圖片，先刪除
-        if (currentModel.value?.main_img) removeImageFromS3Storage({bucketName:StorageBucket.images, url:currentModel.value?.main_img})
+        if (props.currentModel?.main_img) removeImageFromS3Storage({bucketName:StorageBucket.images, url:props.currentModel?.main_img})
 
         const imgs = await uploadMultipleImagesToS3(main_img_file.value, {
             bucketName: StorageBucket.images,
-            modelId: props.modelId!,
+            modelId: props.currentModel.id!,
             fileNameTitle: 'model_main_img'
         })
         editModel.value.main_img = imgs[0]
 
         main_img_file.value = null //釋放圖片資源，避免重複上傳
     }
-    const updateModel = await updateMyModel(props.modelId, editModel.value)
+    const updateModel = await updateMyModel(props.currentModel.id, editModel.value)
     updateMyModelData(updateModel)
     showEditPanel.value = false
     setLoadingState(false)
 }
 function resetData() {
-    editModel.value = currentModel.value
+    editModel.value = props.currentModel
 }
 
 function showEditPanelHandel() {
     showEditPanel.value = !showEditPanel.value
+    editModel.value = props.currentModel
+    previewImg.value = [getModelMainImagePublicUrl(props.currentModel?.main_img!)]
 }
 </script>

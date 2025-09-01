@@ -71,7 +71,6 @@ import { useMyModelStore } from '~/store/useMyModelStore';
 import { type PurchaseInfo, type CreatePurchaseInfoRequest } from "~/types/purchaseInfo";
 import useMyToast from "~/composables/useMyToast";
 const props = defineProps<{
-    modelId: number
     currentModel:Model
 }>()
 const { sendToast } = useMyToast()
@@ -108,7 +107,7 @@ async function fetchUpdate() {
 
 async function fetchAddModelPurchaseInfo() {
     setLoadingState(true)
-    const purchaseInfo = await addMyModelPurchaseInfo(props.modelId, createPurchaseInfo.value)
+    const purchaseInfo = await addMyModelPurchaseInfo(props.currentModel.id, createPurchaseInfo.value)
     //為該Model添加購買資訊
     props.currentModel?.purchase_infos?.push(purchaseInfo)
     sendToast({
