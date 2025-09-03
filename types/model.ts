@@ -28,6 +28,7 @@ export enum ModelBrand{
     OTHER = '其他_未知品牌'
 }
 export enum ModelScale{
+    S0="無比例",
     S144="1:144",
     S100="1:100",
     S72="1:72",
