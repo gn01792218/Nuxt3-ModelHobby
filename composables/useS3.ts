@@ -10,7 +10,7 @@ interface UploadImageToS3Option {
 
 export default () => {
   const { uploadImageToS3, deleteImageToS3 } = useS3API()
- 
+
   async function uploadMultipleImagesToS3(
     imgs: File[],
     option: UploadImageToS3Option
@@ -26,6 +26,19 @@ export default () => {
       formData.append("file", file);
       formData.append("bucketName", bucketName);
       const imgRes = await uploadImageToS3(formData); // 等待一個完成再下一個，因為cloudfare不能一次處理太多併發!
+      // 👉 打印檔案大小（MB）
+      alert(`原始 imgs[i] 大小: ${(imgs[i].size / 1024 / 1024).toFixed(2)} MB`);
+      alert(
+        `第 ${i + 1} 張圖片上傳前大小: ${(file.size / 1024 / 1024).toFixed(2)} MB`
+      );
+      alert(
+        `即將上傳的檔案：
+名稱：${file.name}
+類型：${file.type}
+大小：${(file.size / 1024 / 1024).toFixed(2)} MB`
+      );
+
+
       paths.push(imgRes);
     }
     return paths;
@@ -33,7 +46,7 @@ export default () => {
   async function removeImageFromS3Storage(payload: DeleteS3ImageRequest) {
     return await deleteImageToS3(payload);
   }
-  async function processRemoveFinishInfoImgs(process_imgs: string[], gallery:string[]) {
+  async function processRemoveFinishInfoImgs(process_imgs: string[], gallery: string[]) {
     for (const url of process_imgs) {
       await removeImageFromS3Storage({ bucketName: StorageBucket.model_finish_info_images, url });
     }

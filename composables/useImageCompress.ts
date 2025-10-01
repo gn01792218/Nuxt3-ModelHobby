@@ -3,7 +3,7 @@ export default () => {
   async function compressImg(imgFile: File) {
     // console.log("originalFile instanceof Blob", imgFile instanceof Blob); // true
     console.log(`originalFile size ${imgFile.size / 1024 / 1024} MB`);
-    alert(`originalFile size ${imgFile.size / 1024 / 1024} MB`);
+    // alert(`originalFile size ${imgFile.size / 1024 / 1024} MB`);
     const options = {
       maxSizeMB: 1,
       initialQuality:1, //品質參數
@@ -19,8 +19,7 @@ export default () => {
       console.log(
         `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
       ); // smaller than maxSizeMB
-      alert(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`);
-
+      // alert(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`);
       return compressedFile
     } catch (error) {
       console.log(error);

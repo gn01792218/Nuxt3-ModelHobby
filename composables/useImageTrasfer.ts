@@ -1,4 +1,3 @@
-import imageCompression from "browser-image-compression";
 export default () => {
   const IMGQULATY = 0.8
   // WebP 格式轉換函數
