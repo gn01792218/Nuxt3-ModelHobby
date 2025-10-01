@@ -3,12 +3,12 @@ import { type CreatePurchaseInfoRequest, type UpdatePurchaseInfoRequest } from "
 import useApiBase from "./useApiBase";
 
 export default () => {
-  const { fetchApiBase } = useApiBase()
+  const { fetchApiBase, useFetchApi } = useApiBase()
   const { user } = useUser()
   //MyModel API
   async function getAllModels() {
-    const models = await fetchApiBase(`/api/myModels`,"get");
-    return models as Model[];
+    return await useFetchApi(`/api/myModels`,"get");
+    // return models as Model[];
   }
   async function getMyModels() {
     const models = await fetchApiBase(`/api/myModels/${user.value?.id}`,"get");

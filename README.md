@@ -106,3 +106,6 @@ netlify dev
 ```
 npm run netlify
 ```
+
+# 關於API底層使用
+目前封裝在useApiBase中，有兩種方式，fetchApiBase、useFetchApi。基本上主要使用fetchApiBase做大部分只需要在客戶端發送的請求，而需要SSR優勢的請求，如首頁的模型列表請求，就使用useFetchApi。

@@ -31,7 +31,7 @@ export default () => {
     const compressed = await compressImg(img);
     if (!compressed) return console.log('圖片擠壓縮失敗')
     console.log("最終的照片", `${compressed.size / 1024 / 1024} MB`);
-    alert(`最終的照片 ${compressed.size / 1024 / 1024} MB`);
+    // alert(`最終的照片 ${compressed.size / 1024 / 1024} MB`);
     return compressed;
   }
 
