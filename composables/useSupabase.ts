@@ -5,7 +5,7 @@ interface UploadImageToSupabaseOption {
 }
 export default () => {
   const supabase = useSupabaseClient();
-  const { handleCompressAndFormatConvert } = useUploadImage()
+  const { handleCompress } = useUploadImage()
   const supabaseBaseUrl = useRuntimeConfig().public.supabase.url;
   const RequestCacheControlTime = 1; //請求圖片時要求的快取時間，1表示一年，以此類推
   const uploadImageOption = {
@@ -54,7 +54,7 @@ export default () => {
     const file = new File([imgBlob], "converted_image.webp", {
       type: "image/webp",
     });
-    const result = await handleCompressAndFormatConvert(file);
+    const result = await handleCompress(file);
     if(!result) return alert('圖片壓縮轉換失敗')
     //3.直接覆蓋storage裡面的圖片
     

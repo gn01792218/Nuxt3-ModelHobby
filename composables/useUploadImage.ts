@@ -1,6 +1,5 @@
 export default () => {
   const { compressImg } = useImageCompress();
-  const { convertToWebP } = useImageTrasfer()
   async function handleUploadMutipleImgs(
     event: Event,
     previewImgs: Ref<string[]>
@@ -10,7 +9,7 @@ export default () => {
     if (!files) return;
     const compressedFiles: File[] = [];
     for (let i = 0; i < files.length; i++) {
-      const finalImg = await handleCompressAndFormatConvert(files[i])
+      const finalImg = await handleCompress(files[i])
       if (!finalImg) return console.log("解壓縮圖片失誤");
       compressedFiles.push(finalImg);
       // alert(
@@ -28,20 +27,18 @@ export default () => {
     }
     return compressedFiles;
   }
-  async function handleCompressAndFormatConvert(img: File) {
+  async function handleCompress(img: File) {
     const compressed = await compressImg(img);
     if (!compressed) return console.log('圖片擠壓縮失敗')
-    const finalImg = await convertToWebP(compressed)
-    console.log("最終的照片", `${finalImg.size / 1024 / 1024} MB`);
-    alert("壓縮出來的照片"+ `${compressed.size / 1024 / 1024} MB`);
-    alert(`轉換格式出來的照片 ${finalImg.size / 1024 / 1024} MB`);
-    return finalImg
+    console.log("最終的照片", `${compressed.size / 1024 / 1024} MB`);
+    alert(`最終的照片 ${compressed.size / 1024 / 1024} MB`);
+    return compressed;
   }
 
   return {
     //data
     //methods
     handleUploadMutipleImgs,
-    handleCompressAndFormatConvert
+    handleCompress
   };
 };
