@@ -33,8 +33,8 @@ export default () => {
     if (!compressed) return console.log('圖片擠壓縮失敗')
     const finalImg = await convertToWebP(compressed)
     console.log("最終的照片", `${finalImg.size / 1024 / 1024} MB`);
-    // alert("壓縮出來的照片"+ `${compressed.size / 1024 / 1024} MB`);
-    // alert(`轉換格式出來的照片 ${finalImg.size / 1024 / 1024} MB`);
+    alert("壓縮出來的照片"+ `${compressed.size / 1024 / 1024} MB`);
+    alert(`轉換格式出來的照片 ${finalImg.size / 1024 / 1024} MB`);
     return finalImg
   }
 

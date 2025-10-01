@@ -37,8 +37,6 @@ export default () => {
 類型：${file.type}
 大小：${(file.size / 1024 / 1024).toFixed(2)} MB`
       );
-
-
       paths.push(imgRes);
     }
     return paths;
