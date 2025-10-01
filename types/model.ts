@@ -12,6 +12,7 @@ export enum SizeUnit{
 export enum ModelBrand{
     TRUMPETER = '小號手_Tumpeter',
     TRUMPETER_HOBBYBOSS = '小號手_HobbyBoss',
+    MENG = '萌_Meng',
     ACADEMY = '愛德美_Academy',
     ITALERI = '義大利_Italeri',
     TAMIYA = '田宮_Tamiya',
