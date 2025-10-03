@@ -13,8 +13,7 @@
     "preview": "nuxt build && nuxt preview",
     "postinstall": "nuxt prepare",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "prebuild": "yarn test"
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
