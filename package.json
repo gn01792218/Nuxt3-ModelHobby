@@ -8,16 +8,24 @@
     "netlify": "netlify dev",
     "generate": "nuxt generate",
     "preview": "nuxt build && nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxtjs/supabase": "^1.1.5",
     "@samk-dev/nuxt-vcalendar": "^1.0.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@testing-library/vue": "^8.1.0",
     "@types/opencc-js": "^1.0.3",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "happy-dom": "^19.0.2",
     "nuxt": "^3.11.1",
     "nuxt-time": "^0.1.2",
     "prisma": "^5.15.0",
+    "vitest": "^3.2.4",
     "vue": "^3.3.12",
     "vue-router": "^4.2.5"
   },
