@@ -8,6 +8,7 @@ export default () => {
   //MyModel API
   async function getAllModels() {
     return await useFetchApi(`/api/myModels`,"get");
+    // return models as Model[];
   }
   async function getMyModels() {
     const models = await fetchApiBase(`/api/myModels/${user.value?.id}`,"get");

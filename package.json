@@ -2,32 +2,22 @@
   "name": "nuxt-app",
   "private": true,
   "type": "module",
-  "engines": {
-    "node": ">=20.0.0"
-  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --open",
     "netlify": "netlify dev",
     "generate": "nuxt generate",
     "preview": "nuxt build && nuxt preview",
-    "postinstall": "nuxt prepare",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "postinstall": "nuxt prepare"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@nuxtjs/supabase": "^1.1.5",
-    "@pinia/testing": "^1.0.2",
     "@samk-dev/nuxt-vcalendar": "^1.0.2",
-    "@testing-library/vue": "^8.1.0",
     "@types/opencc-js": "^1.0.3",
-    "@vue/test-utils": "^2.4.6",
-    "happy-dom": "^19.0.2",
     "nuxt": "^3.11.1",
     "nuxt-time": "^0.1.2",
     "prisma": "^5.15.0",
-    "vitest": "^3.2.4",
     "vue": "^3.3.12",
     "vue-router": "^4.2.5"
   },
