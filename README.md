@@ -1,41 +1,74 @@
-# Nuxt 3 Minimal Starter
+# Nuxt3-ModelHobby
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+基於 Nuxt3 開發的模型收藏網站。
 
-## Setup
+## 功能特點
 
-Make sure to install the dependencies:
+- 模型收藏管理
+- 圖片上傳與管理
+- 支援繁簡轉換
+- 幣值轉換功能
+
+## 開發環境設置
+
+安裝依賴：
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
 yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+啟動開發伺服器：
 
 ```bash
-# npm
-npm run dev
+yarn dev
+```
 
-# pnpm
-pnpm run dev
+## 測試
+
+執行單元測試：
+
+```bash
+# 執行所有測試
+yarn test
+
+# 開發時使用 watch 模式
+yarn test:watch
+```
+
+## 建構與部署
+
+建構專案（包含執行測試）：
+
+```bash
+yarn build
+```
+
+預覽建構結果：
+
+```bash
+yarn preview
+```
+
+## 部署
+
+專案使用 Netlify 自動部署。每次推送到主分支時會：
+1. 執行單元測試
+2. 建構專案
+3. 自動部署到生產環境
+
+## 技術棧
+
+- Nuxt 3
+- Vue 3
+- Pinia
+- Vitest
+- TypeScript
+- Tailwind CSS
+- Supabase
+
 
 # yarn
 yarn dev
-
-# bun
-bun run dev
 ```
 
 ## Production
@@ -43,33 +76,19 @@ bun run dev
 Build the application for production:
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
 
 # yarn
 yarn build
 
-# bun
-bun run build
 ```
 
 Locally preview production build:
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
 
 # yarn
 yarn preview
 
-# bun
-bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

@@ -1,0 +1,14 @@
+[build]
+  command = "yarn test && yarn build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# 確保生產環境的變量都有設置
+[context.production]
+  command = "yarn test && yarn build"
+
+# 開發分支的設置
+[context.branch-deploy]
+  command = "yarn test && yarn build"
