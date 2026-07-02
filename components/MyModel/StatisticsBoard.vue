@@ -77,7 +77,7 @@ const totalCoast = computed(()=>{
 })
 const selledAmount = computed(()=>{
   let total = 0
-  selledModels.value.forEach(m=>m.purchase_infos?.forEach(i=>total += toTWD(i.currency, i.price, i.amount)))
+  selledModels.value.forEach(m=>m.purchase_infos?.forEach(i=>total += toTWD(i.currency, i.sellingPrice, i.amount)))
   return total
 })
 function openModelsDetailModal(models:Model[]){

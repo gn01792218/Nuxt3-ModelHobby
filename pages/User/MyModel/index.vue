@@ -96,6 +96,11 @@
                            v-model="(modelPurchaseInfo.price)">
                      </div>
                      <div>
+                        <label for="model_purchase_info_selling_price">賣出價格</label>
+                        <input id="model_purchase_info_selling_price" type="number" step="0.0001"
+                           v-model="(modelPurchaseInfo.sellingPrice)">
+                     </div>
+                     <div>
                         <label for="model_purchase_info_amount">數量</label>
                         <input id="model_purchase_info_amount" type="number" v-model="(modelPurchaseInfo.amount)">
                      </div>
@@ -191,6 +196,7 @@ const modelPurchaseInfo = ref<CreatePurchaseInfoRequest>({
    e_commerce_name: Ecommerce.淘寶,
    currency: Currency.RMB,
    price: 0,
+   sellingPrice:0,
    amount: 1
 })
 const modelFinishInfo = ref<Partial<ModelFinishInfo>>({

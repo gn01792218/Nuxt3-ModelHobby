@@ -40,16 +40,20 @@
                     <input id="purchase_price" type="number" v-model="createPurchaseInfo.price">
                 </div>
                 <div>
-                    <label for="purchase_price">購買數量</label>
-                    <input id="purchase_price" type="number" v-model="createPurchaseInfo.amount">
+                    <label for="purchase_sellingPrice">賣出價格</label>
+                    <input id="purchase_sellingPrice" type="number" v-model="createPurchaseInfo.sellingPrice">
+                </div>
+                <div>
+                    <label for="purchase_amount">購買數量</label>
+                    <input id="purchase_amount" type="number" v-model="createPurchaseInfo.amount">
                 </div>
                 <div>
                     <label for="purchase_shop_name">購買商家</label>
                     <input id="purchase_shop_name" type="text" v-model="createPurchaseInfo.shop_name">
                 </div>
                 <div>
-                    <label for="modelSize_height">購買日期</label>
-                    <input id="modelSize_height" type="date" v-model="createPurchaseInfo.purchase_date">
+                    <label for="purchase_date">購買日期</label>
+                    <input id="purchase_date" type="date" v-model="createPurchaseInfo.purchase_date">
                 </div>
                 <button class="mr-5" @click="fetchAddModelPurchaseInfo">確認</button>
             </div>
@@ -82,6 +86,7 @@ const createPurchaseInfo = ref<CreatePurchaseInfoRequest>({
     e_commerce_name: Ecommerce.淘寶,
     currency: Currency.RMB,
     price: 0,
+    sellingPrice:0,
     amount:1
 })
 const updatePurchaseInfo = ref<PurchaseInfo>()
