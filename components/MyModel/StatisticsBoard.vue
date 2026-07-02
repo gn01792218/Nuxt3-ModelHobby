@@ -1,10 +1,11 @@
 <template>
     <div>
         <p>總花費 : <span class="text-acent-500">{{ totalCoast }}</span>台幣</p>
-        <p>目前共有{{ myModelList.length }} 個模型</p>
+        <p>目前共有{{ myModelList.length }} 個模型-賣出{{selledModels.length}} = {{myModelList.length - selledModels.length}}</p>
         <p>未入庫:{{ unStockInModels.length }}個</p>
         <p>未組裝:{{ unFinishedModels.length }}個</p>
         <p>已組裝:{{ finishedModels.length }}個</p>
+        <p>已賣出: {{selledModels.length}}個(共{{ selledAmount }}元)</p>
         <SearchBar class="mt-3" :search-sorce="myModelList" :search-type="SearchModelType.MyModel" place-holder="個人模型搜尋"/>
     </div>
     <UDivider>
@@ -27,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { SearchModelType, type Model } from '~/types/model'
+import { ModelStatus, SearchModelType, type Model } from '~/types/model'
 import { useMyModelStore } from '~/store/useMyModelStore'
 import type { PurchaseInfo } from '~/types/purchaseInfo';
 const {
@@ -36,6 +37,7 @@ const {
     unStockInModels,
     unFinishedModels,
     finishedModels,
+    selledModels,
     thisMonthFinishedModels,
     thisMonthFinishedCount,
     thisMonthPurchaseModels,
@@ -66,12 +68,17 @@ const purchaseDateSelects = computed<string[] | Date[]>(()=>{
 const totalCoast = computed(()=>{
     let total =0
     if(!myModelList.value) return
-    myModelList.value.forEach((model:Model)=>{
+    myModelList.value.filter(m=>m.status !== ModelStatus.已賣出).forEach((model:Model)=>{
         model.purchase_infos?.forEach(info=>{
             total += toTWD(info.currency, info.price, info.amount)
         })
     })
     return total
+})
+const selledAmount = computed(()=>{
+  let total = 0
+  selledModels.value.forEach(m=>m.purchase_infos?.forEach(i=>total += toTWD(i.currency, i.price, i.amount)))
+  return total
 })
 function openModelsDetailModal(models:Model[]){
     setOpenSearchPanel(true)

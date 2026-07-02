@@ -45,6 +45,11 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
       return model.status === ModelStatus.已組裝;
     })
   );
+  const selledModels = computed(() =>
+    myModelList.value?.filter((model) => {
+      return model.status === ModelStatus.已賣出;
+    })
+  );
   const allfinishedModels = computed(() =>
     allModelList.value.filter((model) => {
       return model.status === ModelStatus.已組裝;
@@ -139,6 +144,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     unStockInModels,
     unFinishedModels,
     finishedModels,
+    selledModels,
     allfinishedModels,
     thisMonthFinishedModels,
     thisMonthFinishedCount,

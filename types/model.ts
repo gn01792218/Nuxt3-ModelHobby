@@ -60,7 +60,8 @@ export enum ModelStatus{
     未入庫,
     未組裝,
     已組裝,
-    完成品
+    完成品,
+    已賣出
 }
 export enum Ecommerce{
     淘寶 = "淘寶",
