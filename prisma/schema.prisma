@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model MyModel {
@@ -44,7 +45,7 @@ model PurchaseInfo {
   e_commerce_name String
   currency        String
   price           Float
-  sellingPrice    Float
+  sellingPrice    Float     @default(0)
   amount          Int       @default(1)
   shop_name       String?
   purchase_date   DateTime?
