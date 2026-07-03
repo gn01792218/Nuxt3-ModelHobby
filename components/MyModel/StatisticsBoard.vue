@@ -5,7 +5,7 @@
         <p>未入庫:{{ unStockInModels.length }}個</p>
         <p>未組裝:{{ unFinishedModels.length }}個</p>
         <p>已組裝:{{ finishedModels.length }}個</p>
-        <p>已賣出: {{selledModels.length}}個(共{{ selledAmount }}元)</p>
+        <p class="cursor-pointer" @click="openModelsDetailModal(selledModels)">已賣出: {{selledModels.length}}個(共{{ selledAmount }}元)</p>
         <SearchBar class="mt-3" :search-sorce="myModelList" :search-type="SearchModelType.MyModel" place-holder="個人模型搜尋"/>
     </div>
     <UDivider>
