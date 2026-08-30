@@ -8,51 +8,39 @@
             <p class="text-2xl">{{ currentModel?.name_en }}</p>
         </section>
         <div>
-            <button @click="showEditPanelHandel()">修改</button>
-            <div v-show="showEditPanel" class="bg-red-200">
-                <div>
-                    <select name="" id="" v-model="editModel.status">
-                        <option v-for="status, index in Object.keys(ModelStatus).filter(key => isNaN(Number(key)))" :key="status" :value="ModelStatus[status]">{{ ModelStatus[index] }}</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="model_name_zh">中文名稱</label>
-                    <input id="model_name_zh" type="text" v-model="editModel.name_zh">
-                </div>
-                <div>
-                    <label for="model_name_en">英文名稱</label>
-                    <input id="model_name_en" type="text" v-model="editModel.name_en">
-                </div>
-                <div>
-                    <label for="model_name_en">品牌</label>
-                    <select name="" id="" v-model="editModel.brand">
-                        <option v-for="brand in ModelBrand" :key="brand" :value="brand">{{ brand }}</option>
-                    </select>
-                </div>
-                <div>
-                     <label for="model_type">類型</label>
-                     <select name="" id="" v-model="editModel.type">
-                        <option v-for="modelType in ModelType" :key="modelType" :value="modelType">{{ modelType }}</option>
-                     </select>
-                  </div>
-                  <div>
-                     <label for="model_type">比例</label>
-                     <select name="" id="" v-model="editModel.scale">
-                        <option v-for="modelScale in ModelScale" :key="modelScale" :value="modelScale">{{ modelScale }}</option>
-                     </select>
-                  </div>
-                <div>
-                    <label for="model_name_en">產品編號</label>
-                    <input id="model_name_en" type="text" v-model="editModel.article_number">
-                </div>
-                <div>
-                    <label for="model_main_img">封面圖片</label>
+            <UButton label="修改" color="primary" @click="showEditPanelHandel()" />
+            <UModal v-model="showEditPanel">
+            <div class="p-4">
+                <UFormGroup label="狀態">
+                    <USelect v-model="editModel.status" :options="statusOptions" option-attribute="label"
+                        value-attribute="value" placeholder="選擇狀態" />
+                </UFormGroup>
+                <UFormGroup label="中文名稱">
+                    <UInput placeholder="中文名稱" v-model="editModel.name_zh" />
+                </UFormGroup>
+                <UFormGroup label="英文名稱">
+                    <UInput placeholder="英文名稱" v-model="editModel.name_en" />
+                </UFormGroup>
+                <UFormGroup label="品牌">
+                    <USelect v-model="editModel.brand" :options="brandOptions" placeholder="選擇品牌" />
+                </UFormGroup>
+                <UFormGroup label="類型">
+                    <USelect v-model="editModel.type" :options="typeOptions" placeholder="選擇類型" />
+                </UFormGroup>
+                <UFormGroup label="比例">
+                    <USelect v-model="editModel.scale" :options="scaleOptions" placeholder="選擇比例" />
+                </UFormGroup>
+                <UFormGroup label="產品編號">
+                    <UInput placeholder="產品編號" v-model="editModel.article_number" />
+                </UFormGroup>
+                <UFormGroup label="封面圖片">
                     <input type="file" id="model_main_img" @change="async (e)=> main_img_file =await handleUploadMutipleImgs(e, ref(previewImg))">
                     <NuxtImg v-show="previewImg[0]" format="webp" width="200" :src="previewImg[0]" alt="預覽圖"/>
-                </div>
-                <button v-show="currentModel" class="mr-5" @click="fetchUpdateModel">確認修改</button>
-                <button v-show="currentModel" @click="resetData">重置資料</button>
+                </UFormGroup>
+                <UButton class="mr-5" v-show="currentModel" label="確認修改" color="primary" @click="fetchUpdateModel" />
+                <UButton v-show="currentModel" label="重置資料" color="secondary" variant="outline" @click="resetData" />
             </div>
+            </UModal>
         </div>
     </section>
 </template>
@@ -80,6 +68,13 @@ const editModel = ref<Model>({
 })
 const previewImg = ref<string[]>([])
 const main_img_file = ref<FileList | null>(null)
+const statusOptions = Object.keys(ModelStatus).filter(key => isNaN(Number(key))).map(key => ({
+    value: ModelStatus[key as keyof typeof ModelStatus],
+    label: key
+}))
+const brandOptions = Object.values(ModelBrand)
+const typeOptions = Object.values(ModelType)
+const scaleOptions = Object.values(ModelScale)
 
 async function fetchUpdateModel() {
     setLoadingState(true)

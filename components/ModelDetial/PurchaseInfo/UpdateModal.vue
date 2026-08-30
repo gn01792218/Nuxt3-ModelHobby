@@ -2,20 +2,21 @@
     <UModal v-model="isOpen">
         <div class="p-4" v-if="editPurchaseInfo">
             <UFormGroup label="購買平台">
-                <select name="" id="" v-model="editPurchaseInfo.e_commerce_name">
-                    <option v-for="ecommerce in Ecommerce" :key="ecommerce" :value="ecommerce">{{ ecommerce }}</option>
-                </select>
+                <USelect v-model="editPurchaseInfo.e_commerce_name" :options="ecommerceOptions" placeholder="選擇購買平台" />
             </UFormGroup>
             <UFormGroup label="購買價格">
                 <div class="flex">
-                    <input class="my-input" type="number" placeholder="購買價格" v-model="editPurchaseInfo.price" />
+                    <UInput type="number" placeholder="購買價格" v-model="editPurchaseInfo.price" />
                     <USelect color="primary" size="md" v-model="editPurchaseInfo.currency" :options="currencyOptions"
                         placeholder="選擇幣種" />
-                    <input class="my-input" type="number" placeholder="購買數量" v-model="editPurchaseInfo.amount" />
+                    <UInput type="number" placeholder="購買數量" v-model="editPurchaseInfo.amount" />
                 </div>
             </UFormGroup>
+            <UFormGroup label="賣出價格">
+                <UInput type="number" placeholder="賣出價格" v-model="editPurchaseInfo.sellingPrice" />
+            </UFormGroup>
             <UFormGroup label="購買商家">
-                <input class="my-input" placeholder="購買商家" v-model="editPurchaseInfo.shop_name" />
+                <UInput placeholder="購買商家" v-model="editPurchaseInfo.shop_name" />
             </UFormGroup>
             <UFormGroup label="購買日期">
                 <VDatePicker v-model="editPurchaseInfo.purchase_date" />
@@ -40,5 +41,6 @@ const props = defineProps<{
 }>()
 const isOpen = computed(() => props.isOpen)
 const currencyOptions = [Currency.RMB, Currency.TW]
+const ecommerceOptions = Object.values(Ecommerce)
 const editPurchaseInfo = computed<PurchaseInfo>(() => props.updatePurchaseInfo!)
 </script>

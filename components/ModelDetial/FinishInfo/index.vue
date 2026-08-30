@@ -1,5 +1,5 @@
 <template>
-    <button @click="processAddFinishInfo">新增完成資料</button>
+    <UButton label="新增完成資料" color="primary" @click="processAddFinishInfo" />
     <section v-for="finish_info in currentModel?.finish_infos" :key="finish_info.id">
         <div>
             <p>{{ finish_info.title }}</p>
@@ -25,8 +25,8 @@
             </div>
         </div>
         <div>
-            <button class="mr-2" @click="processUpdateFinishInfo(finish_info)">修改</button>
-            <button @click="fetchDeleteFinishInfo(finish_info.id)">刪除</button>
+            <UButton class="mr-2" label="修改" color="primary" @click="processUpdateFinishInfo(finish_info)" />
+            <UButton label="刪除" color="red" variant="outline" @click="fetchDeleteFinishInfo(finish_info.id)" />
         </div>
         <ModelDetialFinishInfoUpdate :is-open="openUpdatePanel" :model-id="modelId" :finish-info="finish_info"
             @close="openUpdatePanel = false"  @success="onUpdateFinishInfoSuccess" />

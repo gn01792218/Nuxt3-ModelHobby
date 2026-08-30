@@ -12,30 +12,26 @@
             </p>
         </div>
         <div>
-            <button @click="showEditPanelHandel(currentModel?.size!)">修改</button>
-            <div v-show="showEditPanel" class="bg-red-200">
-                <div>
-                    <select name="" id="" v-model="editSize.unit">
-                        <option :value="SizeUnit.MM">mm</option>
-                        <option :value="SizeUnit.CM">cm</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="modelSize_length">長</label>
-                    <input id="modelSize_length" type="number" v-model="editSize.length">
-                </div>
-                <div>
-                    <label for="modelSize_width">寬</label>
-                    <input id="modelSize_width" type="number" v-model="editSize.width">
-                </div>
-                <div>
-                    <label for="modelSize_height">高</label>
-                    <input id="modelSize_height" type="number" v-model="editSize.height">
-                </div>
-                <button v-if="!modelSize" @click="fetchAddModelSize">新增Size資料</button>
-                <button v-show="modelSize" class="mr-5" @click="fetchUpdateSize">確認修改</button>
-                <button v-show="modelSize" @click="setOriginData">重置資料</button>
+            <UButton label="修改" color="primary" @click="showEditPanelHandel(currentModel?.size!)" />
+            <UModal v-model="showEditPanel">
+            <div class="p-4">
+                <UFormGroup label="單位">
+                    <USelect v-model="editSize.unit" :options="unitOptions" placeholder="選擇單位" />
+                </UFormGroup>
+                <UFormGroup label="長">
+                    <UInput type="number" placeholder="長" v-model="editSize.length" />
+                </UFormGroup>
+                <UFormGroup label="寬">
+                    <UInput type="number" placeholder="寬" v-model="editSize.width" />
+                </UFormGroup>
+                <UFormGroup label="高">
+                    <UInput type="number" placeholder="高" v-model="editSize.height" />
+                </UFormGroup>
+                <UButton v-if="!modelSize" label="新增Size資料" color="primary" @click="fetchAddModelSize" />
+                <UButton v-show="modelSize" class="mr-5" label="確認修改" color="primary" @click="fetchUpdateSize" />
+                <UButton v-show="modelSize" label="重置資料" color="secondary" variant="outline" @click="setOriginData" />
             </div>
+            </UModal>
         </div>
     </section>
 </template>
@@ -58,6 +54,7 @@ const editSize = ref<ModelSize>({
     height: 0,
     length: 0
 })
+const unitOptions = [SizeUnit.MM, SizeUnit.CM]
 
 async function fetchUpdateSize() {
     setLoadingState(true)

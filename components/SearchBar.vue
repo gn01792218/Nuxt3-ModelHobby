@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center mr-2">
-        <input type="text" class="my-input mr-1" v-model="keyword" :placeholde="placeHolder" @keypress.enter="search">
+        <UInput type="text" class="mr-1" v-model="keyword" :placeholder="placeHolder" @keypress.enter="search" />
         <UButton color="pink" icon="i-heroicons-magnifying-glass" size="sm" variant="solid" :trailing="false"
             @click="search" />
     </div>
@@ -17,18 +17,13 @@ const props = defineProps<{
 
 //搜尋相關
 const { setOpenSearchPanel, setSearchResult, setSearchModelType } = useMyModelStore()
-const { converTradictionalToSimple } = useChinessConverter()
+const { matchesKeyword } = useModelKeywordFilter()
 const keyword = ref('')
 function search() {
     setOpenSearchPanel(true)
     setSearchModelType(props.searchType)
     setSearchResult(
-        props.searchSorce.filter((model:Model) => {
-            if (!keyword.value) return false
-            const modelString = converTradictionalToSimple(JSON.stringify(model).toLocaleLowerCase())
-            const keywordArray = converTradictionalToSimple(keyword.value.trim().toLowerCase()).split(" ") as string[]
-            return keywordArray.some(keyword => modelString.includes(keyword))
-        })
+        props.searchSorce.filter((model:Model) => keyword.value.trim() && matchesKeyword(model, keyword.value))
     )
 }
 </script>

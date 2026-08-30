@@ -2,16 +2,16 @@
     <div class="w-full h-screen flex justify-center items-center">
         <section class="w-[400px] bg-primary-200 p-5 rounded-lg shadow-lg shadow-primary-500">
             <h1 class="text-2xl font-bold mb-5">User SignUp</h1>
-            <input class="w-full mb-2" type="email" placeholder="帳號" v-model="email" required>
-            <input class="w-full mb-2" type="password" placeholder="密碼" v-model="password" autocomplete="true" required>
-            <input class="w-full mb-2" type="text" placeholder="名稱(非必填)" v-model="name">
-            <button class="w-full flex items-center justify-center rounded-sm bg-primary-500 mb-5" @click="signUp">註冊</button>
+            <UInput class="w-full mb-2" type="email" placeholder="帳號" v-model="email" required />
+            <UInput class="w-full mb-2" type="password" placeholder="密碼" v-model="password" autocomplete="true" required />
+            <UInput class="w-full mb-2" type="text" placeholder="名稱(非必填)" v-model="name" />
+            <UButton class="w-full flex items-center justify-center mb-5" label="註冊" color="primary" @click="signUp" />
             <p class="text-gray-500 mt-1 mb-5">
                 已經有帳號了?
             </p>
-            <button class="w-full flex items-center justify-center rounded-sm border-2 mb-2" @click="login">Login</button>
+            <UButton class="w-full flex items-center justify-center mb-2" label="Login" color="secondary" variant="outline" @click="login" />
              <div class="w-full flex flex-col justify-around items-center mb-5">
-                <button class="w-full flex items-center justify-center" @click="loginWithGoogle">
+                <UButton class="w-full flex items-center justify-center" color="white" variant="ghost" @click="loginWithGoogle">
                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
                         viewBox="0 0 48 48">
                         <path fill="#fbc02d"
@@ -27,7 +27,7 @@
                             d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571	c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z">
                         </path>
                     </svg>
-                </button>
+                </UButton>
             </div>
             <UButton class="block ml-auto" icon="i-heroicons-home-solid" size="sm" color="primary" variant="outline" :trailing="false">
                 <NuxtLink to="/">

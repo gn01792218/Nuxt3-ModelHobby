@@ -3,17 +3,16 @@
         <h1>更新面板</h1>
         <div class="p-4" v-if="finishInfo">
             <UFormGroup label="標題">
-                <input class="my-input" placeholder="標題" v-model="finishInfo.title" />
+                <UInput placeholder="標題" v-model="finishInfo.title" />
             </UFormGroup>
             <UFormGroup label="描述">
-                <input class="my-input" placeholder="描述" v-model="finishInfo.description" />
+                <UInput placeholder="描述" v-model="finishInfo.description" />
             </UFormGroup>
             <UFormGroup label="完成日期">
                 <VDatePicker v-model="finishInfo.finished_date" />
                 <TimeFormator v-if="finishInfo.finished_date" :date="finishInfo.finished_date" />
             </UFormGroup>
-            <div>
-                <label for="model_process_imgs">製作圖片</label>
+            <UFormGroup label="製作圖片">
                 <input type="file" id="model_process_imgs"
                     @change="async (e) =>await handleLoadProcessImgsFileList(e, previewProcessImgs)" multiple>
                 <div v-for="img, index in previewProcessImgs" :key="img">
@@ -21,18 +20,16 @@
                     <UButton icon="i-heroicons-trash-solid" size="sm" color="red" variant="solid" :trailing="false"
                         @click="deleteProcessUploadImg(index)" />
                 </div>
-            </div>
-            <div>
-                <label for="model_finished_imgs">完成圖片</label>
+            </UFormGroup>
+            <UFormGroup label="完成圖片">
                 <input type="file" id="model_finished_imgs"
                     @change="async (e) =>await handleLoadGallaryImgsFileList(e, previewGalleryImgs)" multiple>
                 <div v-for="img, index in previewGalleryImgs" :key="img">
                     <NuxtImg :modifiers="{rotate: null}" format="webp" width="200" :src="img" alt="預覽圖"/>
-                    
                     <UButton icon="i-heroicons-trash-solid" size="sm" color="red" variant="solid" :trailing="false"
                         @click="deleteGalleryUploadImg(index)" />
                 </div>
-            </div>
+            </UFormGroup>
             <div class="ml-auto flex">
                 <UButton class="block mr-5" label="確認修改" @click="fetchUpdateFinishInfo" color="primary" />
                 <UButton class="block" label="取消" @click="$emit('close')" color="secondary" variant="outline" />

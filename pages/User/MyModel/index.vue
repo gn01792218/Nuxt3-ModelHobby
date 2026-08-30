@@ -7,146 +7,104 @@
                <UIcon name="i-heroicons-plus-circle-16-solid" />
                添加模型
             </UButton>
-            <div class="bg-yellow-600 p-5 absolute z-[1] left-0" v-show="showAddModelPanel">
+            <UModal v-model="showAddModelPanel">
+            <div class="p-4">
                <div>
-                  <div>
-                     <label for="model_name_zh">中文名稱</label>
-                     <input id="model_name_zh" type="text" v-model="model.name_zh">
-                  </div>
-                  <div>
-                     <label for="model_name_en">英文名稱</label>
-                     <input id="model_name_en" type="text" v-model="model.name_en">
-                  </div>
-                  <div>
-                     <label for="model_status">選擇狀態</label>
-                     <select name="" id="" v-model="model.status">
-                        <option v-for="status, index in Object.keys(ModelStatus).filter(key => isNaN(Number(key)))" :key="status" :value="ModelStatus[status]">{{ ModelStatus[index] }}</option>
-                     </select>
-                  </div>
-                  <div>
-                     <label for="model_brand">品牌</label>
-                     <select name="" id="" v-model="model.brand">
-                        <option v-for="brand in ModelBrand" :key="brand" :value="brand">{{ brand }}</option>
-                     </select>
-                  </div>
-                  <div>
-                     <label for="model_type">類型</label>
-                     <select name="" id="" v-model="model.type">
-                        <option v-for="modelType in ModelType" :key="modelType" :value="modelType">{{ modelType }}</option>
-                     </select>
-                  </div>
-                  <div>
-                     <label for="model_type">比例</label>
-                     <select name="" id="" v-model="model.scale">
-                        <option v-for="modelScale in ModelScale" :key="modelScale" :value="modelScale">{{ modelScale }}</option>
-                     </select>
-                  </div>
-                  <div>
-                     <label for="model_name_en">產品編號</label>
-                     <input id="model_name_en" type="text" v-model="model.article_number">
-                  </div>
-                  <div>
-                     <label for="model_main_img">封面圖片</label>
+                  <UFormGroup label="中文名稱">
+                     <UInput placeholder="中文名稱" v-model="model.name_zh" />
+                  </UFormGroup>
+                  <UFormGroup label="英文名稱">
+                     <UInput placeholder="英文名稱" v-model="model.name_en" />
+                  </UFormGroup>
+                  <UFormGroup label="選擇狀態">
+                     <USelect v-model="model.status" :options="statusOptions" option-attribute="label"
+                        value-attribute="value" placeholder="選擇狀態" />
+                  </UFormGroup>
+                  <UFormGroup label="品牌">
+                     <USelect v-model="model.brand" :options="brandOptions" placeholder="選擇品牌" />
+                  </UFormGroup>
+                  <UFormGroup label="類型">
+                     <USelect v-model="model.type" :options="typeOptions" placeholder="選擇類型" />
+                  </UFormGroup>
+                  <UFormGroup label="比例">
+                     <USelect v-model="model.scale" :options="scaleOptions" placeholder="選擇比例" />
+                  </UFormGroup>
+                  <UFormGroup label="產品編號">
+                     <UInput placeholder="產品編號" v-model="model.article_number" />
+                  </UFormGroup>
+                  <UFormGroup label="封面圖片">
                      <input type="file" id="model_main_img"
                         @change="async (e) => main_img_file =await handleUploadMutipleImgs(e, toRef(preview_main_Img))">
                      <NuxtImg v-show="preview_main_Img[0]" format="webp" width="200" :src="preview_main_Img[0]"
                         alt="預覽圖" />
-                  </div>
-                  <div>
-                     --------------模型尺寸資訊------------
-                     <div>
-                        <label for="model_size_unit">選擇尺吋單位</label>
-                        <select name="" id="" v-model="modelSize.unit">
-                           <option :value="SizeUnit.MM">{{ SizeUnit.MM }}</option>
-                           <option :value="SizeUnit.CM">{{ SizeUnit.CM }}</option>
-                        </select>
+                  </UFormGroup>
+                  <UDivider label="模型尺寸資訊" />
+                  <UFormGroup label="選擇尺吋單位">
+                     <USelect v-model="modelSize.unit" :options="sizeUnitOptions" placeholder="選擇尺吋單位" />
+                  </UFormGroup>
+                  <UFormGroup label="長度">
+                     <UInput type="number" step="0.0001" placeholder="長度" v-model="modelSize.length" />
+                  </UFormGroup>
+                  <UFormGroup label="寬度">
+                     <UInput type="number" step="0.0001" placeholder="寬度" v-model="(modelSize.width)" />
+                  </UFormGroup>
+                  <UFormGroup label="高度">
+                     <UInput type="number" step="0.0001" placeholder="高度" v-model="(modelSize.height)" />
+                  </UFormGroup>
+                  <UDivider label="購買訊息" />
+                  <UFormGroup label="購買平台">
+                     <USelect v-model="modelPurchaseInfo.e_commerce_name" :options="ecommerceOptions" placeholder="選擇購買平台" />
+                  </UFormGroup>
+                  <UFormGroup label="幣種">
+                     <USelect v-model="modelPurchaseInfo.currency" :options="currencyOptions" placeholder="選擇幣種" />
+                  </UFormGroup>
+                  <UFormGroup label="價格">
+                     <UInput type="number" step="0.0001" placeholder="價格" v-model="(modelPurchaseInfo.price)" />
+                  </UFormGroup>
+                  <UFormGroup label="賣出價格">
+                     <UInput type="number" step="0.0001" placeholder="賣出價格" v-model="(modelPurchaseInfo.sellingPrice)" />
+                  </UFormGroup>
+                  <UFormGroup label="數量">
+                     <UInput type="number" placeholder="數量" v-model="(modelPurchaseInfo.amount)" />
+                  </UFormGroup>
+                  <UFormGroup label="店家名稱">
+                     <UInput placeholder="店家名稱" v-model="modelPurchaseInfo.shop_name" />
+                  </UFormGroup>
+                  <UFormGroup label="購買日期">
+                     <VDatePicker v-model="modelPurchaseInfo.purchase_date" />
+                     <TimeFormator v-if="modelPurchaseInfo.purchase_date" :date="modelPurchaseInfo.purchase_date" />
+                  </UFormGroup>
+                  <UDivider label="完成資訊" />
+                  <UFormGroup label="完成日期">
+                     <VDatePicker v-model="modelFinishInfo.finished_date" />
+                     <TimeFormator v-if="modelFinishInfo.finished_date" :date="modelFinishInfo.finished_date" />
+                  </UFormGroup>
+                  <UFormGroup label="製作圖片">
+                     <input type="file" id="model_process_imgs" @change="async (e) => {
+                        process_imgs_file_list =await handleUploadMutipleImgs(e, ref(previewProcessImgs))
+                        previewProcessImgs.length = 0
+                     }" multiple>
+                     <div v-for="img in previewProcessImgs" :key="img">
+                        <NuxtImg format="webp" width="200" :src="img" alt="預覽圖" />
                      </div>
-                     <div>
-                        <label for="model_size_length">長度</label>
-                        <input id="model_size_length" type="number" step="0.0001" v-model="modelSize.length">
+                  </UFormGroup>
+                  <UFormGroup label="完成圖片">
+                     <input type="file" id="model_finished_imgs" @change="async (e) => {
+                        gallery_imgs_file_list =await handleUploadMutipleImgs(e, ref(previewGalleryImgs))
+                        previewGalleryImgs.length = 0
+                     }" multiple>
+                     <div v-for="img in previewGalleryImgs" :key="img">
+                        <NuxtImg format="webp" width="200" :src="img" alt="預覽圖" />
                      </div>
-                     <div>
-                        <label for="model_size_width">寬度</label>
-                        <input id="model_size_width" type="number" step="0.0001" v-model="(modelSize.width)">
-                     </div>
-                     <div>
-                        <label for="model_size_height">高度</label>
-                        <input id="model_size_height" type="number" step="0.0001" v-model="(modelSize.height)">
-                     </div>
-                  </div>
-                  <div>
-                     --------------購買訊息------------
-                     <div>
-                        <label for="model_purchase_info_ecommerce">購買平台</label>
-                        <select name="" id="" v-model="modelPurchaseInfo.e_commerce_name">
-                           <option v-for="ecommerce in Ecommerce" :key="ecommerce" :value="ecommerce">{{ ecommerce }}
-                           </option>
-                        </select>
-                     </div>
-                     <div>
-                        <label for="model_purchase_info_currency">幣種</label>
-                        <select name="" id="" v-model="modelPurchaseInfo.currency">
-                           <option :value="Currency.RMB">{{ Currency.RMB }}</option>
-                           <option :value="Currency.TW">{{ Currency.TW }}</option>
-                        </select>
-                     </div>
-                     <div>
-                        <label for="model_purchase_info_price">價格</label>
-                        <input id="model_purchase_info_price" type="number" step="0.0001"
-                           v-model="(modelPurchaseInfo.price)">
-                     </div>
-                     <div>
-                        <label for="model_purchase_info_selling_price">賣出價格</label>
-                        <input id="model_purchase_info_selling_price" type="number" step="0.0001"
-                           v-model="(modelPurchaseInfo.sellingPrice)">
-                     </div>
-                     <div>
-                        <label for="model_purchase_info_amount">數量</label>
-                        <input id="model_purchase_info_amount" type="number" v-model="(modelPurchaseInfo.amount)">
-                     </div>
-                     <div>
-                        <label for="model_purchase_info_shop_name">店家名稱</label>
-                        <input id="model_purchase_info_shop_name" type="text" v-model="modelPurchaseInfo.shop_name">
-                     </div>
-                     <div>
-                        <label for="model_purchase_info_shop_name">購買日期</label>
-                        <input id="model_purchase_info_shop_name" type="date" v-model="modelPurchaseInfo.purchase_date">
-                     </div>
-                  </div>
-                  <div>
-                     --------------完成資訊------------
-                     <div>
-                        <label for="model_finish_info_finished_date">完成日期</label>
-                        <input id="model_finish_info_finished_date" type="date" v-model="modelFinishInfo.finished_date">
-                     </div>
-                     <div>
-                        <label for="model_process_imgs">製作圖片</label>
-                        <input type="file" id="model_process_imgs" @change="async (e) => {
-                           process_imgs_file_list =await handleUploadMutipleImgs(e, ref(previewProcessImgs))
-                           previewProcessImgs.length = 0
-                        }" multiple>
-                        <div v-for="img in previewProcessImgs" :key="img">
-                           <NuxtImg format="webp" width="200" :src="img" alt="預覽圖" />
-                        </div>
-                     </div>
-                     <div>
-                        <label for="model_finished_imgs">完成圖片</label>
-                        <input type="file" id="model_finished_imgs" @change="async (e) => {
-                           gallery_imgs_file_list =await handleUploadMutipleImgs(e, ref(previewGalleryImgs))
-                           previewGalleryImgs.length = 0
-                        }" multiple>
-                        <div v-for="img in previewGalleryImgs" :key="img">
-                           <NuxtImg format="webp" width="200" :src="img" alt="預覽圖" />
-                        </div>
-                     </div>
-                  </div>
+                  </UFormGroup>
                </div>
-               <button class="ml-auto block border-2" @click="fetchAddMyModel">確認</button>
+               <UButton class="ml-auto block" label="確認" color="primary" @click="fetchAddMyModel" />
             </div>
+            </UModal>
          </div>
       </section>
       <MyModelTabsArea :un-stock-in-models="unStockInModels" :un-finished-models="unFinishedModels"
-         :finished-models="finishedModels" />
+         :finished-models="finishedModels" :selled-models="selledModels" />
    </main>
 </template>
 
@@ -178,6 +136,7 @@ const {
    unStockInModels,
    unFinishedModels,
    finishedModels,
+   selledModels,
 } = storeToRefs(useMyModelStore())
 
 const { setLoadingState } = useMyModelStore()
@@ -215,6 +174,16 @@ const previewProcessImgs = ref<string[]>([])
 const previewGalleryImgs = ref<string[]>([])
 const main_img_file = ref<FileList | null>(null)
 const process_imgs_file_list = ref<FileList | null>(null)
+const statusOptions = Object.keys(ModelStatus).filter(key => isNaN(Number(key))).map(key => ({
+   value: ModelStatus[key as keyof typeof ModelStatus],
+   label: key
+}))
+const brandOptions = Object.values(ModelBrand)
+const typeOptions = Object.values(ModelType)
+const scaleOptions = Object.values(ModelScale)
+const sizeUnitOptions = [SizeUnit.MM, SizeUnit.CM]
+const ecommerceOptions = Object.values(Ecommerce)
+const currencyOptions = [Currency.RMB, Currency.TW]
 const gallery_imgs_file_list = ref<FileList | null>(null)
 
 async function fetchAddMyModel() {
