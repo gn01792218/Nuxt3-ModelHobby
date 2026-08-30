@@ -4,14 +4,14 @@
          <section class="space-y-6 pb-5">
              <p class="font-bold">選項</p>
             <div class="flex">
-                <USelect
+                <MySelect
                     v-model="selectedBrand"
                     :options="brandOptions"
                     placeholder="選擇品牌"
                     label="品牌"
                     class="max-w-sm"
                 />
-                <USelect
+                <MySelect
                     v-model="selectedType"
                     :options="typeOptions"
                     placeholder="選擇類型"

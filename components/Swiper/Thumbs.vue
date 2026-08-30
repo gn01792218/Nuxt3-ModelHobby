@@ -1,28 +1,30 @@
 <template>
     <Swiper class="w-full max-w-[1280px] h-[250px] md:h-[400px] mb-2 md:mb-5"
-        :modules="[SwiperThumbs, SwiperPagination, SwiperController]" 
+        :modules="[SwiperThumbs, SwiperPagination, SwiperController, SwiperMousewheel]"
         @swiper="setMainSwiper"
         @activeIndexChange="onMainSwiperActiveIndexChange"
-        :thumbs="{ swiper: thumbsSwiper }" 
+        :thumbs="{ swiper: thumbsSwiper }"
         :style="{
             '--swiper-navigation-color': '#fff',
             '--swiper-pagination-color': '#fff',
-        }" 
+        }"
         :pagination="{
             clickable: true
-        }" 
+        }"
+        :mousewheel="{ forceToAxis: true, releaseOnEdges: true }"
         :spaceBetween="10">
         <SwiperSlide class="relative" v-for="slide in sliderItems" :key="slide" @click="processOpenImgPanel()">
             <NuxtImg :modifiers="{rotate: null}" class="w-full h-full object-contain" format="webp" sizes="250px md:400px" :src="getModelFinishImagePublicUrl(slide)" :alt="slide"/>
         </SwiperSlide>
     </Swiper>
     <Swiper class="border-2 w-full h-[87px] max-w-[1280px] sm:h-[150px] md:h-[200px] swiper-thumbs "
-        :modules="[SwiperFreeMode, SwiperThumbs, SwiperPagination, SwiperNavigation]" 
+        :modules="[SwiperFreeMode, SwiperThumbs, SwiperPagination, SwiperNavigation, SwiperMousewheel]"
         @swiper="setThumbsSwiper"
-        :navigation="true" 
-        :spaceBetween="10" 
-        :slidesPerView="4" 
-        :freeMode="true" 
+        :navigation="true"
+        :mousewheel="{ forceToAxis: true, releaseOnEdges: true }"
+        :spaceBetween="10"
+        :slidesPerView="4"
+        :freeMode="true"
         :watchSlidesProgress="true">
         <SwiperSlide class="relative cursor-pointer" v-for="slide in sliderItems" :key="slide">
             <NuxtImg class="w-full h-full opacity-50 hover:opacity-100" format="webp" sizes="87px sm:150px md:200px" :src="getModelFinishImagePublicUrl(slide)" :alt="slide"/>
@@ -40,17 +42,18 @@
     }"
     >
         <Swiper class="w-full"
-            :modules="[SwiperPagination, SwiperController,SwiperZoom]" 
+            :modules="[SwiperPagination, SwiperController, SwiperZoom, SwiperMousewheel]"
             :initialSlide="currentIndex"
-            :controller="{ control: mainSwiper }"  
+            :controller="{ control: mainSwiper }"
             :style="{
                 '--swiper-navigation-color': '#fff',
                 '--swiper-pagination-color': '#fff',
-            }" 
+            }"
             :pagination="{
                 clickable: true
-            }" 
-            :spaceBetween="10" 
+            }"
+            :mousewheel="{ forceToAxis: true, releaseOnEdges: true }"
+            :spaceBetween="10"
             :zoom="true"
             :autoHeight="true"
             >

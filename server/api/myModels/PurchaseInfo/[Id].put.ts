@@ -4,6 +4,7 @@ export default defineEventHandler(async (event)=>{
     const body = await readBody(event)
 
     body.purchase_date = body.purchase_date? new Date(body.purchase_date) : null
+    body.sellingDate = body.sellingDate? new Date(body.sellingDate) : null
 
     const myModelPurchaseInfo =await prisma.purchaseInfo.update({
         where:{

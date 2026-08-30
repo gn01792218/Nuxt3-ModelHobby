@@ -8,6 +8,7 @@ export declare interface PurchaseInfo{
     amount:number,
     shop_name?:string,
     purchase_date?:Date,
+    sellingDate?:Date,
 }
 export declare interface CreatePurchaseInfoRequest{
     e_commerce_name:Ecommerce,
@@ -17,6 +18,7 @@ export declare interface CreatePurchaseInfoRequest{
     amount:number,
     shop_name?:string,
     purchase_date?:Date,
+    sellingDate?:Date,
 }
 export declare interface UpdatePurchaseInfoRequest{
     e_commerce_name?:Ecommerce,
@@ -26,5 +28,6 @@ export declare interface UpdatePurchaseInfoRequest{
     amount?:number,
     shop_name?:string,
     purchase_date?:Date,
+    sellingDate?:Date,
 }
 

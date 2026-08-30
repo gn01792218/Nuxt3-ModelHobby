@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center mr-2">
-        <UInput type="text" class="mr-1" v-model="keyword" :placeholder="placeHolder" @keypress.enter="search" />
+        <MyInput type="text" class="mr-1" v-model="keyword" :placeholder="placeHolder" @keypress.enter="search" />
         <UButton color="pink" icon="i-heroicons-magnifying-glass" size="sm" variant="solid" :trailing="false"
             @click="search" />
     </div>

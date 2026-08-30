@@ -49,6 +49,7 @@ model PurchaseInfo {
   amount          Int       @default(1)
   shop_name       String?
   purchase_date   DateTime?
+  sellingDate     DateTime?
   modelId         Int
   model           MyModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
 }

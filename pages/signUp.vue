@@ -2,9 +2,9 @@
     <div class="w-full h-screen flex justify-center items-center">
         <section class="w-[400px] bg-primary-200 p-5 rounded-lg shadow-lg shadow-primary-500">
             <h1 class="text-2xl font-bold mb-5">User SignUp</h1>
-            <UInput class="w-full mb-2" type="email" placeholder="帳號" v-model="email" required />
-            <UInput class="w-full mb-2" type="password" placeholder="密碼" v-model="password" autocomplete="true" required />
-            <UInput class="w-full mb-2" type="text" placeholder="名稱(非必填)" v-model="name" />
+            <MyInput class="w-full mb-2" type="email" placeholder="帳號" v-model="email" required />
+            <MyInput class="w-full mb-2" type="password" placeholder="密碼" v-model="password" autocomplete="true" required />
+            <MyInput class="w-full mb-2" type="text" placeholder="名稱(非必填)" v-model="name" />
             <UButton class="w-full flex items-center justify-center mb-5" label="註冊" color="primary" @click="signUp" />
             <p class="text-gray-500 mt-1 mb-5">
                 已經有帳號了?

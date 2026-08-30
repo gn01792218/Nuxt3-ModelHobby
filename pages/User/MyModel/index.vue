@@ -10,76 +10,80 @@
             <UModal v-model="showAddModelPanel">
             <div class="p-4">
                <div>
-                  <UFormGroup label="中文名稱">
-                     <UInput placeholder="中文名稱" v-model="model.name_zh" />
-                  </UFormGroup>
-                  <UFormGroup label="英文名稱">
-                     <UInput placeholder="英文名稱" v-model="model.name_en" />
-                  </UFormGroup>
-                  <UFormGroup label="選擇狀態">
-                     <USelect v-model="model.status" :options="statusOptions" option-attribute="label"
+                  <MyFormGroup label="中文名稱">
+                     <MyInput placeholder="中文名稱" v-model="model.name_zh" />
+                  </MyFormGroup>
+                  <MyFormGroup label="英文名稱">
+                     <MyInput placeholder="英文名稱" v-model="model.name_en" />
+                  </MyFormGroup>
+                  <MyFormGroup label="選擇狀態">
+                     <MySelect v-model="model.status" :options="statusOptions" option-attribute="label"
                         value-attribute="value" placeholder="選擇狀態" />
-                  </UFormGroup>
-                  <UFormGroup label="品牌">
-                     <USelect v-model="model.brand" :options="brandOptions" placeholder="選擇品牌" />
-                  </UFormGroup>
-                  <UFormGroup label="類型">
-                     <USelect v-model="model.type" :options="typeOptions" placeholder="選擇類型" />
-                  </UFormGroup>
-                  <UFormGroup label="比例">
-                     <USelect v-model="model.scale" :options="scaleOptions" placeholder="選擇比例" />
-                  </UFormGroup>
-                  <UFormGroup label="產品編號">
-                     <UInput placeholder="產品編號" v-model="model.article_number" />
-                  </UFormGroup>
-                  <UFormGroup label="封面圖片">
+                  </MyFormGroup>
+                  <MyFormGroup label="品牌">
+                     <MySelect v-model="model.brand" :options="brandOptions" placeholder="選擇品牌" />
+                  </MyFormGroup>
+                  <MyFormGroup label="類型">
+                     <MySelect v-model="model.type" :options="typeOptions" placeholder="選擇類型" />
+                  </MyFormGroup>
+                  <MyFormGroup label="比例">
+                     <MySelect v-model="model.scale" :options="scaleOptions" placeholder="選擇比例" />
+                  </MyFormGroup>
+                  <MyFormGroup label="產品編號">
+                     <MyInput placeholder="產品編號" v-model="model.article_number" />
+                  </MyFormGroup>
+                  <MyFormGroup label="封面圖片">
                      <input type="file" id="model_main_img"
                         @change="async (e) => main_img_file =await handleUploadMutipleImgs(e, toRef(preview_main_Img))">
                      <NuxtImg v-show="preview_main_Img[0]" format="webp" width="200" :src="preview_main_Img[0]"
                         alt="預覽圖" />
-                  </UFormGroup>
+                  </MyFormGroup>
                   <UDivider label="模型尺寸資訊" />
-                  <UFormGroup label="選擇尺吋單位">
-                     <USelect v-model="modelSize.unit" :options="sizeUnitOptions" placeholder="選擇尺吋單位" />
-                  </UFormGroup>
-                  <UFormGroup label="長度">
-                     <UInput type="number" step="0.0001" placeholder="長度" v-model="modelSize.length" />
-                  </UFormGroup>
-                  <UFormGroup label="寬度">
-                     <UInput type="number" step="0.0001" placeholder="寬度" v-model="(modelSize.width)" />
-                  </UFormGroup>
-                  <UFormGroup label="高度">
-                     <UInput type="number" step="0.0001" placeholder="高度" v-model="(modelSize.height)" />
-                  </UFormGroup>
+                  <MyFormGroup label="選擇尺吋單位">
+                     <MySelect v-model="modelSize.unit" :options="sizeUnitOptions" placeholder="選擇尺吋單位" />
+                  </MyFormGroup>
+                  <MyFormGroup label="長度">
+                     <MyInput type="number" step="0.0001" placeholder="長度" v-model="modelSize.length" />
+                  </MyFormGroup>
+                  <MyFormGroup label="寬度">
+                     <MyInput type="number" step="0.0001" placeholder="寬度" v-model="(modelSize.width)" />
+                  </MyFormGroup>
+                  <MyFormGroup label="高度">
+                     <MyInput type="number" step="0.0001" placeholder="高度" v-model="(modelSize.height)" />
+                  </MyFormGroup>
                   <UDivider label="購買訊息" />
-                  <UFormGroup label="購買平台">
-                     <USelect v-model="modelPurchaseInfo.e_commerce_name" :options="ecommerceOptions" placeholder="選擇購買平台" />
-                  </UFormGroup>
-                  <UFormGroup label="幣種">
-                     <USelect v-model="modelPurchaseInfo.currency" :options="currencyOptions" placeholder="選擇幣種" />
-                  </UFormGroup>
-                  <UFormGroup label="價格">
-                     <UInput type="number" step="0.0001" placeholder="價格" v-model="(modelPurchaseInfo.price)" />
-                  </UFormGroup>
-                  <UFormGroup label="賣出價格">
-                     <UInput type="number" step="0.0001" placeholder="賣出價格" v-model="(modelPurchaseInfo.sellingPrice)" />
-                  </UFormGroup>
-                  <UFormGroup label="數量">
-                     <UInput type="number" placeholder="數量" v-model="(modelPurchaseInfo.amount)" />
-                  </UFormGroup>
-                  <UFormGroup label="店家名稱">
-                     <UInput placeholder="店家名稱" v-model="modelPurchaseInfo.shop_name" />
-                  </UFormGroup>
-                  <UFormGroup label="購買日期">
+                  <MyFormGroup label="購買平台">
+                     <MySelect v-model="modelPurchaseInfo.e_commerce_name" :options="ecommerceOptions" placeholder="選擇購買平台" />
+                  </MyFormGroup>
+                  <MyFormGroup label="幣種">
+                     <MySelect v-model="modelPurchaseInfo.currency" :options="currencyOptions" placeholder="選擇幣種" />
+                  </MyFormGroup>
+                  <MyFormGroup label="價格">
+                     <MyInput type="number" step="0.0001" placeholder="價格" v-model="(modelPurchaseInfo.price)" />
+                  </MyFormGroup>
+                  <MyFormGroup label="賣出價格">
+                     <MyInput type="number" step="0.0001" placeholder="賣出價格" v-model="(modelPurchaseInfo.sellingPrice)" />
+                  </MyFormGroup>
+                  <MyFormGroup label="數量">
+                     <MyInput type="number" placeholder="數量" v-model="(modelPurchaseInfo.amount)" />
+                  </MyFormGroup>
+                  <MyFormGroup label="店家名稱">
+                     <MyInput placeholder="店家名稱" v-model="modelPurchaseInfo.shop_name" />
+                  </MyFormGroup>
+                  <MyFormGroup label="購買日期">
                      <VDatePicker v-model="modelPurchaseInfo.purchase_date" />
                      <TimeFormator v-if="modelPurchaseInfo.purchase_date" :date="modelPurchaseInfo.purchase_date" />
-                  </UFormGroup>
+                  </MyFormGroup>
+                  <MyFormGroup label="賣出日期">
+                     <VDatePicker v-model="modelPurchaseInfo.sellingDate" />
+                     <TimeFormator v-if="modelPurchaseInfo.sellingDate" :date="modelPurchaseInfo.sellingDate" />
+                  </MyFormGroup>
                   <UDivider label="完成資訊" />
-                  <UFormGroup label="完成日期">
+                  <MyFormGroup label="完成日期">
                      <VDatePicker v-model="modelFinishInfo.finished_date" />
                      <TimeFormator v-if="modelFinishInfo.finished_date" :date="modelFinishInfo.finished_date" />
-                  </UFormGroup>
-                  <UFormGroup label="製作圖片">
+                  </MyFormGroup>
+                  <MyFormGroup label="製作圖片">
                      <input type="file" id="model_process_imgs" @change="async (e) => {
                         process_imgs_file_list =await handleUploadMutipleImgs(e, ref(previewProcessImgs))
                         previewProcessImgs.length = 0
@@ -87,8 +91,8 @@
                      <div v-for="img in previewProcessImgs" :key="img">
                         <NuxtImg format="webp" width="200" :src="img" alt="預覽圖" />
                      </div>
-                  </UFormGroup>
-                  <UFormGroup label="完成圖片">
+                  </MyFormGroup>
+                  <MyFormGroup label="完成圖片">
                      <input type="file" id="model_finished_imgs" @change="async (e) => {
                         gallery_imgs_file_list =await handleUploadMutipleImgs(e, ref(previewGalleryImgs))
                         previewGalleryImgs.length = 0
@@ -96,7 +100,7 @@
                      <div v-for="img in previewGalleryImgs" :key="img">
                         <NuxtImg format="webp" width="200" :src="img" alt="預覽圖" />
                      </div>
-                  </UFormGroup>
+                  </MyFormGroup>
                </div>
                <UButton class="ml-auto block" label="確認" color="primary" @click="fetchAddMyModel" />
             </div>

@@ -2,25 +2,25 @@
     <UTabs :items="tabItems" @change="onTabChange" v-model="currentModeStatusTab">
         <template #未組裝="{ item }">
             <div class="flex justify-end mb-2">
-                <UInput v-model="filterKeyword" icon="i-heroicons-magnifying-glass" placeholder="搜尋此分類" class="w-full sm:w-64" />
+                <MyInput v-model="filterKeyword" icon="i-heroicons-magnifying-glass" placeholder="搜尋此分類" class="w-full sm:w-64" />
             </div>
             <MyModelCardGroup :group-title="item.label" :card-list="filteredUnFinishedModels" />
         </template>
         <template #已組裝="{ item }">
             <div class="flex justify-end mb-2">
-                <UInput v-model="filterKeyword" icon="i-heroicons-magnifying-glass" placeholder="搜尋此分類" class="w-full sm:w-64" />
+                <MyInput v-model="filterKeyword" icon="i-heroicons-magnifying-glass" placeholder="搜尋此分類" class="w-full sm:w-64" />
             </div>
             <MyModelCardGroup :group-title="item.label" :card-list="filteredFinishedModels" />
         </template>
         <template #未入庫="{ item }">
             <div class="flex justify-end mb-2">
-                <UInput v-model="filterKeyword" icon="i-heroicons-magnifying-glass" placeholder="搜尋此分類" class="w-full sm:w-64" />
+                <MyInput v-model="filterKeyword" icon="i-heroicons-magnifying-glass" placeholder="搜尋此分類" class="w-full sm:w-64" />
             </div>
             <MyModelCardGroup :group-title="item.label" :card-list="filteredUnStockInModels" />
         </template>
         <template #已賣出="{ item }">
             <div class="flex justify-end mb-2">
-                <UInput v-model="filterKeyword" icon="i-heroicons-magnifying-glass" placeholder="搜尋此分類" class="w-full sm:w-64" />
+                <MyInput v-model="filterKeyword" icon="i-heroicons-magnifying-glass" placeholder="搜尋此分類" class="w-full sm:w-64" />
             </div>
             <MyModelCardGroup :group-title="item.label" :card-list="filteredSelledModels" />
         </template>

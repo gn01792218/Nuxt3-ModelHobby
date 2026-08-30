@@ -15,18 +15,18 @@
             <UButton label="修改" color="primary" @click="showEditPanelHandel(currentModel?.size!)" />
             <UModal v-model="showEditPanel">
             <div class="p-4">
-                <UFormGroup label="單位">
-                    <USelect v-model="editSize.unit" :options="unitOptions" placeholder="選擇單位" />
-                </UFormGroup>
-                <UFormGroup label="長">
-                    <UInput type="number" placeholder="長" v-model="editSize.length" />
-                </UFormGroup>
-                <UFormGroup label="寬">
-                    <UInput type="number" placeholder="寬" v-model="editSize.width" />
-                </UFormGroup>
-                <UFormGroup label="高">
-                    <UInput type="number" placeholder="高" v-model="editSize.height" />
-                </UFormGroup>
+                <MyFormGroup label="單位">
+                    <MySelect v-model="editSize.unit" :options="unitOptions" placeholder="選擇單位" />
+                </MyFormGroup>
+                <MyFormGroup label="長">
+                    <MyInput type="number" placeholder="長" v-model="editSize.length" />
+                </MyFormGroup>
+                <MyFormGroup label="寬">
+                    <MyInput type="number" placeholder="寬" v-model="editSize.width" />
+                </MyFormGroup>
+                <MyFormGroup label="高">
+                    <MyInput type="number" placeholder="高" v-model="editSize.height" />
+                </MyFormGroup>
                 <UButton v-if="!modelSize" label="新增Size資料" color="primary" @click="fetchAddModelSize" />
                 <UButton v-show="modelSize" class="mr-5" label="確認修改" color="primary" @click="fetchUpdateSize" />
                 <UButton v-show="modelSize" label="重置資料" color="secondary" variant="outline" @click="setOriginData" />

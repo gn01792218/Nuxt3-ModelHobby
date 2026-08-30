@@ -2,8 +2,8 @@
     <div class="w-full h-screen flex justify-center items-center">
         <section class="w-[400px] bg-primary-200 p-5 rounded-lg shadow-lg shadow-primary-500">
             <h1 class="text-2xl font-bold mb-5">User Login</h1>
-            <UInput class="w-full mb-2" type="email" placeholder="帳號" v-model="email" />
-            <UInput class="w-full mb-2" type="password" placeholder="密碼" v-model="password" autocomplete="true" />
+            <MyInput class="w-full mb-2" type="email" placeholder="帳號" v-model="email" />
+            <MyInput class="w-full mb-2" type="password" placeholder="密碼" v-model="password" autocomplete="true" />
             <div class="w-full h-[100px] flex flex-col justify-around items-center">
                 <UButton class="w-full flex items-center justify-center" label="Login" color="primary" @click="login" />
                 <UButton class="w-full flex items-center justify-center" color="white" variant="ghost" @click="loginWithGoogle">

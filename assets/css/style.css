@@ -18,6 +18,13 @@ body {
     @apply w-[180px] p-2 rounded-md
 }
 
+/* 手機瀏覽器對 font-size < 16px 的 input 會自動放大整頁，這裡強制 16px 避免觸發 */
+@media (max-width: 640px){
+    input, textarea, select{
+        font-size: 16px !important;
+    }
+}
+
 /* Swiper */
 .swiper-base .swiper-wrapper{
     @apply flex

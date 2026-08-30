@@ -11,6 +11,9 @@
                 </p>
                 <p>
                     賣出價格 : {{ purchaseInfo?.sellingPrice || 0 }}
+                    <template v-if="purchaseInfo?.sellingPrice && purchaseInfo?.price">
+                        (<span :class="profitClass(purchaseInfo)">{{ profitText(purchaseInfo) }}</span>)
+                    </template>
                 </p>
                 <p>
                     購買商家 : {{ purchaseInfo?.shop_name }}
@@ -18,6 +21,11 @@
                 <p>
                     購買日期 :
                     <TimeFormator v-if="purchaseInfo.purchase_date" :date="purchaseInfo.purchase_date"/>
+                    <span v-else>????/??/??</span>
+                </p>
+                <p>
+                    賣出日期 :
+                    <TimeFormator v-if="purchaseInfo.sellingDate" :date="purchaseInfo.sellingDate"/>
                     <span v-else>????/??/??</span>
                 </p>
                 <UButton class="mr-5" label="修改" color="primary" @click="openUpdatePanel(purchaseInfo)" />
@@ -28,28 +36,32 @@
             <UButton label="新增購買資訊" color="primary" @click="showAddPurchaseInfoPanel = !showAddPurchaseInfoPanel" />
             <UModal v-model="showAddPurchaseInfoPanel">
             <div class="p-4">
-                <UFormGroup label="購買平台">
-                    <USelect v-model="createPurchaseInfo.e_commerce_name" :options="ecommerceOptions" placeholder="選擇購買平台" />
-                </UFormGroup>
-                <UFormGroup label="幣種">
-                    <USelect v-model="createPurchaseInfo.currency" :options="currencyOptions" placeholder="選擇幣種" />
-                </UFormGroup>
-                <UFormGroup label="購買價格">
-                    <UInput type="number" placeholder="購買價格" v-model="createPurchaseInfo.price" />
-                </UFormGroup>
-                <UFormGroup label="賣出價格">
-                    <UInput type="number" placeholder="賣出價格" v-model="createPurchaseInfo.sellingPrice" />
-                </UFormGroup>
-                <UFormGroup label="購買數量">
-                    <UInput type="number" placeholder="購買數量" v-model="createPurchaseInfo.amount" />
-                </UFormGroup>
-                <UFormGroup label="購買商家">
-                    <UInput placeholder="購買商家" v-model="createPurchaseInfo.shop_name" />
-                </UFormGroup>
-                <UFormGroup label="購買日期">
+                <MyFormGroup label="購買平台">
+                    <MySelect v-model="createPurchaseInfo.e_commerce_name" :options="ecommerceOptions" placeholder="選擇購買平台" />
+                </MyFormGroup>
+                <MyFormGroup label="幣種">
+                    <MySelect v-model="createPurchaseInfo.currency" :options="currencyOptions" placeholder="選擇幣種" />
+                </MyFormGroup>
+                <MyFormGroup label="購買價格">
+                    <MyInput type="number" placeholder="購買價格" v-model="createPurchaseInfo.price" />
+                </MyFormGroup>
+                <MyFormGroup label="賣出價格">
+                    <MyInput type="number" placeholder="賣出價格" v-model="createPurchaseInfo.sellingPrice" />
+                </MyFormGroup>
+                <MyFormGroup label="購買數量">
+                    <MyInput type="number" placeholder="購買數量" v-model="createPurchaseInfo.amount" />
+                </MyFormGroup>
+                <MyFormGroup label="購買商家">
+                    <MyInput placeholder="購買商家" v-model="createPurchaseInfo.shop_name" />
+                </MyFormGroup>
+                <MyFormGroup label="購買日期">
                     <VDatePicker v-model="createPurchaseInfo.purchase_date" />
                     <TimeFormator v-if="createPurchaseInfo.purchase_date" :date="createPurchaseInfo.purchase_date" />
-                </UFormGroup>
+                </MyFormGroup>
+                <MyFormGroup label="賣出日期">
+                    <VDatePicker v-model="createPurchaseInfo.sellingDate" />
+                    <TimeFormator v-if="createPurchaseInfo.sellingDate" :date="createPurchaseInfo.sellingDate" />
+                </MyFormGroup>
                 <UButton class="mr-5" label="確認" color="primary" @click="fetchAddModelPurchaseInfo" />
             </div>
             </UModal>
@@ -76,6 +88,7 @@ const props = defineProps<{
 const { sendToast } = useMyToast()
 const { setLoadingState } = useMyModelStore()
 const { updateMyModelPurchaseInfo, addMyModelPurchaseInfo, deleteMyModelPurchaseInfo} = useMyModelsAPI()
+const { toTWD } = useExchange()
 const showAddPurchaseInfoPanel = ref(false)
 const showUpdatePurchaseInfoPanel = ref(false)
 const createPurchaseInfo = ref<CreatePurchaseInfoRequest>({
@@ -89,6 +102,22 @@ const updatePurchaseInfo = ref<PurchaseInfo>()
 const originUpdatePurchaseInfo = ref<PurchaseInfo>()
 const ecommerceOptions = Object.values(Ecommerce)
 const currencyOptions = [Currency.RMB, Currency.TW]
+
+function getProfit(purchaseInfo: PurchaseInfo) {
+    const sellingPriceTWD = toTWD(purchaseInfo.currency, purchaseInfo.sellingPrice, 1)!
+    const priceTWD = toTWD(purchaseInfo.currency, purchaseInfo.price, 1)!
+    return Math.round(sellingPriceTWD - priceTWD)
+}
+function profitText(purchaseInfo: PurchaseInfo) {
+    const profit = getProfit(purchaseInfo)
+    return profit > 0 ? `+${profit}` : `${profit}`
+}
+function profitClass(purchaseInfo: PurchaseInfo) {
+    const profit = getProfit(purchaseInfo)
+    if (profit > 0) return 'text-red-500'
+    if (profit < 0) return 'text-green-500'
+    return ''
+}
 
 async function openUpdatePanel(purchaseInfo: PurchaseInfo) {
     showUpdatePurchaseInfoPanel.value = true
