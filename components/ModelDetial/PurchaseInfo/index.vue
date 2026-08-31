@@ -115,6 +115,9 @@ async function openUpdatePanel(purchaseInfo: PurchaseInfo) {
 async function fetchUpdate() {
     setLoadingState(true)
     const purchaseInfo = await updateMyModelPurchaseInfo(updatePurchaseInfo.value?.id!, updatePurchaseInfo.value!)
+    const infoList = props.currentModel?.purchase_infos
+    const targetIndex = infoList?.findIndex((info: PurchaseInfo) => info.id === purchaseInfo.id)
+    if (infoList && targetIndex !== undefined && targetIndex >= 0) infoList[targetIndex] = purchaseInfo
     setLoadingState(false)
     showUpdatePurchaseInfoPanel.value = false
     sendToast({
@@ -156,7 +159,7 @@ function resetData(originPurchaseInfoId:number) {
     showUpdatePurchaseInfoPanel.value = false
     const infoList = props.currentModel?.purchase_infos
     const targetDataIndex = infoList?.findIndex((info:PurchaseInfo) => info.id === originPurchaseInfoId)
-    if(!targetDataIndex) return 
+    if(targetDataIndex === undefined || targetDataIndex < 0) return
     if(infoList) infoList[targetDataIndex] = originUpdatePurchaseInfo.value!
 }
 </script>
