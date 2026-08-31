@@ -11,8 +11,8 @@
                 </p>
                 <p>
                     賣出價格 : {{ purchaseInfo?.sellingPrice || 0 }} {{ purchaseInfo?.sellingCurrency?.toUpperCase() }}
-                    <template v-if="purchaseInfo?.sellingPrice && purchaseInfo?.price">
-                        ( <span :class="profitClass(purchaseInfo)">{{ profitText(purchaseInfo) }}</span> )
+                    <template v-if="getProfit(purchaseInfo) !== null">
+                        ( <span :class="profitClass(getProfit(purchaseInfo)!)">{{ profitText(getProfit(purchaseInfo)!) }}</span> )
                     </template>
                 </p>
                 <p>
@@ -91,7 +91,7 @@ const props = defineProps<{
 const { sendToast } = useMyToast()
 const { setLoadingState } = useMyModelStore()
 const { updateMyModelPurchaseInfo, addMyModelPurchaseInfo, deleteMyModelPurchaseInfo} = useMyModelsAPI()
-const { toTWD } = useExchange()
+const { getProfit, profitText, profitClass } = useProfit()
 const showAddPurchaseInfoPanel = ref(false)
 const showUpdatePurchaseInfoPanel = ref(false)
 const createPurchaseInfo = ref<CreatePurchaseInfoRequest>({
@@ -106,22 +106,6 @@ const updatePurchaseInfo = ref<PurchaseInfo>()
 const originUpdatePurchaseInfo = ref<PurchaseInfo>()
 const ecommerceOptions = Object.values(Ecommerce)
 const currencyOptions = [Currency.RMB, Currency.TW]
-
-function getProfit(purchaseInfo: PurchaseInfo) {
-    const sellingPriceTWD = toTWD(purchaseInfo.sellingCurrency, purchaseInfo.sellingPrice, 1)!
-    const priceTWD = toTWD(purchaseInfo.currency, purchaseInfo.price, 1)!
-    return Math.round(sellingPriceTWD - priceTWD)
-}
-function profitText(purchaseInfo: PurchaseInfo) {
-    const profit = getProfit(purchaseInfo)
-    return profit > 0 ? `+${profit}` : `${profit}`
-}
-function profitClass(purchaseInfo: PurchaseInfo) {
-    const profit = getProfit(purchaseInfo)
-    if (profit > 0) return 'text-red-500'
-    if (profit < 0) return 'text-green-500'
-    return ''
-}
 
 async function openUpdatePanel(purchaseInfo: PurchaseInfo) {
     showUpdatePurchaseInfoPanel.value = true
