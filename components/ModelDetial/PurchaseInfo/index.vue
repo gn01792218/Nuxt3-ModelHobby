@@ -10,9 +10,9 @@
                     購買價格 : {{ purchaseInfo?.price }} ( {{ purchaseInfo?.currency }} ) / 數量 {{ purchaseInfo.amount }}
                 </p>
                 <p>
-                    賣出價格 : {{ purchaseInfo?.sellingPrice || 0 }}
+                    賣出價格 : {{ purchaseInfo?.sellingPrice || 0 }} {{ purchaseInfo?.sellingCurrency?.toUpperCase() }}
                     <template v-if="purchaseInfo?.sellingPrice && purchaseInfo?.price">
-                        (<span :class="profitClass(purchaseInfo)">{{ profitText(purchaseInfo) }}</span>)
+                        ( <span :class="profitClass(purchaseInfo)">{{ profitText(purchaseInfo) }}</span> )
                     </template>
                 </p>
                 <p>
@@ -47,6 +47,9 @@
                 </MyFormGroup>
                 <MyFormGroup label="賣出價格">
                     <MyInput type="number" placeholder="賣出價格" v-model="createPurchaseInfo.sellingPrice" />
+                </MyFormGroup>
+                <MyFormGroup label="賣出幣種">
+                    <MySelect v-model="createPurchaseInfo.sellingCurrency" :options="currencyOptions" placeholder="選擇幣種" />
                 </MyFormGroup>
                 <MyFormGroup label="購買數量">
                     <MyInput type="number" placeholder="購買數量" v-model="createPurchaseInfo.amount" />
@@ -96,6 +99,7 @@ const createPurchaseInfo = ref<CreatePurchaseInfoRequest>({
     currency: Currency.RMB,
     price: 0,
     sellingPrice:0,
+    sellingCurrency: Currency.TW,
     amount:1
 })
 const updatePurchaseInfo = ref<PurchaseInfo>()
@@ -104,7 +108,7 @@ const ecommerceOptions = Object.values(Ecommerce)
 const currencyOptions = [Currency.RMB, Currency.TW]
 
 function getProfit(purchaseInfo: PurchaseInfo) {
-    const sellingPriceTWD = toTWD(purchaseInfo.currency, purchaseInfo.sellingPrice, 1)!
+    const sellingPriceTWD = toTWD(purchaseInfo.sellingCurrency, purchaseInfo.sellingPrice, 1)!
     const priceTWD = toTWD(purchaseInfo.currency, purchaseInfo.price, 1)!
     return Math.round(sellingPriceTWD - priceTWD)
 }

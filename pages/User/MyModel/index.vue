@@ -64,6 +64,9 @@
                   <MyFormGroup label="賣出價格">
                      <MyInput type="number" step="0.0001" placeholder="賣出價格" v-model="(modelPurchaseInfo.sellingPrice)" />
                   </MyFormGroup>
+                  <MyFormGroup label="賣出幣種">
+                     <MySelect v-model="modelPurchaseInfo.sellingCurrency" :options="currencyOptions" placeholder="選擇幣種" />
+                  </MyFormGroup>
                   <MyFormGroup label="數量">
                      <MyInput type="number" placeholder="數量" v-model="(modelPurchaseInfo.amount)" />
                   </MyFormGroup>
@@ -160,6 +163,7 @@ const modelPurchaseInfo = ref<CreatePurchaseInfoRequest>({
    currency: Currency.RMB,
    price: 0,
    sellingPrice:0,
+   sellingCurrency: Currency.TW,
    amount: 1
 })
 const modelFinishInfo = ref<Partial<ModelFinishInfo>>({

@@ -13,7 +13,11 @@
                 </div>
             </MyFormGroup>
             <MyFormGroup label="賣出價格">
-                <MyInput type="number" placeholder="賣出價格" v-model="editPurchaseInfo.sellingPrice" />
+                <div class="flex">
+                    <MyInput type="number" placeholder="賣出價格" v-model="editPurchaseInfo.sellingPrice" />
+                    <MySelect color="primary" size="md" v-model="editPurchaseInfo.sellingCurrency" :options="currencyOptions"
+                        placeholder="選擇幣種" />
+                </div>
             </MyFormGroup>
             <MyFormGroup label="購買商家">
                 <MyInput placeholder="購買商家" v-model="editPurchaseInfo.shop_name" />

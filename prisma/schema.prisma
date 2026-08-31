@@ -46,6 +46,7 @@ model PurchaseInfo {
   currency        String
   price           Float
   sellingPrice    Float     @default(0)
+  sellingCurrency String    @default("tw")
   amount          Int       @default(1)
   shop_name       String?
   purchase_date   DateTime?
