@@ -5,18 +5,22 @@
                 <MySelect v-model="editPurchaseInfo.e_commerce_name" :options="ecommerceOptions" placeholder="選擇購買平台" />
             </MyFormGroup>
             <MyFormGroup label="購買價格">
-                <div class="flex">
+                <div class="flex gap-2">
                     <MyInput type="number" placeholder="購買價格" v-model="editPurchaseInfo.price" />
-                    <MySelect color="primary" size="md" v-model="editPurchaseInfo.currency" :options="currencyOptions"
+                    <MySelect color="primary" v-model="editPurchaseInfo.currency" :options="currencyOptions"
                         placeholder="選擇幣種" />
-                    <MyInput type="number" placeholder="購買數量" v-model="editPurchaseInfo.amount" />
+                    <MyInput type="number" class="w-20" placeholder="購買數量" v-model="editPurchaseInfo.amount" />
+                    <MyInput v-if="editPurchaseInfo.currency === Currency.RMB" type="number"
+                        placeholder="匯率(留空使用預設匯率)" v-model="editPurchaseInfo.exchangeRate" />
                 </div>
             </MyFormGroup>
             <MyFormGroup label="賣出價格">
-                <div class="flex">
+                <div class="flex gap-2">
                     <MyInput type="number" placeholder="賣出價格" v-model="editPurchaseInfo.sellingPrice" />
-                    <MySelect color="primary" size="md" v-model="editPurchaseInfo.sellingCurrency" :options="currencyOptions"
+                    <MySelect color="primary" v-model="editPurchaseInfo.sellingCurrency" :options="currencyOptions"
                         placeholder="選擇幣種" />
+                    <MyInput v-if="editPurchaseInfo.sellingCurrency === Currency.RMB" type="number"
+                        placeholder="匯率(留空使用預設匯率)" v-model="editPurchaseInfo.sellingExchangeRate" />
                 </div>
             </MyFormGroup>
             <MyFormGroup label="購買商家">

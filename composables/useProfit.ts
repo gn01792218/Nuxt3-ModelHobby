@@ -6,8 +6,8 @@ export default () => {
   function getProfit(purchaseInfo: PurchaseInfo, withAmount = false) {
     if (!purchaseInfo.price || !purchaseInfo.sellingPrice) return null
     const amount = withAmount ? purchaseInfo.amount : 1
-    const sellingPriceTWD = toTWD(purchaseInfo.sellingCurrency, purchaseInfo.sellingPrice, amount)!
-    const priceTWD = toTWD(purchaseInfo.currency, purchaseInfo.price, amount)!
+    const sellingPriceTWD = toTWD(purchaseInfo.sellingCurrency, purchaseInfo.sellingPrice, amount, purchaseInfo.sellingExchangeRate)!
+    const priceTWD = toTWD(purchaseInfo.currency, purchaseInfo.price, amount, purchaseInfo.exchangeRate)!
     return Math.round(sellingPriceTWD - priceTWD)
   }
   function profitText(profit: number) {

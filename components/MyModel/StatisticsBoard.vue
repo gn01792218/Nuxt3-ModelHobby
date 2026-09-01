@@ -71,14 +71,14 @@ const totalCoast = computed(()=>{
     if(!myModelList.value) return
     myModelList.value.filter(m=>m.status !== ModelStatus.已賣出).forEach((model:Model)=>{
         model.purchase_infos?.forEach(info=>{
-            total += toTWD(info.currency, info.price, info.amount)
+            total += toTWD(info.currency, info.price, info.amount, info.exchangeRate)
         })
     })
     return total
 })
 const selledAmount = computed(()=>{
   let total = 0
-  selledModels.value.forEach(m=>m.purchase_infos?.forEach(i=>total += toTWD(i.sellingCurrency, i.sellingPrice, i.amount)))
+  selledModels.value.forEach(m=>m.purchase_infos?.forEach(i=>total += toTWD(i.sellingCurrency, i.sellingPrice, i.amount, i.sellingExchangeRate)))
   return total
 })
 const totalProfit = computed(()=>{

@@ -1,13 +1,18 @@
 
 <template>
     <section>
-        <div class="flex">
-            <UCard v-for="purchaseInfo in currentModel?.purchase_infos" :key="purchaseInfo.id">
+        <div class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 sm:flex-wrap sm:overflow-visible">
+            <UCard v-for="purchaseInfo in currentModel?.purchase_infos" :key="purchaseInfo.id"
+                class="shrink-0 w-[85vw] snap-center sm:w-auto sm:shrink">
                 <p>
                     購買平台 : {{ purchaseInfo?.e_commerce_name }}
                 </p>
                 <p>
-                    購買價格 : {{ purchaseInfo?.price }} ( {{ purchaseInfo?.currency }} ) / 數量 {{ purchaseInfo.amount }}
+                    購買價格 : {{ purchaseInfo?.price }} ( {{ purchaseInfo?.currency }} )
+                    <template v-if="purchaseInfo.currency !== Currency.TW">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">約 {{ toTWD(purchaseInfo.currency, purchaseInfo.price, 1, purchaseInfo.exchangeRate)?.toFixed(2) }} TWD</span>
+                    </template>
+                    / 數量 {{ purchaseInfo.amount }}
                 </p>
                 <p>
                     賣出價格 : {{ purchaseInfo?.sellingPrice || 0 }} {{ purchaseInfo?.sellingCurrency?.toUpperCase() }}
@@ -39,20 +44,24 @@
                 <MyFormGroup label="購買平台">
                     <MySelect v-model="createPurchaseInfo.e_commerce_name" :options="ecommerceOptions" placeholder="選擇購買平台" />
                 </MyFormGroup>
-                <MyFormGroup label="幣種">
-                    <MySelect v-model="createPurchaseInfo.currency" :options="currencyOptions" placeholder="選擇幣種" />
-                </MyFormGroup>
                 <MyFormGroup label="購買價格">
-                    <MyInput type="number" placeholder="購買價格" v-model="createPurchaseInfo.price" />
+                    <div class="flex gap-2">
+                        <MyInput type="number" placeholder="購買價格" v-model="createPurchaseInfo.price" />
+                        <MySelect color="primary" v-model="createPurchaseInfo.currency" :options="currencyOptions"
+                            placeholder="選擇幣種" />
+                        <MyInput type="number" class="w-20" placeholder="購買數量" v-model="createPurchaseInfo.amount" />
+                        <MyInput v-if="createPurchaseInfo.currency === Currency.RMB" type="number"
+                            placeholder="匯率(留空使用預設匯率)" v-model="createPurchaseInfo.exchangeRate" />
+                    </div>
                 </MyFormGroup>
                 <MyFormGroup label="賣出價格">
-                    <MyInput type="number" placeholder="賣出價格" v-model="createPurchaseInfo.sellingPrice" />
-                </MyFormGroup>
-                <MyFormGroup label="賣出幣種">
-                    <MySelect v-model="createPurchaseInfo.sellingCurrency" :options="currencyOptions" placeholder="選擇幣種" />
-                </MyFormGroup>
-                <MyFormGroup label="購買數量">
-                    <MyInput type="number" placeholder="購買數量" v-model="createPurchaseInfo.amount" />
+                    <div class="flex gap-2">
+                        <MyInput type="number" placeholder="賣出價格" v-model="createPurchaseInfo.sellingPrice" />
+                        <MySelect color="primary" v-model="createPurchaseInfo.sellingCurrency" :options="currencyOptions"
+                            placeholder="選擇幣種" />
+                        <MyInput v-if="createPurchaseInfo.sellingCurrency === Currency.RMB" type="number"
+                            placeholder="匯率(留空使用預設匯率)" v-model="createPurchaseInfo.sellingExchangeRate" />
+                    </div>
                 </MyFormGroup>
                 <MyFormGroup label="購買商家">
                     <MyInput placeholder="購買商家" v-model="createPurchaseInfo.shop_name" />
@@ -92,14 +101,17 @@ const { sendToast } = useMyToast()
 const { setLoadingState } = useMyModelStore()
 const { updateMyModelPurchaseInfo, addMyModelPurchaseInfo, deleteMyModelPurchaseInfo} = useMyModelsAPI()
 const { getProfit, profitText, profitClass } = useProfit()
+const { toTWD } = useExchange()
 const showAddPurchaseInfoPanel = ref(false)
 const showUpdatePurchaseInfoPanel = ref(false)
 const createPurchaseInfo = ref<CreatePurchaseInfoRequest>({
     e_commerce_name: Ecommerce.淘寶,
     currency: Currency.RMB,
     price: 0,
+    exchangeRate: null,
     sellingPrice:0,
     sellingCurrency: Currency.TW,
+    sellingExchangeRate: null,
     amount:1
 })
 const updatePurchaseInfo = ref<PurchaseInfo>()

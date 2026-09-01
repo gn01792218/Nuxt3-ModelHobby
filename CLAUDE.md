@@ -11,6 +11,10 @@ Nuxt 3 模型收藏/購入管理系統。資料庫用 Prisma，認證/儲存用 
 - 需要理由時，一句話帶過即可，不展開說明背景故事。
 - 用條列，不用長段落；能用檔案連結佐證的規則就附連結，不用文字重述程式碼內容。
 - 規則會過時就直接改掉或刪除，不要疊加註記「已過時」之類的說明。
+- 提到某個 function 時只寫名稱（附連結），不要列出完整參數簽名（如 `fn(a, b, c?)`），參數一改文件就要跟著改；真的需要說明某個參數的行為差異時，用文字描述該參數的效果，不要照抄簽名。
+
+## 基本準則：先 grill 再動工
+收到新需求時，先提出詳細問題釐清範圍、邊界情況、資料來源等細節，確認清楚後才開始寫程式，不要憑猜測直接實作。
 
 ## 基本準則：重複必抽共用
 只要發現「兩處以上」地方使用雷同的計算邏輯、判斷邏輯或 HTML 結構，優先抽成共用 composable / method，或共用元件（component），不要各自複製一份。
@@ -22,9 +26,9 @@ Nuxt 3 模型收藏/購入管理系統。資料庫用 Prisma，認證/儲存用 
 - 下方「金額與毛利計算」一節就是這個準則的具體案例（`useExchange`、`useProfit`）。
 
 ## 金額與毛利計算
-- 換算成台幣一律呼叫 [composables/useExchange.ts](composables/useExchange.ts) 的 `toTWD(currency, price, amount)`，不要自己寫換算公式或寫死匯率。
+- 換算成台幣一律呼叫 [composables/useExchange.ts](composables/useExchange.ts) 的 `toTWD`，不要自己寫換算公式或寫死匯率。可傳入自訂匯率，只在幣種為人民幣時生效，留空則用預設匯率。
 - 毛利計算/顯示一律呼叫 [composables/useProfit.ts](composables/useProfit.ts)：
-  - `getProfit(purchaseInfo, withAmount?)`：`price`/`sellingPrice` 缺一則回傳 `null`。單筆顯示用預設 `false`（不乘數量）；加總統計用 `true`（乘 `amount`）。
+  - `getProfit`：`price`/`sellingPrice` 缺一則回傳 `null`。單筆顯示用預設不乘數量；加總統計則改用乘上數量的模式。
   - `profitText(profit)`：正數補 `+` 號。
   - `profitClass(profit)`：正數紅 `text-red-500`、負數綠 `text-green-500`、0 不上色，全站固定用這個規則，不要自創配色。
 - 新增相關功能時擴充這兩個 composable，不要在元件內另寫加總或正負號判斷。
