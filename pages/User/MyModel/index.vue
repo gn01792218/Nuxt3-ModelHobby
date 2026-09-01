@@ -59,7 +59,11 @@
                      <MySelect v-model="modelPurchaseInfo.currency" :options="currencyOptions" placeholder="選擇幣種" />
                   </MyFormGroup>
                   <MyFormGroup label="價格">
-                     <MyInput type="number" step="0.0001" placeholder="價格" v-model="(modelPurchaseInfo.price)" />
+                     <div class="flex gap-2">
+                        <MyInput type="number" step="0.0001" placeholder="價格" v-model="(modelPurchaseInfo.price)" />
+                        <MyInput v-if="modelPurchaseInfo.currency === Currency.RMB" type="number"
+                           placeholder="匯率(留空使用預設匯率)" v-model="modelPurchaseInfo.exchangeRate" />
+                     </div>
                   </MyFormGroup>
                   <MyFormGroup label="賣出價格">
                      <MyInput type="number" step="0.0001" placeholder="賣出價格" v-model="(modelPurchaseInfo.sellingPrice)" />
@@ -162,6 +166,7 @@ const modelPurchaseInfo = ref<CreatePurchaseInfoRequest>({
    e_commerce_name: Ecommerce.淘寶,
    currency: Currency.RMB,
    price: 0,
+   exchangeRate: null,
    sellingPrice:0,
    sellingCurrency: Currency.TW,
    amount: 1
