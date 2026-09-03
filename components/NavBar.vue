@@ -11,10 +11,12 @@
                     <UIcon v-if="navItem.icon" :name="navItem.icon" />
                     <span>{{ navItem.label }}</span>
                     <ul>
-                       <li v-for="nav in navItem.childs" :key="nav.label">
-                        <NuxtLink :class="[!user && nav.authority !== Authority.All ? 'text-slate-400' : '']"
-                        :to="nav.to"> {{ nav.label }} </NuxtLink> 
-                       </li> 
+                       <template v-for="nav in navItem.childs" :key="nav.label">
+                        <li v-if="isNavVisible(nav)">
+                         <NuxtLink :class="[isNavDisabled(nav) ? 'text-slate-400' : '']"
+                         :to="nav.to"> {{ nav.label }} </NuxtLink>
+                        </li>
+                       </template>
                     </ul>
                 </section>
             </li>
@@ -32,6 +34,17 @@ interface NavItem {
     childs?: NavItem[]
 }
 const { user } = useUser()
+const { ownerEmail } = useRuntimeConfig().public
+
+function isNavVisible(nav: NavItem) {
+    if (nav.authority === Authority.SUPER) return user.value?.email === ownerEmail
+    return true
+}
+
+function isNavDisabled(nav: NavItem) {
+    return !user.value && nav.authority !== Authority.All
+}
+
 const navs: NavItem[] = [
     {
         label: '首頁',
@@ -59,7 +72,7 @@ const navs: NavItem[] = [
             {
                 label:'我的模型',
                 to:'/User/MyModel',
-                authority:Authority.MEMBER
+                authority:Authority.SUPER
             },
         ]
     }

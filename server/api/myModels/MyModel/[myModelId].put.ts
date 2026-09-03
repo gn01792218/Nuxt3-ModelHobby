@@ -1,5 +1,6 @@
 import { prisma } from '@/server/utils/prisma'
 export default defineEventHandler(async (event) => {
+  await requireOwner(event)
   const { myModelId } = event.context.params as any;
   const body = await readBody(event);
   delete body.finish_infos

@@ -3,6 +3,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import sharp from "sharp";
 
 export default defineEventHandler(async (event) => {
+  await requireOwner(event);
   const body = await readMultipartFormData(event);
   const file = body?.find((f) => f.name === "file");
   const bucketName = body

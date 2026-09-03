@@ -3,6 +3,7 @@ import { s3 } from "~/server/utils/S3";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 export default defineEventHandler(async (event) => {
+  await requireOwner(event);
   const body = await readBody(event);
   const bucketName = body.bucketName?.replaceAll("_", "-");
   const url = body.url;

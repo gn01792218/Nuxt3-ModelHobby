@@ -47,6 +47,12 @@ Nuxt 3 模型收藏/購入管理系統。資料庫用 Prisma，認證/儲存用 
 - 範例：[components/ModelDetial/PurchaseInfo/index.vue](components/ModelDetial/PurchaseInfo/index.vue) 的 `fetchAddModelPurchaseInfo`/`fetchDeletePurchaseInfo`/`fetchUpdate`，以及 [components/ModelDetial/BaseInfo.vue](components/ModelDetial/BaseInfo.vue) 編輯後呼叫 `updateMyModelData()`。
 - 用 `findIndex` 找項目後，用 `=== undefined` 或 `< 0` 判斷「找不到」，不要用 `!index`（index 為 `0` 時會被誤判成找不到）。
 
+## 權限：模型的新增/修改/刪除限定 owner
+- 只有 `.env` 的 `OWNER_EMAIL`（對應 `runtimeConfig.public.ownerEmail`）指定的帳號能新增/修改/刪除 `Model` 與其巢狀資料（`PurchaseInfo`、`ModelFinishInfo`、`ModelSize`）以及上傳/刪除模型圖片，其他登入者與訪客一律唯讀。
+- 新增任何模型相關的 POST/PUT/DELETE server API 時，第一行呼叫 [server/utils/requireOwner.ts](server/utils/requireOwner.ts) 的 `requireOwner`，非 owner 會丟出 403；不要只靠前端擋，API 端一定要驗證，否則有人直接呼叫 API 就能繞過。
+- 前端「我的模型」頁面（路徑含 `MyModel`）比照 [middleware/auth.global.ts](middleware/auth.global.ts)：非 owner 一律導回首頁，不只是登入判斷。
+- NavBar（[components/NavBar.vue](components/NavBar.vue)）用 `Authority.SUPER`（[types/Auth.ts](types/Auth.ts)）標記僅 owner 可見/可用的項目。
+
 ## API 呼叫方式
 封裝在 [composables/api/useApiBase.ts](composables/api/useApiBase.ts)，有兩種：
 - `fetchApiBase`：純客戶端請求，大部分情境用這個。

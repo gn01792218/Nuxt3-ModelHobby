@@ -4,6 +4,11 @@ export default defineNuxtConfig({
   supabase: {
     redirect: false, //true的話就會設置路由守衛，自動把尚未登入者導到login
   },
+  runtimeConfig: {
+    public: {
+      ownerEmail: process.env.OWNER_EMAIL, //只有這個帳號能新增/修改/刪除模型
+    },
+  },
   devtools: { enabled: true },
   modules: [
     "@nuxt/ui",
