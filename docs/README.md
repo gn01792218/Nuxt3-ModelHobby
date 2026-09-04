@@ -6,3 +6,4 @@
 - [nested-data-sync.md](nested-data-sync.md)：`Model` 巢狀陣列（`purchase_infos`/`finish_infos` 等）異動後如何顯式同步回 store。
 - [model-permissions.md](model-permissions.md)：模型新增/修改/刪除限定 owner 的權限規則。
 - [favorites.md](favorites.md)：收藏功能（唯一開放一般會員寫入的例外、愛心元件、排行榜資料來源）。
+- [gallery-detail.md](gallery-detail.md)：展示頁資料來源與「探索更多」同類別/品牌/比例隨機清單規則。

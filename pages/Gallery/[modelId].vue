@@ -22,6 +22,28 @@
                 完成於 : {{ formateDateYYYYMM(finish_info.finished_date, '-') }}
             </p>
         </section>
+
+        <section v-if="sameTypeModels.length || sameBrandModels.length || sameScaleModels.length" class="mt-8">
+            <SectionTitle title="探索更多" icon="i-heroicons-sparkles" />
+            <div v-if="sameTypeModels.length" class="mt-4">
+                <p class="mb-2 text-sm font-bold text-primary-300">同類別模型({{ currentModel.type }})</p>
+                <div class="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+                    <MyModelGalleryCard v-for="model in sameTypeModels" :key="model.id" :model="model" />
+                </div>
+            </div>
+            <div v-if="sameBrandModels.length" class="mt-6">
+                <p class="mb-2 text-sm font-bold text-primary-300">同品牌模型({{ currentModel.brand }})</p>
+                <div class="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+                    <MyModelGalleryCard v-for="model in sameBrandModels" :key="model.id" :model="model" />
+                </div>
+            </div>
+            <div v-if="sameScaleModels.length" class="mt-6">
+                <p class="mb-2 text-sm font-bold text-primary-300">同比例模型({{ currentModel.scale }})</p>
+                <div class="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+                    <MyModelGalleryCard v-for="model in sameScaleModels" :key="model.id" :model="model" />
+                </div>
+            </div>
+        </section>
     </div>
     <GallerySkeketon v-else />
 </template>
@@ -30,7 +52,7 @@
 import GallerySkeketon from '~/components/MyModel/GallerySkeketon.vue'
 
 const { formateDateYYYYMM } = useDate()
-const {currentModel} = useMyModel()
+const { currentModel, sameTypeModels, sameBrandModels, sameScaleModels } = useMyModel()
 const { loadSkeleton } = useSkeleton()
 const { authorName } = useModelAuthor()
 </script>

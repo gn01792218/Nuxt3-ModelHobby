@@ -8,9 +8,10 @@
     >
         <UIcon
             :name="isFavoritedByMe(model) ? 'i-heroicons-heart-solid' : 'i-heroicons-heart'"
+            class="h-6 w-6"
             :class="isFavoritedByMe(model) ? 'text-red-500' : 'text-gray-400'"
         />
-        <span class="text-sm">{{ favoriteCount(model) }}</span>
+        <span class="text-sm sm:text-base font-semibold">{{ favoriteCount(model) }}</span>
     </button>
 </template>
 

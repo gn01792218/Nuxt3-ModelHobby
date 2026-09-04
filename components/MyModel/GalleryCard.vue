@@ -34,7 +34,7 @@
                 alt="沒有上傳圖片"
             />
             <div class="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-olive-950/95 to-transparent" />
-            <FavoriteButton class="absolute top-2 right-2 z-10 rounded-sm bg-olive-950/80 px-2 py-1 text-orange-400 ring-1 ring-olive-600/60" :model="model" />
+            <FavoriteButton class="absolute top-2 right-2 z-10 flex min-h-11 min-w-11 items-center justify-center rounded-sm bg-olive-950/80 px-2 py-1 text-orange-400 ring-1 ring-olive-600/60" :model="model" />
         </div>
 
         <!-- 資訊區 -->
