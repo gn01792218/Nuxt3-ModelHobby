@@ -1,96 +1,79 @@
 <template>
     <main class="pt-0 !mt-0">
-        <!-- 最多人收藏區 -->
-         <section v-if="mostFavoritedModels.length" class="pb-5">
-            <p class="font-bold mb-2 text-white">最多人收藏</p>
-            <div class="flex flex-col md:flex-row md:items-center gap-6">
-                <SwiperFavorites :slider-items="mostFavoritedModels" />
-                <ul class="flex-1 w-full space-y-1">
-                    <li
-                        v-for="(model, index) in rankingModels"
-                        :key="model.id"
-                        class="flex items-center gap-3 cursor-pointer rounded-md p-2 hover:bg-white/10"
-                        @click="navergateToGallery(model.id)"
-                    >
-                        <span class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-primary-500 text-white text-xs font-bold">{{ index + 1 }}</span>
-                        <NuxtImg
-                            class="w-12 h-12 object-cover rounded-md flex-shrink-0"
-                            :modifiers="{rotate: null}"
-                            format="webp"
-                            :src="getModelFinishImagePublicUrl(model.finish_infos[0].gallery[0])"
-                            :alt="model.name_zh"
+        <!-- 熱門排行區 -->
+        <HomeHighlightBoard />
+        <!-- 探索更多模型創作區：篩選 + 展示 -->
+        <section class="pt-8">
+            <SectionTitle title="探索更多模型創作" icon="i-heroicons-sparkles" />
+
+            <!-- 大地色底：跟上方的藍天(main)區塊做出區隔 -->
+            <div class="bg-gradient-to-b from-earth-500 to-earth-800 rounded-3xl shadow-inner p-4 sm:p-8">
+                <!-- 選項Filter區：軍事簡報面板風格，跟熱門排行的軍風配色呼應 -->
+                <div class="mb-6 space-y-5 rounded-xl bg-olive-950/40 p-4 ring-1 ring-olive-400/20 sm:p-6">
+                    <div class="flex flex-wrap gap-3">
+                        <MySelect
+                            v-model="selectedBrand"
+                            :options="brandOptions"
+                            placeholder="選擇品牌"
+                            select-class="rounded-sm bg-olive-900/60 font-mono text-sm text-olive-50 ring-1 ring-olive-400/30 focus:ring-2 focus:ring-acent-400"
+                            class="max-w-[10rem]"
                         />
-                        <p class="flex-1 truncate text-white">{{ model.name_zh }}</p>
-                        <FavoriteButton class="text-white" :model="model" />
-                    </li>
-                </ul>
-            </div>
-         </section>
-        <!-- 選項Filter區 -->
-         <section class="space-y-6 pb-5">
-             <p class="font-bold">選項</p>
-            <div class="flex flex-wrap gap-2">
-                <MySelect
-                    v-model="selectedBrand"
-                    :options="brandOptions"
-                    placeholder="選擇品牌"
-                    label="品牌"
-                    class="max-w-sm"
-                />
-                <MySelect
-                    v-model="selectedType"
-                    :options="typeOptions"
-                    placeholder="選擇類型"
-                    label="類型"
-                    class="max-w-sm"
-                />
-            </div>
-            <div>
-                <p class="font-bold mb-2">排序方式</p>
-                <MySelect
-                    v-model="selectedSort"
-                    :options="sortOptions"
-                    select-class="w-auto"
-                />
-            </div>
-            <div>
-                <p class="font-bold mb-2">比例</p>
-                <UButtonGroup class="flex-wrap">
-                    <UButton
-                    v-for="scale in scaleOptions"
-                    :key="scale"
-                    :label="scale"
-                    :color="selectedScale === scale ? 'primary' : 'gray'"
-                    @click="selectedScale = scale"
+                        <MySelect
+                            v-model="selectedType"
+                            :options="typeOptions"
+                            placeholder="選擇類型"
+                            select-class="rounded-sm bg-olive-900/60 font-mono text-sm text-olive-50 ring-1 ring-olive-400/30 focus:ring-2 focus:ring-acent-400"
+                            class="max-w-[10rem]"
+                        />
+                    </div>
+                    <div>
+                        <p class="mb-2 font-mono text-xs uppercase tracking-widest text-earth-100/70">排序方式</p>
+                        <MySelect
+                            v-model="selectedSort"
+                            :options="sortOptions"
+                            select-class="w-auto rounded-sm bg-olive-900/60 font-mono text-sm text-olive-50 ring-1 ring-olive-400/30 focus:ring-2 focus:ring-acent-400"
+                        />
+                    </div>
+                    <div>
+                        <p class="mb-2 font-mono text-xs uppercase tracking-widest text-earth-100/70">比例</p>
+                        <div class="flex flex-wrap gap-2">
+                            <ToggleChip
+                                v-for="scale in scaleOptions"
+                                :key="scale"
+                                :active="selectedScale === scale"
+                                @click="selectedScale = scale"
+                            >
+                                {{ scale }}
+                            </ToggleChip>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        class="rounded-sm bg-earth-700/50 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-earth-50 ring-1 ring-earth-200/30 transition-colors hover:bg-earth-600/60 sm:text-sm"
+                        @click="reSetFilter"
+                    >
+                        重置篩選條件
+                    </button>
+                </div>
+
+                <!-- 展示區，從allfinishedModels列表中根據上面的Filter顯示項目 -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6 gap-1">
+                    <MyModelGalleryCard
+                        v-for="model in filteredModels"
+                        :key="model.id"
+                        :model="model"
                     />
-                </UButtonGroup>
+                </div>
             </div>
-            <UButton
-                label="重置篩選條件"
-                @click="reSetFilter"
-            />
-         </section>
-        <!-- 展示區，從allfinishedModels列表中根據上面的Filter顯示項目 -->
-         <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6 gap-1">
-            <MyModelGalleryCard
-                v-for="model in filteredModels"
-                :key="model.id"
-                :model="model"
-            />
-         </section>
+        </section>
     </main>
 </template>
 <script setup lang="ts">
 import { enumToArray } from '@/utils/enumToArray'
 import { ModelBrand, ModelScale, ModelType, type Model } from "@/types/model"
-import { useMyModelStore } from "~/store/useMyModelStore"
 
-const { allfinishedModels, navergateToGallery } = useMyModel()
+const { allfinishedModels } = useMyModel()
 const { favoriteCount } = useFavorite()
-const { getModelFinishImagePublicUrl } = useMyModelImg()
-const { mostFavoritedModels } = storeToRefs(useMyModelStore())
-
-const rankingModels = computed(() => mostFavoritedModels.value.slice(0, 5))
 
 const brandOptions = enumToArray(ModelBrand)
 const scaleOptions = enumToArray(ModelScale)

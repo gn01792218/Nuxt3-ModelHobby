@@ -14,6 +14,11 @@ body {
    clip-path: polygon(0 0, 100% 0%, 100% 80%, 51% 100%, 0 81%);
 }
 
+/* 排行榜前三名徽章：盾牌/軍階牌形狀 */
+.rank-shield-clip{
+    clip-path: polygon(50% 0%, 100% 20%, 100% 80%, 50% 100%, 0% 80%, 0% 20%);
+}
+
 .my-input{
     @apply w-[180px] p-2 rounded-md
 }
@@ -23,6 +28,22 @@ body {
     input, textarea, select{
         font-size: 16px !important;
     }
+}
+
+/* 原生 select 下拉選單的捲軸改細版、配色跟主題一致；不影響滾輪/觸控捲動行為 */
+select{
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.olive.400') theme('colors.olive.950');
+}
+select::-webkit-scrollbar{
+    width: 8px;
+}
+select::-webkit-scrollbar-track{
+    background: theme('colors.olive.950');
+}
+select::-webkit-scrollbar-thumb{
+    background: theme('colors.olive.400');
+    border-radius: 9999px;
 }
 
 /* Swiper */

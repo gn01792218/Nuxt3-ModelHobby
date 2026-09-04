@@ -60,11 +60,17 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
       model.favorites?.some((favorite) => favorite.userId === user.value?.id)
     )
   );
-  const mostFavoritedModels = computed(() =>
+  const favoritedFinishedModels = computed(() =>
     [...allfinishedModels.value]
-      .filter((model) => (model.favorites?.length ?? 0) > 0)
       .filter((model) => model.finish_infos.length && model.finish_infos[0].gallery.length)
+      .filter((model) => (model.favorites?.length ?? 0) > 0)
       .sort((a, b) => (b.favorites?.length ?? 0) - (a.favorites?.length ?? 0))
+  );
+  const mostFavoritedModels = computed(() => favoritedFinishedModels.value.slice(0, 10));
+  const latestFinishedModels = computed(() =>
+    [...allfinishedModels.value]
+      .filter((model) => model.finish_infos.length && model.finish_infos[0].gallery.length)
+      .sort((a, b) => new Date(b.finish_infos[0].finished_date ?? 0).getTime() - new Date(a.finish_infos[0].finished_date ?? 0).getTime())
       .slice(0, 10)
   );
   const thisMonthFinishedModels = computed(() => {
@@ -164,7 +170,9 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     selledModels,
     allfinishedModels,
     myFavoriteModels,
+    favoritedFinishedModels,
     mostFavoritedModels,
+    latestFinishedModels,
     thisMonthFinishedModels,
     thisMonthFinishedCount,
     thisMonthPurchaseModels,

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-專案指引，供 Claude Code 在此 repo 工作時自動遵循，避免重複被提醒。
+專案指引，供 Claude Code 在此 repo 工作時自動遵循，避免重複被提醒。本文件只放全站通用、跨功能的規則；單一功能領域的細節規則放 `docs/`，索引見 [docs/README.md](docs/README.md)。
 
 ## 專案概觀
 Nuxt 3 模型收藏/購入管理系統。資料庫用 Prisma，認證/儲存用 Supabase，圖片存放 S3(R2)。
@@ -16,6 +16,8 @@ Nuxt 3 模型收藏/購入管理系統。資料庫用 Prisma，認證/儲存用 
 - 提到某個 function 時只寫名稱（附連結），不要列出完整參數簽名（如 `fn(a, b, c?)`），參數一改文件就要跟著改；真的需要說明某個參數的行為差異時，用文字描述該參數的效果，不要照抄簽名。
 - 需要理由時，一句話帶過即可，不展開說明背景故事。
 - 本文件（CLAUDE.md）另外比照業界常見的 AI 指引文件（如 AGENTS.md）風格，每條規則寫成「遇到 X 就怎麼做」的祈使句。
+- CLAUDE.md 只放跨功能的通用原則；單一功能領域（例如某個功能的計算規則、權限規則）的細節寫進 `docs/` 底下對應的檔案，CLAUDE.md 本身不列舉這些檔案，只透過 [docs/README.md](docs/README.md) 這個索引檔連結出去，避免每加一個功能 CLAUDE.md 就多一行。判斷標準：影響全站寫法、寫任何功能都要看的準則留在 CLAUDE.md（例如 grill 需求、重複必抽共用、API 呼叫方式、測試、慣例）；只跟單一功能/領域有關的規則獨立成 `docs/` 檔案。
+- 新增 `docs/` 檔案時同步在 [docs/README.md](docs/README.md) 加一行連結＋一句話說明；該檔案內容有更新，索引那一句話跟著改到還是準確為止；功能整個移除就把對應檔案與索引行一起刪掉。CLAUDE.md 裡完全不需要跟著變動。
 
 ## 基本準則：先 grill 再動工
 收到新需求時，先提出詳細問題釐清範圍、邊界情況、資料來源等細節，確認清楚後才開始寫程式，不要憑猜測直接實作。
@@ -28,26 +30,12 @@ Nuxt 3 模型收藏/購入管理系統。資料庫用 Prisma，認證/儲存用 
   - 不需要，純輸入輸出的函式 → 抽成 `utils/` 底下的共用 util（例如既有的 [utils/enumToArray.ts](utils/enumToArray.ts)），不要為了「共用」就一律包成 composable。
 - 畫面/HTML 結構類（重複的區塊、卡片、表單片段）→ 抽成 `components/` 底下的共用元件。
 - 判斷「雷同」不需要完全一模一樣，只要是同一個概念的計算/顯示（例如「毛利怎麼算、怎麼上色」），出現第二次就該抽，不要等到第三次。
-- 下方「金額與毛利計算」一節就是這個準則的具體案例（`useExchange`、`useProfit`）。
+- [docs/profit-and-currency.md](docs/profit-and-currency.md)（`useExchange`、`useProfit`）與區塊標題共用元件 [components/SectionTitle.vue](components/SectionTitle.vue)，都是這個準則的具體案例。
 
-## 金額與毛利計算
-- 換算成台幣一律呼叫 [composables/useExchange.ts](composables/useExchange.ts) 的 `toTWD`，不要自己寫換算公式或寫死匯率。可傳入自訂匯率，只在幣種為人民幣時生效，留空則用預設匯率。
-- 毛利計算/顯示一律呼叫 [composables/useProfit.ts](composables/useProfit.ts)：
-  - `getProfit`：`price`/`sellingPrice` 缺一則回傳 `null`。單筆顯示用預設不乘數量；加總統計則改用乘上數量的模式。
-  - `profitText(profit)`：正數補 `+` 號。
-  - `profitClass(profit)`：正數紅 `text-red-500`、負數綠 `text-green-500`、0 不上色，全站固定用這個規則，不要自創配色。
-- 新增相關功能時擴充這兩個 composable，不要在元件內另寫加總或正負號判斷。
-
-## 巢狀資料的 Store 同步
-`Model` 底下的巢狀陣列（`purchase_infos`、`finish_infos` 等）新增/修改/刪除後，一律把 API 回傳結果顯式寫回 `useMyModelStore` 裡對應物件的陣列（`push`/`splice`/依 `id` 找到 index 後整筆替換），不要依賴「元件間剛好共用同一個物件參考」這種隱性機制讓畫面更新——參考鏈只要中斷（多一層 clone、prop 傳遞方式改變等），其他頁面讀到的就會是舊資料，只能整頁刷新才會恢復正常。
-- 範例：[components/ModelDetial/PurchaseInfo/index.vue](components/ModelDetial/PurchaseInfo/index.vue) 的 `fetchAddModelPurchaseInfo`/`fetchDeletePurchaseInfo`/`fetchUpdate`，以及 [components/ModelDetial/BaseInfo.vue](components/ModelDetial/BaseInfo.vue) 編輯後呼叫 `updateMyModelData()`。
-- 用 `findIndex` 找項目後，用 `=== undefined` 或 `< 0` 判斷「找不到」，不要用 `!index`（index 為 `0` 時會被誤判成找不到）。
-
-## 權限：模型的新增/修改/刪除限定 owner
-- 只有 `.env` 的 `OWNER_EMAIL`（對應 `runtimeConfig.public.ownerEmail`）指定的帳號能新增/修改/刪除 `Model` 與其巢狀資料（`PurchaseInfo`、`ModelFinishInfo`、`ModelSize`）以及上傳/刪除模型圖片，其他登入者與訪客一律唯讀。
-- 新增任何模型相關的 POST/PUT/DELETE server API 時，第一行呼叫 [server/utils/requireOwner.ts](server/utils/requireOwner.ts) 的 `requireOwner`，非 owner 會丟出 403；不要只靠前端擋，API 端一定要驗證，否則有人直接呼叫 API 就能繞過。
-- 前端「我的模型」頁面（路徑含 `MyModel`）比照 [middleware/auth.global.ts](middleware/auth.global.ts)：非 owner 一律導回首頁，不只是登入判斷。
-- NavBar（[components/NavBar.vue](components/NavBar.vue)）用 `Authority.SUPER`（[types/Auth.ts](types/Auth.ts)）標記僅 owner 可見/可用的項目。
+## 基本準則：改動後同步更新文件
+每次改完程式碼，收工前主動想一次「這次改動有沒有新增/調整規則、慣例、共用元件、資料來源」，需要就直接更新 CLAUDE.md 或對應的 `docs/**`，不要等使用者提醒才補；去哪個檔案的判斷標準跟「基本準則：撰寫文件」一致。
+- 算「規則變了、要更新文件」的情況：新增共用 composable/component/util、新增或調整 API 的權限規則、新增色階或其他之後會被複用的慣例（例如新增 `useModelAuthor.ts` 這種資料來源）。
+- 純粹調整視覺樣式（改顏色數值、字級、間距）本身不用寫文件；但如果順便新增了共用元件或新色階，那個「新增」的部分要記錄。
 
 ## API 呼叫方式
 封裝在 [composables/api/useApiBase.ts](composables/api/useApiBase.ts)，有兩種：
@@ -57,8 +45,10 @@ Nuxt 3 模型收藏/購入管理系統。資料庫用 Prisma，認證/儲存用 
 新增 API 呼叫前先判斷是否需要 SSR，不要自己用裸的 `fetch`/`$fetch`。
 
 ## 測試
-測試放在 `test/`，目錄結構鏡射 `composables/`（例如 `composables/useExchange.ts` → `test/composables/useExchange.test.ts`）。用 `npm run test` (vitest) 執行。新增/修改 composable 的計算邏輯時，應同步補上或更新對應測試。
+測試放在 `test/`，目錄結構鏡射 `composables/`/`utils/`（例如 `composables/useExchange.ts` → `test/composables/useExchange.test.ts`、`utils/favorite.ts` → `test/utils/favorite.test.ts`）。用 `npm run test` (vitest) 執行。新增/修改 composable 或 util 的計算邏輯時，應同步補上或更新對應測試；若邏輯依賴 `useUser`/Pinia store 等 Nuxt runtime，先拆成不依賴 runtime 的純函式放 `utils/` 再測，不要直接測需要 Nuxt context 的 composable。
 
 ## 慣例
-- Composable、Store 皆使用 Nuxt/Pinia 的 auto-import，不需手動 import（新檔案存到 `composables/` 或 `store/` 即可）。
+- `composables/` 底下的檔案用 Nuxt 的 auto-import，不需手動 import。但 Pinia store（`useMyModelStore`）**沒有**被自動 import，任何檔案要用都必須手動 `import { useMyModelStore } from '~/store/useMyModelStore'`，漏了會在執行期才噴 `useMyModelStore is not defined`。
 - Pinia store 用 composition API 寫法（`defineStore(name, () => {...})`），不是 options API。
+- 顏色一律用 [tailwind.config.ts](tailwind.config.ts) 已定義的色階（`main` 藍、`acent` 粉紅、`earth` 大地棕、`olive` 軍綠、`steel` 銀灰），不要在元件裡寫死 hex 或用 Tailwind 內建色；新增色系也要補滿 `50`~`950` 完整色階。
+- 卡片/列表要顯示模型代表圖時，依序 `finish_infos[0].gallery[0]`（完成照）→ `main_img`（主圖）→ `/imagePlaceHolder.jpg`（佔位圖），呼叫 [composables/useMyModelImg.ts](composables/useMyModelImg.ts) 的 `getModelFinishImagePublicUrl`/`getModelMainImagePublicUrl`，不要只讀 `main_img`。範例：[components/MyModel/GalleryCard.vue](components/MyModel/GalleryCard.vue)。

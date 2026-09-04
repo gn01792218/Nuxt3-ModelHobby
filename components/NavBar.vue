@@ -1,6 +1,6 @@
 <template>
     <nav>
-        <ul class="flex min-w-[250px] justify-between">
+        <ul class="flex items-center gap-6">
             <li v-for="navItem in navs" :key="navItem.label">
                 <section v-if="!navItem.childs">
                     <UIcon v-if="navItem.icon" :name="navItem.icon" />
@@ -50,12 +50,6 @@ const navs: NavItem[] = [
         label: '首頁',
         to: '/',
         icon: 'i-heroicons-home-solid',
-        authority: Authority.All
-    },
-    {
-        label: '藝廊',
-        to: '/Gallery',
-        icon: 'i-heroicons-paint-brush-16-solid',
         authority: Authority.All
     },
     {

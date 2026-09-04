@@ -1,11 +1,12 @@
 <template>
     <div v-if="currentModel">
-        <div class="flex items-center justify-center gap-3 border-b-2 border-b-primary-950 pb-2 mb-3">
+        <div class="flex items-center justify-center gap-3 border-b-2 border-b-primary-950 pb-2 mb-1">
             <h1 class="text-center text-primary-100 font-bold text-xl">
                 {{ currentModel.name_zh }}
             </h1>
             <FavoriteButton :model="currentModel" />
         </div>
+        <p class="text-center text-xs text-primary-500 mb-3">作者：{{ authorName }}</p>
         <section v-for="finish_info, index in currentModel.finish_infos" :key="finish_info.id" class="mb-5">
             <p class="text-black font-bold text-lg mb-2 text-center bg-primary-300">
                 <span v-if="finish_info.title">
@@ -31,4 +32,5 @@ import GallerySkeketon from '~/components/MyModel/GallerySkeketon.vue'
 const { formateDateYYYYMM } = useDate()
 const {currentModel} = useMyModel()
 const { loadSkeleton } = useSkeleton()
+const { authorName } = useModelAuthor()
 </script>
