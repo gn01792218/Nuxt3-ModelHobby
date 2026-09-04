@@ -6,6 +6,9 @@ export default defineEventHandler(async(event)=>{
             size:true,
             finish_infos:true,
             purchase_infos:true,
+            favorites:{
+                select:{ userId:true }
+            },
         }
     })
 })

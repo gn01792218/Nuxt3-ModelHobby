@@ -1,8 +1,11 @@
 <template>
     <div v-if="currentModel">
-        <h1 class="w-full text-center text-primary-100 font-bold text-xl border-b-2 border-b-primary-950 pb-2 mb-3">
-            {{ currentModel.name_zh }}
-        </h1>
+        <div class="flex items-center justify-center gap-3 border-b-2 border-b-primary-950 pb-2 mb-3">
+            <h1 class="text-center text-primary-100 font-bold text-xl">
+                {{ currentModel.name_zh }}
+            </h1>
+            <FavoriteButton :model="currentModel" />
+        </div>
         <section v-for="finish_info, index in currentModel.finish_infos" :key="finish_info.id" class="mb-5">
             <p class="text-black font-bold text-lg mb-2 text-center bg-primary-300">
                 <span v-if="finish_info.title">

@@ -4,6 +4,7 @@
         :options="options"
         :option-attribute="optionAttribute"
         :value-attribute="valueAttribute"
+        :select-class="selectClass"
         @update:model-value="onUpdateModelValue"
         @change="onChange"
     />
@@ -14,6 +15,7 @@ const props = defineProps<{
     options?: any[]
     optionAttribute?: string
     valueAttribute?: string
+    selectClass?: string
 }>()
 const modelValue = defineModel<any>()
 const emit = defineEmits<{ change: [value: any] }>()

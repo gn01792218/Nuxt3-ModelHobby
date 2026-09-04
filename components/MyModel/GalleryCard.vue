@@ -1,5 +1,6 @@
 <template>
-    <UCard class="cursor-pointer bg-red-400"  @click="navergateToGallery(model.id)">
+    <UCard class="relative cursor-pointer bg-red-400"  @click="navergateToGallery(model.id)">
+        <FavoriteButton class="absolute top-2 right-2" :model="model" />
         <p>{{ model.name_zh }}</p>
         <div class="d-flex mb-5">
             <UBadge class="mr-2" color="gray">{{ model.scale }}</UBadge>

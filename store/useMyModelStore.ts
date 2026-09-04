@@ -55,6 +55,18 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
       return model.status === ModelStatus.已組裝;
     })
   );
+  const myFavoriteModels = computed(() =>
+    allModelList.value.filter((model) =>
+      model.favorites?.some((favorite) => favorite.userId === user.value?.id)
+    )
+  );
+  const mostFavoritedModels = computed(() =>
+    [...allfinishedModels.value]
+      .filter((model) => (model.favorites?.length ?? 0) > 0)
+      .filter((model) => model.finish_infos.length && model.finish_infos[0].gallery.length)
+      .sort((a, b) => (b.favorites?.length ?? 0) - (a.favorites?.length ?? 0))
+      .slice(0, 10)
+  );
   const thisMonthFinishedModels = computed(() => {
     return myModelList.value?.filter(model=> model.status !== ModelStatus.完成品).filter((model) =>
       model.finish_infos.some((info) =>
@@ -135,6 +147,11 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   function setTargetDate(payload: Date | string) {
     targetDate.value = payload;
   }
+  function updateModelFavorites(modelId: number, favorites: { userId: string }[]) {
+    const index = allModelList.value.findIndex((model) => model.id === modelId);
+    if (index < 0) return;
+    allModelList.value[index].favorites = favorites;
+  }
 
   return {
     //data
@@ -146,6 +163,8 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     finishedModels,
     selledModels,
     allfinishedModels,
+    myFavoriteModels,
+    mostFavoritedModels,
     thisMonthFinishedModels,
     thisMonthFinishedCount,
     thisMonthPurchaseModels,
@@ -169,6 +188,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     setOpenImgPanel,
     setSearchResult,
     setTargetDate,
-    setSearchModelType
+    setSearchModelType,
+    updateModelFavorites
   };
 });

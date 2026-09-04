@@ -65,7 +65,7 @@ const navs: NavItem[] = [
         authority: Authority.MEMBER,
         childs: [
             {
-                label:'願望清單',
+                label:'我的收藏',
                 to:'/User/WishList',
                 authority:Authority.MEMBER
             },

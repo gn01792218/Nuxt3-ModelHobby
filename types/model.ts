@@ -102,5 +102,6 @@ export declare interface Model{
     PD?:Date, //生產日期
     purchase_infos?:PurchaseInfo[]
     finish_infos:ModelFinishInfo[]
+    favorites?:{userId:string}[]
 }
 

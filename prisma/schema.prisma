@@ -27,6 +27,7 @@ model MyModel {
   PD             DateTime?
   purchase_infos PurchaseInfo[]
   finish_infos    ModelFinishInfo[]
+  favorites      Favorite[]
   userId String?  @db.Uuid
 }
 
@@ -66,6 +67,15 @@ model ModelFinishInfo {
   gallery       String[]  @default([])
   modelId       Int 
   model         MyModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
+}
+model Favorite {
+  id        Int      @id @unique @default(autoincrement())
+  userId    String   @db.Uuid
+  modelId   Int
+  createdAt DateTime @default(now())
+  model     MyModel  @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, modelId])
 }
 // 定義 Profiles 表
 model Profile {
