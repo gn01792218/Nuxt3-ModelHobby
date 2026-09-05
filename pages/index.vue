@@ -13,6 +13,7 @@
                     v-model:brand="selectedBrand"
                     v-model:type="selectedType"
                     v-model:scale="selectedScale"
+                    v-model:keyword="selectedKeyword"
                     :brand-options="brandOptions"
                     :type-options="typeOptions"
                     :scale-options="scaleOptions"
@@ -30,7 +31,7 @@
                     </template>
                 </ModelFilterPanel>
 
-                <!-- 展示區，從allfinishedModels列表中根據上面的Filter顯示項目 -->
+                <!-- 展示區，從showcaseReadyModels列表中根據上面的Filter顯示項目 -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6 gap-1">
                     <MyModelGalleryCard
                         v-for="model in filteredModels"
@@ -43,9 +44,9 @@
     </main>
 </template>
 <script setup lang="ts">
-import type { Model } from "@/types/model"
+import { ModelType, type Model } from "@/types/model"
 
-const { allfinishedModels } = useMyModel()
+const { showcaseReadyModels } = useMyModel()
 const { favoriteCount } = useFavorite()
 
 const {
@@ -55,9 +56,10 @@ const {
   selectedBrand,
   selectedScale,
   selectedType,
+  selectedKeyword,
   filteredModels: filteredByOptions,
   reSetFilter: reSetOptionFilter,
-} = useModelFilter(allfinishedModels)
+} = useModelFilter(showcaseReadyModels, { excludeTypeOptions: [ModelType.工具, ModelType.顏料, ModelType.成品模型] })
 
 const sortOptions = ['最新完成在前', '收藏數：多→少', '最早新增在前']
 const selectedSort = ref(sortOptions[0])

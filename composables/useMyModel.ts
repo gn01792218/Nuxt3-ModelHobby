@@ -1,6 +1,7 @@
 import { useMyModelStore } from "~/store/useMyModelStore"
 import type { Model } from "~/types/model";
 import { pickRelatedModels } from "~/utils/relatedModels"
+import { isShowcaseReady } from "~/utils/modelShowcase"
 
 export default () => {
   const { setOpenSearchPanel, setAllModelList, setLoadingState } = useMyModelStore()
@@ -12,9 +13,11 @@ export default () => {
   })
 
   // 展示頁「探索更多」：同類別/同品牌/同比例的其他已完成模型，隨機取 12 筆
-  const sameTypeModels = computed(() => pickRelatedModels(allfinishedModels.value, currentModel.value, 'type', 12))
-  const sameBrandModels = computed(() => pickRelatedModels(allfinishedModels.value, currentModel.value, 'brand', 12))
-  const sameScaleModels = computed(() => pickRelatedModels(allfinishedModels.value, currentModel.value, 'scale', 12))
+  // 排除沒有完成圖片、沒有完成時間的模型，避免卡牌顯示不完整
+  const showcaseReadyModels = computed(() => allfinishedModels.value.filter(isShowcaseReady))
+  const sameTypeModels = computed(() => pickRelatedModels(showcaseReadyModels.value, currentModel.value, 'type', 12))
+  const sameBrandModels = computed(() => pickRelatedModels(showcaseReadyModels.value, currentModel.value, 'brand', 12))
+  const sameScaleModels = computed(() => pickRelatedModels(showcaseReadyModels.value, currentModel.value, 'scale', 12))
 
   //導航
   function navergateToMyModelDetial(id:number) {
@@ -31,6 +34,7 @@ export default () => {
     currentModel,
     allModelList,
     allfinishedModels,
+    showcaseReadyModels,
     sameTypeModels,
     sameBrandModels,
     sameScaleModels,

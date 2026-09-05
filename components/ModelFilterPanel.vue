@@ -1,5 +1,10 @@
 <template>
     <div class="mb-6 space-y-5 rounded-xl bg-olive-950/40 p-4 ring-1 ring-olive-400/20 sm:p-6">
+        <MyInput
+            v-model="selectedKeyword"
+            placeholder="在目前篩選結果中搜尋名稱、品牌關鍵字"
+            class="w-full"
+        />
         <div class="flex flex-wrap gap-3">
             <MySelect
                 v-model="selectedBrand"
@@ -44,6 +49,7 @@ defineProps<{
 const selectedBrand = defineModel<string>('brand', { default: '' })
 const selectedType = defineModel<string>('type', { default: '' })
 const selectedScale = defineModel<string>('scale', { default: '' })
+const selectedKeyword = defineModel<string>('keyword', { default: '' })
 
 const emit = defineEmits<{ reset: [] }>()
 </script>

@@ -19,6 +19,7 @@
                 v-model:brand="selectedBrand"
                 v-model:type="selectedType"
                 v-model:scale="selectedScale"
+                v-model:keyword="selectedKeyword"
                 :brand-options="brandOptions"
                 :type-options="typeOptions"
                 :scale-options="scaleOptions"
@@ -49,6 +50,7 @@ const {
     selectedBrand,
     selectedScale,
     selectedType,
+    selectedKeyword,
     filteredModels,
     reSetFilter,
 } = useModelFilter(myFavoriteModels, { optionsSource: 'models' })

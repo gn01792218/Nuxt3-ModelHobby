@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { filterModelsByCriteria, presentOptions } from '@/utils/modelFilter'
+import { filterModelsByCriteria, presentOptions, excludeOptions } from '@/utils/modelFilter'
 import type { Model } from '~/types/model'
 
 function buildModel(overrides: Partial<Model> = {}): Model {
@@ -52,6 +52,21 @@ describe('modelFilter', () => {
         buildModel({ id: 2, brand: 'Tamiya' as any }),
       ]
       expect(presentOptions(models, 'brand', ['Tamiya', 'Bandai'])).toEqual(['Tamiya'])
+    })
+  })
+
+  describe('excludeOptions', () => {
+    it('should remove the excluded values', () => {
+      expect(excludeOptions(['戰車', '飛機', '工具', '顏料'], ['工具', '顏料'])).toEqual(['戰車', '飛機'])
+    })
+
+    it('should return the original array when excluded is empty', () => {
+      const options = ['戰車', '飛機']
+      expect(excludeOptions(options, [])).toEqual(options)
+    })
+
+    it('should ignore excluded values that are not present', () => {
+      expect(excludeOptions(['戰車', '飛機'], ['工具'])).toEqual(['戰車', '飛機'])
     })
   })
 })
