@@ -1,11 +1,12 @@
 import type { Model } from "~/types/model"
 
-export type ModelFilterField = "brand" | "type" | "scale"
+export type ModelFilterField = "brand" | "type" | "scale" | "theme"
 
 export interface ModelFilterCriteria {
   brand?: string
   type?: string
   scale?: string
+  theme?: string
 }
 
 export function filterModelsByCriteria(models: Model[], criteria: ModelFilterCriteria): Model[] {
@@ -13,7 +14,8 @@ export function filterModelsByCriteria(models: Model[], criteria: ModelFilterCri
     const matchBrand = criteria.brand ? model.brand === criteria.brand : true
     const matchType = criteria.type ? model.type === criteria.type : true
     const matchScale = criteria.scale ? model.scale === criteria.scale : true
-    return matchBrand && matchType && matchScale
+    const matchTheme = criteria.theme ? model.theme === criteria.theme : true
+    return matchBrand && matchType && matchScale && matchTheme
   })
 }
 

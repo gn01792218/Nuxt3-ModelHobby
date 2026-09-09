@@ -29,6 +29,9 @@
                   <MyFormGroup label="比例">
                      <MySelect v-model="model.scale" :options="scaleOptions" placeholder="選擇比例" />
                   </MyFormGroup>
+                  <MyFormGroup label="題材">
+                     <MySelect v-model="model.theme" :options="themeOptions" placeholder="選擇題材" />
+                  </MyFormGroup>
                   <MyFormGroup label="產品編號">
                      <MyInput placeholder="產品編號" v-model="model.article_number" />
                   </MyFormGroup>
@@ -130,7 +133,8 @@ import {
    Currency,
    ModelBrand,
    ModelType,
-   ModelScale
+   ModelScale,
+   ModelTheme
 } from "~/types/model"
 import {
    type CreatePurchaseInfoRequest
@@ -180,7 +184,8 @@ const model: Model = {
    name_zh: '',
    name_en: '',
    userId: '',
-   scale: ModelScale.S72
+   scale: ModelScale.S72,
+   theme: ModelTheme.其他
 }
 const preview_main_Img = ref<string[]>([])
 const previewProcessImgs = ref<string[]>([])
@@ -194,6 +199,7 @@ const statusOptions = Object.keys(ModelStatus).filter(key => isNaN(Number(key)))
 const brandOptions = Object.values(ModelBrand)
 const typeOptions = Object.values(ModelType)
 const scaleOptions = Object.values(ModelScale)
+const themeOptions = Object.values(ModelTheme)
 const sizeUnitOptions = [SizeUnit.MM, SizeUnit.CM]
 const ecommerceOptions = Object.values(Ecommerce)
 const currencyOptions = [Currency.RMB, Currency.TW]

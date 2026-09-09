@@ -4,7 +4,8 @@
         <div class="d-flex mb-5">
             <UBadge class="mr-2" color="gray">{{ model.scale }}</UBadge>
             <UBadge class="mr-2" color="gray">{{ model.brand }}</UBadge>
-            <UBadge color="gray">{{ model.type }}</UBadge>
+            <UBadge class="mr-2" color="gray">{{ model.type }}</UBadge>
+            <UBadge color="gray">{{ model.theme }}</UBadge>
         </div>
         <NuxtImg v-if="model.main_img" loading="lazy" format="webp"  :modifiers="{rotate: null}"  class="w-full md:h-full" width="300" :src="getModelMainImagePublicUrl(model.main_img)"/>
         <NuxtImg v-else loading="lazy" :modifiers="{rotate: null}" src="/imagePlaceHolder.jpg" format="webp" alt="沒有上傳圖片"/>

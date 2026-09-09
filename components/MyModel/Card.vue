@@ -11,6 +11,7 @@
         <NuxtImg v-else loading="lazy" :modifiers="{rotate: null}" src="/imagePlaceHolder.jpg" sizes="266px md:300px" format="webp" alt="沒有上傳圖片"/>
       </div>
       <p class="text-sm text-gray-500 text-right">類型 : {{ modelData.type }}</p>
+      <p class="text-sm text-gray-500 text-right">題材 : {{ modelData.theme }}</p>
     </div>
     <template #footer>
       <div>

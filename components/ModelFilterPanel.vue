@@ -27,6 +27,13 @@
                 select-class="rounded-sm bg-olive-900/60 font-mono text-sm text-olive-50 ring-1 ring-olive-400/30 focus:ring-2 focus:ring-acent-400"
                 class="max-w-[10rem]"
             />
+            <MySelect
+                v-model="selectedTheme"
+                :options="themeOptions"
+                placeholder="選擇題材"
+                select-class="rounded-sm bg-olive-900/60 font-mono text-sm text-olive-50 ring-1 ring-olive-400/30 focus:ring-2 focus:ring-acent-400"
+                class="max-w-[10rem]"
+            />
         </div>
         <slot name="extra" />
         <button
@@ -44,11 +51,13 @@ defineProps<{
     brandOptions: string[]
     typeOptions: string[]
     scaleOptions: string[]
+    themeOptions: string[]
 }>()
 
 const selectedBrand = defineModel<string>('brand', { default: '' })
 const selectedType = defineModel<string>('type', { default: '' })
 const selectedScale = defineModel<string>('scale', { default: '' })
+const selectedTheme = defineModel<string>('theme', { default: '' })
 const selectedKeyword = defineModel<string>('keyword', { default: '' })
 
 const emit = defineEmits<{ reset: [] }>()

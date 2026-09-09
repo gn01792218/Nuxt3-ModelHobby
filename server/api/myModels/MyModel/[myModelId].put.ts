@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
   delete body.finish_infos
   delete body.purchase_infos
   delete body.size
+  delete body.favorites
   const myModel = await prisma.myModel.update({
     where: {
       id: parseInt(myModelId),

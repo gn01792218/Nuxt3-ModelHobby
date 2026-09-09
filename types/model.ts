@@ -56,6 +56,20 @@ export enum ModelType{
     成品模型 = "成品模型",
     公仔手辦 = "公仔手辦"
 }
+export enum ModelTheme{
+    一戰 = "一戰",
+    二戰 = "二戰",
+    八年抗戰 = "八年抗戰",
+    韓戰 = "韓戰",
+    第二次中東戰爭 = "第二次中東戰爭",
+    越戰 = "越戰",
+    現代 = "現代",
+    冷戰 = "冷戰",
+    機甲 = "機甲",
+    鋼彈 = "鋼彈",
+    魔戒 = "魔戒",
+    其他 = "其他"
+}
 export enum ModelStatus{
     未入庫,
     未組裝,
@@ -95,6 +109,7 @@ export declare interface Model{
     brand?:ModelBrand,
     scale?:ModelScale,
     type?:ModelType,
+    theme:ModelTheme,
     size?:ModelSize,
     main_img?:string,
     panting_guid?:string[]

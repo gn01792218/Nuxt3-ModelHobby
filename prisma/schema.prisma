@@ -20,6 +20,7 @@ model MyModel {
   brand          String?
   scale          String?
   type           String?
+  theme          String           @default("其他")
   size           ModelSize?
   main_img       String?
   panting_guide  String[]         @default([])

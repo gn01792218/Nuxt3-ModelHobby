@@ -4,6 +4,7 @@
             <NuxtImg :modifiers="{rotate: null}" format="webp" width="300" :src="getModelMainImagePublicUrl(currentModel?.main_img || '')"/>
             <p>品牌 : {{ currentModel?.brand }} ({{ currentModel?.article_number }})</p>
             <p>比例 : {{ currentModel?.scale }}</p>
+            <p>題材 : {{ currentModel?.theme }}</p>
             <p class="text-3xl font-extrabold">{{ currentModel?.name_zh }}</p>
             <p class="text-2xl">{{ currentModel?.name_en }}</p>
         </section>
@@ -30,6 +31,9 @@
                 <MyFormGroup label="比例">
                     <MySelect v-model="editModel.scale" :options="scaleOptions" placeholder="選擇比例" />
                 </MyFormGroup>
+                <MyFormGroup label="題材">
+                    <MySelect v-model="editModel.theme" :options="themeOptions" placeholder="選擇題材" />
+                </MyFormGroup>
                 <MyFormGroup label="產品編號">
                     <MyInput placeholder="產品編號" v-model="editModel.article_number" />
                 </MyFormGroup>
@@ -47,7 +51,7 @@
 
 <script setup lang="ts">
 import useMyModelsAPI from "~/composables/api/useMyModelsAPI"
-import { type Model, ModelStatus, ModelBrand, ModelType, ModelScale } from "~/types/model"
+import { type Model, ModelStatus, ModelBrand, ModelType, ModelScale, ModelTheme } from "~/types/model"
 import { useMyModelStore } from '~/store/useMyModelStore';
 import { StorageBucket } from "~/types/storage";
 const props = defineProps<{
@@ -75,6 +79,7 @@ const statusOptions = Object.keys(ModelStatus).filter(key => isNaN(Number(key)))
 const brandOptions = Object.values(ModelBrand)
 const typeOptions = Object.values(ModelType)
 const scaleOptions = Object.values(ModelScale)
+const themeOptions = Object.values(ModelTheme)
 
 async function fetchUpdateModel() {
     setLoadingState(true)

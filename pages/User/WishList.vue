@@ -19,10 +19,12 @@
                 v-model:brand="selectedBrand"
                 v-model:type="selectedType"
                 v-model:scale="selectedScale"
+                v-model:theme="selectedTheme"
                 v-model:keyword="selectedKeyword"
                 :brand-options="brandOptions"
                 :type-options="typeOptions"
                 :scale-options="scaleOptions"
+                :theme-options="themeOptions"
                 @reset="reSetFilter"
             />
 
@@ -47,9 +49,11 @@ const {
     brandOptions,
     scaleOptions,
     typeOptions,
+    themeOptions,
     selectedBrand,
     selectedScale,
     selectedType,
+    selectedTheme,
     selectedKeyword,
     filteredModels,
     reSetFilter,

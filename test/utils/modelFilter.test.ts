@@ -25,6 +25,12 @@ describe('modelFilter', () => {
       const result = filterModelsByCriteria([match, wrongScale], { brand: 'Tamiya', scale: '1:72' })
       expect(result).toEqual([match])
     })
+
+    it('should filter by theme', () => {
+      const ww2 = buildModel({ id: 1, theme: '二戰' as any })
+      const modern = buildModel({ id: 2, theme: '現代' as any })
+      expect(filterModelsByCriteria([ww2, modern], { theme: '二戰' })).toEqual([ww2])
+    })
   })
 
   describe('presentOptions', () => {
