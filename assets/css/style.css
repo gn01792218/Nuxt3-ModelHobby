@@ -72,7 +72,7 @@ select::-webkit-scrollbar-thumb{
     @apply max-w-full rounded-md my-2;
 }
 .rich-text-editable .ProseMirror{
-    @apply min-h-[120px] outline-none;
+    @apply min-h-[120px] outline-none text-steel-900;
 }
 
 /* Swiper */

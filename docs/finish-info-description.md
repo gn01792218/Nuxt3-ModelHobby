@@ -3,7 +3,9 @@
 - `ModelFinishInfo.description` 存 HTML 字串（Tiptap 輸出），不是純文字。
 - 建立/編輯用 [components/RichTextEditor.vue](../components/RichTextEditor.vue)，包在 `MyFormGroup` 裡取代原本的 `MyInput`，`v-model` 綁 `description`，需傳入 `modelId` 供內嵌圖片上傳使用。用法見 [components/ModelDetial/FinishInfo/Create.vue](../components/ModelDetial/FinishInfo/Create.vue)、[Update.vue](../components/ModelDetial/FinishInfo/Update.vue)。
 - 顯示用 [components/RichTextViewer.vue](../components/RichTextViewer.vue)，傳入 `content` prop，內部會先用 [utils/sanitizeDescriptionHtml.ts](../utils/sanitizeDescriptionHtml.ts) 清洗過再 `v-html` 輸出，避免 XSS。用法見 [pages/Gallery/[modelId].vue](../pages/Gallery/[modelId].vue)、[components/ModelDetial/FinishInfo/index.vue](../components/ModelDetial/FinishInfo/index.vue)。
-- 允許的標籤/屬性只跟工具列功能對齊（粗體/斜體/底線/刪除線、清單、H2/H3 標題、連結、圖片），新增工具列功能要同步更新 `sanitizeDescriptionHtml.ts` 的允許清單，否則新格式會在顯示時被濾掉。
+- 允許的標籤/屬性只跟工具列功能對齊（粗體/斜體/底線/刪除線、清單、H2/H3 標題、連結、圖片、字體顏色），新增工具列功能要同步更新 `sanitizeDescriptionHtml.ts` 的允許清單，否則新格式會在顯示時被濾掉。
+- 字體顏色是自訂的 Tiptap `fontColor` mark（定義在 [components/RichTextEditor.vue](../components/RichTextEditor.vue)），只允許選 [tailwind.config.ts](../tailwind.config.ts) 既有色階的固定字體色（`main`/`acent`/`earth`/`olive`/`steel`，各取一個色階做為文字色 class），輸出 `<span class="text-xxx-700">` 而不是任意 `style="color:..."`；`sanitizeDescriptionHtml.ts` 用 `allowedClasses` 限定同一份色階清單，兩邊要保持一致。新增/調整可選色時，`RichTextEditor.vue` 的 `FONT_COLORS` 跟 `sanitizeDescriptionHtml.ts` 的 `ALLOWED_CLASSES` 要同步改。
+- 編輯區固定用淺色底（`bg-white`）＋固定深色文字（`.rich-text-editable .ProseMirror` 在 [assets/css/style.css](../assets/css/style.css) 指定 `text-steel-900`），不跟著系統深色模式切換，避免文字顏色被裝置的深色模式覆蓋成白色而看不到。
 - 存檔前 server 端（`server/api/myModels/ModelFinishInfo/[id].post.ts`/`[id].put.ts`）也會用同一個 `sanitizeDescriptionHtml` 清洗一次，不能只依賴前端清洗。
 - 編輯器內嵌圖片沿用既有的 `useS3().uploadMultipleImagesToS3`（bucket 用 `StorageBucket.model_finish_info_images`），上傳完直接用 `useMyModelImg().getModelFinishImagePublicUrl` 轉成公開網址寫進 `<img src>`；不要存原始的 R2 endpoint 路徑，因為描述內文沒有像 `gallery`/`process_imgs` 那樣在渲染時另外做路徑轉換。
 - 富文本排版樣式（清單、標題、連結、圖片）共用全域 CSS class `.rich-text-content`（[assets/css/style.css](../assets/css/style.css)），`RichTextEditor`／`RichTextViewer` 都套用同一份，改樣式只需改這裡一處。

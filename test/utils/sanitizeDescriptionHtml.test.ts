@@ -53,4 +53,18 @@ describe('sanitizeDescriptionHtml', () => {
     const result = sanitizeDescriptionHtml(html)
     expect(result).not.toContain('<iframe')
   })
+
+  it('should keep span with an allowed font color class', () => {
+    const html = '<p><span class="text-main-700">彩色文字</span></p>'
+    expect(sanitizeDescriptionHtml(html)).toBe(html)
+  })
+
+  it('should strip disallowed classes and inline style from span', () => {
+    const html = '<p><span class="text-main-700 evil-class" style="color:red" onclick="alert(1)">text</span></p>'
+    const result = sanitizeDescriptionHtml(html)
+    expect(result).toContain('class="text-main-700"')
+    expect(result).not.toContain('evil-class')
+    expect(result).not.toContain('style=')
+    expect(result).not.toContain('onclick')
+  })
 })
