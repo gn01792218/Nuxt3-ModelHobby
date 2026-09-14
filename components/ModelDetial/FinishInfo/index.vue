@@ -3,7 +3,7 @@
     <section v-for="finish_info in currentModel?.finish_infos" :key="finish_info.id">
         <div>
             <p>{{ finish_info.title }}</p>
-            <p>{{ finish_info.description }}</p>
+            <RichTextViewer :content="finish_info.description" />
             <p>
                 完成日期 : <TimeFormator v-if="finish_info.finished_date" :date="finish_info.finished_date" /><span v-else>?????</span>
             </p>
@@ -66,7 +66,7 @@ async function processUpdateFinishInfo(updateTarget:ModelFinishInfo) {
 async function fetchDeleteFinishInfo(id: number) {
     setLoadingState(true)
     const deleteFinishInfo = await deleteMyModelFinishInfo(id)
-    processRemoveFinishInfoImgs(deleteFinishInfo.process_imgs, deleteFinishInfo.gallery);
+    processRemoveFinishInfoImgs(deleteFinishInfo.process_imgs, deleteFinishInfo.gallery, extractImageFileNamesFromHtml(deleteFinishInfo.description));
     const deleteIndex = props.currentModel?.finish_infos?.findIndex((info: ModelFinishInfo) => info.id === deleteFinishInfo.id)
     if (deleteIndex! >= 0) props.currentModel?.finish_infos?.splice(deleteIndex!, 1)
     setLoadingState(false)

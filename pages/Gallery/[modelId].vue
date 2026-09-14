@@ -14,9 +14,7 @@
                 </span>
                  {{ finish_info.title }}
             </p>
-            <p class="text-primary-500 text-center mb-5">
-                {{ finish_info.description }}
-            </p>
+            <RichTextViewer :content="finish_info.description" class="text-primary-500 mb-5 mx-auto w-fit max-w-full text-left" />
             <SwiperThumbs :slider-items="finish_info.gallery" />
             <p class=" text-xs text-primary-500 text-end mt-2">
                 完成於 : {{ formateDateYYYYMM(finish_info.finished_date, '-') }}

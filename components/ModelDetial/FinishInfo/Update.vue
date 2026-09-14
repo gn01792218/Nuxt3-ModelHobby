@@ -6,7 +6,7 @@
                 <MyInput placeholder="標題" v-model="finishInfo.title" />
             </MyFormGroup>
             <MyFormGroup label="描述">
-                <MyInput placeholder="描述" v-model="finishInfo.description" />
+                <RichTextEditor v-model="finishInfo.description" :model-id="props.modelId" />
             </MyFormGroup>
             <MyFormGroup label="完成日期">
                 <VDatePicker v-model="finishInfo.finished_date" />
@@ -71,8 +71,10 @@ const { updateMyModelFinishInfo } = useMyModelsAPI()
 const { uploadMultipleImagesToS3, processRemoveFinishInfoImgs } = useS3()
 
 const isOpen = computed(() => props.isOpen)
+const originalDescription = ref('') //記錄修改前的描述，用來比對哪些描述圖片被移除了
 onMounted(()=>{
     finishInfo.value = props.finishInfo!
+    originalDescription.value = props.finishInfo?.description ?? ''
 })
 
 watch(() => props.finishInfo, () => {  //更新previewImg
@@ -90,9 +92,11 @@ async function fetchUpdateFinishInfo() {
 }
 
 async function fetchUploadImageToSupabaseStorage() {
-    if(!props.finishInfo) return 
-    //先處理要被刪除的圖片
-    processRemoveFinishInfoImgs(deleteProcessImgs.value, deleteGalleryImgs.value)
+    if(!props.finishInfo) return
+    //先處理要被刪除的圖片(含描述欄位裡被移除的圖片)
+    const removedDescriptionImgs = extractImageFileNamesFromHtml(originalDescription.value)
+        .filter(fileName => !extractImageFileNamesFromHtml(props.finishInfo?.description).includes(fileName))
+    processRemoveFinishInfoImgs(deleteProcessImgs.value, deleteGalleryImgs.value, removedDescriptionImgs)
     //再看看有沒有要新上傳  的圖片
     const promises:Promise<string[]>[] = []
     if (process_imgs_file_list.value?.length) {

@@ -6,7 +6,7 @@
                 <MyInput placeholder="標題" v-model="finishInfo.title" />
             </MyFormGroup>
             <MyFormGroup label="描述">
-                <MyInput placeholder="描述" v-model="finishInfo.description" />
+                <RichTextEditor v-model="finishInfo.description" :model-id="props.modelId" />
             </MyFormGroup>
             <MyFormGroup label="完成日期">
                 <VDatePicker v-model="finishInfo.finished_date" />

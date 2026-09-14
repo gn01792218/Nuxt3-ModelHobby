@@ -46,6 +46,35 @@ select::-webkit-scrollbar-thumb{
     border-radius: 9999px;
 }
 
+/* 富文本內容通用樣式，套用於 RichTextEditor 可編輯區與 RichTextViewer 顯示內容，維持格式一致 */
+.rich-text-content{
+    @apply text-sm break-words;
+}
+.rich-text-content p{
+    @apply my-1;
+}
+.rich-text-content ul{
+    @apply pl-5 my-1 list-disc;
+}
+.rich-text-content ol{
+    @apply pl-5 my-1 list-decimal;
+}
+.rich-text-content h2{
+    @apply text-lg font-bold my-1;
+}
+.rich-text-content h3{
+    @apply text-base font-bold my-1;
+}
+.rich-text-content a{
+    @apply text-main-300 underline;
+}
+.rich-text-content img{
+    @apply max-w-full rounded-md my-2;
+}
+.rich-text-editable .ProseMirror{
+    @apply min-h-[120px] outline-none;
+}
+
 /* Swiper */
 .swiper-base .swiper-wrapper{
     @apply flex

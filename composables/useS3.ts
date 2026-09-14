@@ -44,12 +44,15 @@ export default () => {
   async function removeImageFromS3Storage(payload: DeleteS3ImageRequest) {
     return await deleteImageToS3(payload);
   }
-  async function processRemoveFinishInfoImgs(process_imgs: string[], gallery: string[]) {
+  async function processRemoveFinishInfoImgs(process_imgs: string[], gallery: string[], descriptionImgFileNames: string[] = []) {
     for (const url of process_imgs) {
       await removeImageFromS3Storage({ bucketName: StorageBucket.model_finish_info_images, url });
     }
     for (const url of gallery) {
       await removeImageFromS3Storage({ bucketName: StorageBucket.model_finish_info_images, url });
+    }
+    for (const fileName of descriptionImgFileNames) {
+      await removeImageFromS3Storage({ bucketName: StorageBucket.model_finish_info_images, url: fileName });
     }
   }
   function getModelImagePublicUrl(imgDbPaath: string) {
