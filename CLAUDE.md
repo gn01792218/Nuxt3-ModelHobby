@@ -52,3 +52,4 @@ Nuxt 3 模型收藏/購入管理系統。資料庫用 Prisma，認證/儲存用 
 - Pinia store 用 composition API 寫法（`defineStore(name, () => {...})`），不是 options API。
 - 顏色一律用 [tailwind.config.ts](tailwind.config.ts) 已定義的色階（`main` 藍、`acent` 粉紅、`earth` 大地棕、`olive` 軍綠、`steel` 銀灰），不要在元件裡寫死 hex 或用 Tailwind 內建色；新增色系也要補滿 `50`~`950` 完整色階。
 - 卡片/列表要顯示模型代表圖時，依序 `finish_infos[0].gallery[0]`（完成照）→ `main_img`（主圖）→ `/imagePlaceHolder.jpg`（佔位圖），呼叫 [composables/useMyModelImg.ts](composables/useMyModelImg.ts) 的 `getModelFinishImagePublicUrl`/`getModelMainImagePublicUrl`，不要只讀 `main_img`。範例：[components/MyModel/GalleryCard.vue](components/MyModel/GalleryCard.vue)。
+- 手機瀏覽器 focus 時會放大頁面的規則已在 [assets/css/style.css](assets/css/style.css) 用全域 CSS（`input`、`textarea`、`select`、`[contenteditable="true"]` 選擇器）解決，任何新增的表單元素或 contenteditable 編輯區都會自動套用，不需為個別元件另外處理。

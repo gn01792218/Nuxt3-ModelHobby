@@ -23,9 +23,11 @@ body {
     @apply w-[180px] p-2 rounded-md
 }
 
-/* 手機瀏覽器對 font-size < 16px 的 input 會自動放大整頁，這裡強制 16px 避免觸發 */
+/* 手機瀏覽器對 font-size < 16px 的可輸入元素會自動放大整頁，這裡強制 16px 避免觸發。
+   [contenteditable="true"] 涵蓋 RichTextEditor(ProseMirror) 這類非 input/textarea 的可編輯區，
+   之後新增任何 input/textarea/select/contenteditable 元素都會自動套用，不需額外處理 */
 @media (max-width: 640px){
-    input, textarea, select{
+    input, textarea, select, [contenteditable="true"]{
         font-size: 16px !important;
     }
 }
