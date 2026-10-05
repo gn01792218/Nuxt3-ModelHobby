@@ -1,5 +1,11 @@
 <template>
-    <UTabs :items="tabItems" @change="onTabChange" v-model="currentModeStatusTab">
+    <UTabs :items="tabItems" @change="onTabChange" v-model="currentModeStatusTab" :ui="tabsUi">
+        <template #default="{ item }">
+            <span class="flex flex-col items-center leading-tight">
+                <span>{{ item.label }}</span>
+                <span class="text-xs opacity-75">({{ item.count }})</span>
+            </span>
+        </template>
         <template #未組裝="{ item }">
             <div class="flex justify-end mb-2">
                 <MyInput v-model="filterKeyword" icon="i-heroicons-magnifying-glass" placeholder="搜尋此分類" class="w-full sm:w-64" />
@@ -47,25 +53,37 @@ const filteredUnFinishedModels = computed(() => filterModelsByKeyword(props.unFi
 const filteredFinishedModels = computed(() => filterModelsByKeyword(props.finishedModels, filterKeyword.value))
 const filteredUnStockInModels = computed(() => filterModelsByKeyword(props.unStockInModels, filterKeyword.value))
 const filteredSelledModels = computed(() => filterModelsByKeyword(props.selledModels, filterKeyword.value))
-const tabItems = [//這裡的順序影響tab的排列順序
+const tabItems = computed(() => [//這裡的順序影響tab的排列順序
     {
         slot: '未組裝',
-        label: '未組裝'
+        label: '未組裝',
+        count: props.unFinishedModels.length
     },
     {
         slot: '已組裝',
-        label: '已組裝'
+        label: '已組裝',
+        count: props.finishedModels.length
     },
     {
         slot: '未入庫',
         label: '未入庫',
+        count: props.unStockInModels.length
     },
     {
         slot: '已賣出',
         label: '已賣出',
+        count: props.selledModels.length
     },
-]
+])
 function onTabChange(index: number) {
     setCurrentModelStatusTab(index)
+}
+const tabsUi = {
+    list: {
+        height: 'h-14',
+        tab: {
+            height: 'h-14'
+        }
+    }
 }
 </script>

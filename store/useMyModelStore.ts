@@ -128,10 +128,12 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     myModelList.value.push(payload);
   }
   function updateMyModelData(payload: Model) {
-    const modelIndex = myModelList.value.findIndex(
+    const modelIndex = allModelList.value.findIndex(
       (model) => model.id === payload.id
     );
-    myModelList.value[modelIndex] = payload;
+    if (modelIndex < 0) return;
+    //後端更新模型的API不會回傳favorites，用merge保留既有的收藏資料，避免編輯後畫面上的收藏狀態被清空
+    allModelList.value[modelIndex] = { ...allModelList.value[modelIndex], ...payload };
   }
   function setSearchResult(payload: Model[]) {
     searchResult.value = payload;

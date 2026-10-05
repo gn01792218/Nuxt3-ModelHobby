@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>總花費 : <span class="text-acent-500">{{ totalCoast }}</span>台幣</p>
+        <p>總花費 : <span class="text-acent-500">{{ totalCoast }}</span>台幣（四捨五入）</p>
         <p>目前共有{{ myModelList.length }} 個模型-賣出{{selledModels.length}} = {{myModelList.length - selledModels.length}}</p>
         <p>未入庫:{{ unStockInModels.length }}個</p>
         <p>未組裝:{{ unFinishedModels.length }}個</p>
@@ -74,7 +74,7 @@ const totalCoast = computed(()=>{
             total += toTWD(info.currency, info.price, info.amount, info.exchangeRate)
         })
     })
-    return total
+    return Math.round(total)
 })
 const selledAmount = computed(()=>{
   let total = 0
