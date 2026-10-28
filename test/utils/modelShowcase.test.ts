@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { hasFinishedGallery, hasFinishedDate, isShowcaseReady } from '@/utils/modelShowcase'
+import { hasFinishedGallery, hasFinishedDate, isShowcaseReady, getModelDisplayName } from '@/utils/modelShowcase'
 import type { Model } from '~/types/model'
 
 function buildModel(overrides: Partial<Model> = {}): Model {
@@ -53,6 +53,20 @@ describe('modelShowcase', () => {
     it('should return false when only finished_date exists', () => {
       const model = buildModel({ finish_infos: [{ finished_date: new Date() } as any] })
       expect(isShowcaseReady(model)).toBe(false)
+    })
+  })
+
+  describe('getModelDisplayName', () => {
+    it('should return display_name when it is set', () => {
+      expect(getModelDisplayName(buildModel({ name_zh: '原名', display_name: '展示名' }))).toBe('展示名')
+    })
+
+    it('should fall back to name_zh when display_name is missing', () => {
+      expect(getModelDisplayName(buildModel({ name_zh: '原名' }))).toBe('原名')
+    })
+
+    it('should fall back to name_zh when display_name is blank', () => {
+      expect(getModelDisplayName(buildModel({ name_zh: '原名', display_name: '   ' }))).toBe('原名')
     })
   })
 })

@@ -44,9 +44,9 @@
                         :modifiers="{rotate: null}"
                         format="webp"
                         :src="getModelFinishImagePublicUrl(model.finish_infos[0].gallery[0])"
-                        :alt="model.name_zh"
+                        :alt="getModelDisplayName(model)"
                     />
-                    <p class="flex-1 min-w-0 truncate text-white" :class="rankTiers[index] ? 'font-bold' : ''">{{ model.name_zh }}</p>
+                    <p class="flex-1 min-w-0 truncate text-white" :class="rankTiers[index] ? 'font-bold' : ''">{{ getModelDisplayName(model) }}</p>
                     <FavoriteBadge class="flex-shrink-0 text-white" :model="model" variant="flame" />
                 </li>
             </ul>

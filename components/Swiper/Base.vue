@@ -22,9 +22,9 @@
     
   >
     <SwiperSlide v-for="slide in sliderItems" :key="slide.id" class="relative cursor-pointer"  @click="handleClick(slide.id)">
-      <NuxtImg :modifiers="{rotate: null}" preload class="w-full h-full object-contain" format="webp" sizes='100vw md:500px' :src="getModelFinishImagePublicUrl(slide.finish_infos[0].gallery[0])" :alt="slide.name_zh"/>
+      <NuxtImg :modifiers="{rotate: null}" preload class="w-full h-full object-contain" format="webp" sizes='100vw md:500px' :src="getModelFinishImagePublicUrl(slide.finish_infos[0].gallery[0])" :alt="getModelDisplayName(slide)"/>
       <div class="w-[300px] flex justify-center absolute top-1/2 translate-y-[-50%] right-1/2 translate-x-[50%] opacity-70 bg-primary-900 py-2 px-5 rounded-md hover:opacity-90">
-        <p class="text-white text-overflow-ellipsis">{{ slide.name_zh }}</p>
+        <p class="text-white text-overflow-ellipsis">{{ getModelDisplayName(slide) }}</p>
       </div>
     </SwiperSlide>
   </Swiper>

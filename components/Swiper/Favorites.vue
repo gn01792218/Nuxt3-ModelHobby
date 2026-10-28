@@ -31,7 +31,7 @@
                     :modifiers="{rotate: null}"
                     format="webp"
                     :src="getModelFinishImagePublicUrl(slide.finish_infos[0].gallery[0])"
-                    :alt="slide.name_zh"
+                    :alt="getModelDisplayName(slide)"
                 />
                 <div class="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
                 <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/75 to-transparent pointer-events-none" />
@@ -43,7 +43,7 @@
 
                 <FavoriteBadge class="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-sm rounded-full px-2.5 py-1 shadow-sm" :model="slide" variant="flame" />
 
-                <p class="absolute bottom-3 inset-x-3 text-white font-black uppercase tracking-wide drop-shadow text-overflow-ellipsis">{{ slide.name_zh }}</p>
+                <p class="absolute bottom-3 inset-x-3 text-white font-black uppercase tracking-wide drop-shadow text-overflow-ellipsis">{{ getModelDisplayName(slide) }}</p>
             </SwiperSlide>
         </Swiper>
     </div>

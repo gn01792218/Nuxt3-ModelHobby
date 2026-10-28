@@ -13,7 +13,7 @@
                 :modifiers="{rotate: null}"
                 format="webp"
                 :src="getModelFinishImagePublicUrl(model.finish_infos[0].gallery[0])"
-                :alt="model.name_zh"
+                :alt="getModelDisplayName(model)"
             />
             <NuxtImg
                 v-else-if="model.main_img"
@@ -22,7 +22,7 @@
                 :modifiers="{rotate: null}"
                 format="webp"
                 :src="getModelMainImagePublicUrl(model.main_img)"
-                :alt="model.name_zh"
+                :alt="getModelDisplayName(model)"
             />
             <NuxtImg
                 v-else
@@ -39,7 +39,7 @@
 
         <!-- 資訊區 -->
         <div class="p-2 sm:p-3">
-            <p class="truncate text-sm sm:text-base font-black uppercase tracking-wide text-olive-50">{{ model.name_zh }}</p>
+            <p class="truncate text-sm sm:text-base font-black uppercase tracking-wide text-olive-50">{{ getModelDisplayName(model) }}</p>
             <div class="mt-2 flex flex-wrap gap-1">
                 <span v-if="model.scale" class="rounded-sm bg-olive-950/70 px-1.5 py-0.5 text-[11px] font-mono uppercase tracking-widest text-olive-300 ring-1 ring-olive-600/60">{{ model.scale }}</span>
                 <span v-if="model.brand" class="rounded-sm bg-olive-950/70 px-1.5 py-0.5 text-[11px] font-mono uppercase tracking-widest text-olive-300 ring-1 ring-olive-600/60">{{ model.brand }}</span>

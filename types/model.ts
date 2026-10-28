@@ -104,6 +104,7 @@ export declare interface Model{
     userId:string,
     name_zh:string,
     name_en:string,
+    display_name?:string,
     status:ModelStatus,
     article_number?:string,
     brand?:ModelBrand,

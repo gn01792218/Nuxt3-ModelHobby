@@ -7,6 +7,7 @@
             <p>題材 : {{ currentModel?.theme }}</p>
             <p class="text-3xl font-extrabold">{{ currentModel?.name_zh }}</p>
             <p class="text-2xl">{{ currentModel?.name_en }}</p>
+            <p v-if="currentModel?.display_name">展示名稱 : {{ currentModel.display_name }}</p>
         </section>
         <div>
             <UButton label="修改" color="primary" @click="showEditPanelHandel()" />
@@ -21,6 +22,9 @@
                 </MyFormGroup>
                 <MyFormGroup label="英文名稱">
                     <MyInput placeholder="英文名稱" v-model="editModel.name_en" />
+                </MyFormGroup>
+                <MyFormGroup label="展示名稱">
+                    <MyInput placeholder="展示名稱（未填則顯示中文名稱）" v-model="editModel.display_name" />
                 </MyFormGroup>
                 <MyFormGroup label="品牌">
                     <MySelect v-model="editModel.brand" :options="brandOptions" placeholder="選擇品牌" />

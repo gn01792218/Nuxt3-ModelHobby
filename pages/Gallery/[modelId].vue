@@ -2,7 +2,7 @@
     <div v-if="currentModel">
         <div class="flex items-center justify-center gap-3 border-b-2 border-b-primary-950 pb-2 mb-1">
             <h1 class="text-center text-primary-100 font-bold text-xl">
-                {{ currentModel.name_zh }}
+                {{ getModelDisplayName(currentModel) }}
             </h1>
             <FavoriteButton :model="currentModel" />
         </div>

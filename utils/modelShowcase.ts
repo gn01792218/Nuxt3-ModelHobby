@@ -12,3 +12,8 @@ export function hasFinishedDate(model: Model): boolean {
 export function isShowcaseReady(model: Model): boolean {
   return hasFinishedGallery(model) && hasFinishedDate(model)
 }
+
+// 展示用名稱：有設定展示名稱就用展示名稱，否則退回中文名稱
+export function getModelDisplayName(model: Pick<Model, 'name_zh' | 'display_name'>): string {
+  return model.display_name?.trim() || model.name_zh
+}

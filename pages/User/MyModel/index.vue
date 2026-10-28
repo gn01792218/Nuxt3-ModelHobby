@@ -16,6 +16,9 @@
                   <MyFormGroup label="英文名稱">
                      <MyInput placeholder="英文名稱" v-model="model.name_en" />
                   </MyFormGroup>
+                  <MyFormGroup label="展示名稱">
+                     <MyInput placeholder="展示名稱（未填則顯示中文名稱）" v-model="model.display_name" />
+                  </MyFormGroup>
                   <MyFormGroup label="選擇狀態">
                      <MySelect v-model="model.status" :options="statusOptions" option-attribute="label"
                         value-attribute="value" placeholder="選擇狀態" />
@@ -183,6 +186,7 @@ const model: Model = {
    status: ModelStatus.未入庫,
    name_zh: '',
    name_en: '',
+   display_name: '',
    userId: '',
    scale: ModelScale.S72,
    theme: ModelTheme.其他
@@ -245,6 +249,7 @@ async function fetchAddMyModel() {
    //reset
    model.name_zh = ''
    model.name_en = ''
+   model.display_name = ''
    showAddModelPanel.value = false
    resetAllUploadImageProcess()
    //關閉loading

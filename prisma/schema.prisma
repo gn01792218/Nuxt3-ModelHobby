@@ -16,6 +16,7 @@ model MyModel {
   status         Int
   name_zh        String
   name_en        String?
+  display_name   String?
   article_number String?
   brand          String?
   scale          String?
