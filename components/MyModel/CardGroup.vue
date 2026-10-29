@@ -3,7 +3,7 @@
         <p>{{ groupTitle }} {{ cardList.length }}</p>
         <ul class="grid gap-2 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
             <li class="border-2 mb-5" v-for="model in cardList" :key="model.id">
-                <MyModelCard :model-data="model" />
+                <MyModelCard :model-data="model" :show-profit="showProfit" />
             </li>
         </ul>
     </section>
@@ -13,5 +13,6 @@ import { type Model } from "../../types/model"
 defineProps<{
     groupTitle:string,
     cardList: Model[],
+    showProfit?: boolean,
 }>()
 </script>

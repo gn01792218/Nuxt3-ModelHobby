@@ -16,6 +16,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     openRouteGuardPanel: false,
     openImgPanel: false,
     searchResult: [],
+    searchShowProfit: false,
     targetDate: formateDateYYYYMM(new Date(), "-"),
     searchModelType: SearchModelType.Gallery,
   };
@@ -28,6 +29,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
   const openRouteGuardPanel = ref(initState.openRouteGuardPanel);
   const openImgPanel = ref(initState.openImgPanel);
   const searchResult = ref<Model[]>(initState.searchResult);
+  const searchShowProfit = ref<boolean>(initState.searchShowProfit);
   const targetDate = ref<Date | string>(initState.targetDate);
   const searchModelType = ref<SearchModelType>(initState.searchModelType);
 
@@ -135,8 +137,10 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     //後端更新模型的API不會回傳favorites，用merge保留既有的收藏資料，避免編輯後畫面上的收藏狀態被清空
     allModelList.value[modelIndex] = { ...allModelList.value[modelIndex], ...payload };
   }
-  function setSearchResult(payload: Model[]) {
+  //showProfit：搜尋彈窗的卡片是否顯示毛利，每次設定搜尋結果都會一併重設
+  function setSearchResult(payload: Model[], showProfit = false) {
     searchResult.value = payload;
+    searchShowProfit.value = showProfit;
   }
   function setLoadingState(payload: boolean) {
     loading.value = payload;
@@ -186,6 +190,7 @@ export const useMyModelStore = defineStore("MyMOdelsStore", () => {
     openRouteGuardPanel,
     openImgPanel,
     searchResult,
+    searchShowProfit,
     searchModelType,
     targetDate,
     //methods

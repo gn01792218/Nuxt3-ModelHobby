@@ -5,7 +5,7 @@
         <p>未入庫:{{ unStockInModels.length }}個</p>
         <p>未組裝:{{ unFinishedModels.length }}個</p>
         <p>已組裝:{{ finishedModels.length }}個</p>
-        <p class="cursor-pointer" @click="openModelsDetailModal(selledModels)">已賣出: {{selledModels.length}}個(共賣出{{ selledAmount }}元，毛利<span :class="profitClass(totalProfit)">{{ profitText(totalProfit) }}</span>元)</p>
+        <p class="cursor-pointer" @click="openModelsDetailModal(selledModels, true)">已賣出: {{selledModels.length}}個(共賣出{{ selledAmount }}元，毛利<span :class="profitClass(totalProfit)">{{ profitText(totalProfit) }}</span>元)</p>
         <SearchBar class="mt-3" :search-sorce="myModelList" :search-type="SearchModelType.MyModel" place-holder="個人模型搜尋"/>
     </div>
     <UDivider>
@@ -48,7 +48,7 @@ const {
 const { setOpenSearchPanel, setSearchResult, setTargetDate, setSearchModelType } = useMyModelStore()
 const { sortDateArray, formateDateYYYYMM } = useDate()
 const { toTWD } = useExchange()
-const { getProfit, profitText, profitClass } = useProfit()
+const { getModelProfit, profitText, profitClass } = useProfit()
 
 const purchaseInfos = computed<PurchaseInfo[]>(()=>{
     const purchaseInfos:PurchaseInfo[] = []
@@ -83,15 +83,13 @@ const selledAmount = computed(()=>{
 })
 const totalProfit = computed(()=>{
   let total = 0
-  selledModels.value.forEach(m=>m.purchase_infos?.forEach(i=>{
-    total += getProfit(i, true) ?? 0
-  }))
+  selledModels.value.forEach(m=>total += getModelProfit(m) ?? 0)
   return Math.round(total)
 })
-function openModelsDetailModal(models:Model[]){
+function openModelsDetailModal(models:Model[], showProfit = false){
     setOpenSearchPanel(true)
     setSearchModelType(SearchModelType.MyModel)
-    setSearchResult(models)
+    setSearchResult(models, showProfit)
 }
 function onPurchaseDateChange(){
     setTargetDate(purchaseDate.value)

@@ -28,7 +28,7 @@
             <div class="flex justify-end mb-2">
                 <MyInput v-model="filterKeyword" icon="i-heroicons-magnifying-glass" placeholder="搜尋此分類" class="w-full sm:w-64" />
             </div>
-            <MyModelCardGroup :group-title="item.label" :card-list="filteredSelledModels" />
+            <MyModelCardGroup :group-title="item.label" :card-list="filteredSelledModels" show-profit />
         </template>
     </UTabs>
 </template>

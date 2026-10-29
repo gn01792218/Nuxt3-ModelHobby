@@ -4,6 +4,7 @@
       <p>{{ modelData.name_zh }}</p>
       <p>{{ modelData.name_en }}</p>
       <p v-if="modelData.scale">{{ modelData.scale }}</p>
+      <MyModelProfitText v-if="showProfit" :model="modelData" />
     </template>
     <div>
       <div class="w-full h-200px md:h-[250px] cursor-pointer object-contain flex justify-center" @click="navergateToMyModelDetial(modelData.id)">
@@ -35,7 +36,8 @@ const { loadSkeleton } = useSkeleton()
 const { navergateToMyModelDetial, setLoadingState, setAllModelList, allModelList } = useMyModel()
 
 const props = defineProps<{
-  modelData: Model
+  modelData: Model,
+  showProfit?: boolean
 }>()
 const { getModelMainImagePublicUrl } = useMyModelImg()
 const { removeImageFromS3Storage, processRemoveFinishInfoImgs } = useS3()

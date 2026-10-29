@@ -1,6 +1,7 @@
 <template>
     <UCard class="cursor-pointer bg-main-400"  @click="gottoItem(model.id)">
         <p>{{ model.name_zh }}</p>
+        <MyModelProfitText v-if="searchShowProfit" :model="model" />
         <div class="d-flex mb-5">
             <UBadge class="mr-2" color="gray">{{ model.scale }}</UBadge>
             <UBadge class="mr-2" color="gray">{{ model.brand }}</UBadge>
@@ -23,6 +24,7 @@ defineProps<{
 
 const { getModelMainImagePublicUrl } = useMyModelImg()
 const { setOpenSearchPanel } = useMyModelStore()
+const { searchShowProfit } = storeToRefs(useMyModelStore())
 const { navergateToMyModelDetial } = useMyModel()
 
 function gottoItem(modelId: number) {
